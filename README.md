@@ -1,2 +1,2 @@
 # StockIn
-web-app para la gestion de inventario en negocios pequeños o medianos
+Inventory management system for small businesses created with ReactJS, NodeJS, MySQL and TailwindCSS
