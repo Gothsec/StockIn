@@ -1,5 +1,4 @@
-# StockIn
-<h3> Inventory management system for small businesses created with ReactJS, NodeJS, MySQL and TailwindCSS. </h3>
+![StockIn](https://github.com/user-attachments/assets/c9d23b2f-f37d-4880-a752-d6904c7a0a09)
 
 ---
 
