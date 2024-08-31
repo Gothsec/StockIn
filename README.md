@@ -1,4 +1,5 @@
-![StockIn](https://github.com/user-attachments/assets/c9d23b2f-f37d-4880-a752-d6904c7a0a09)
+![StockIn](https://github.com/user-attachments/assets/4ad4f6a2-b208-43da-8bf8-4eae30aa90eb)
+
 
 ---
 
