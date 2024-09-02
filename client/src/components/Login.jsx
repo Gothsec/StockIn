@@ -3,7 +3,7 @@ import Banner from '../assets/login-banner.png';
 export default function Component() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl overflow-hidden">
+      <div className="bg-white rounded-3xl shadow-lg w-full max-w-4xl overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Sección de la imagen */}
           <div className="hidden md:block">
@@ -29,7 +29,7 @@ export default function Component() {
                   id="email"
                   type="email"
                   placeholder="example@email.com"
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-700 focus:border-blue-700 sm:text-sm"
                 />
               </div>
               <div>
@@ -40,12 +40,12 @@ export default function Component() {
                   id="password"
                   type="password"
                   placeholder="••••••••"
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Sign In
               </button>
