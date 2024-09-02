@@ -3,6 +3,5 @@
 
 ---
 
-Our competence and reference comes from the zoho inventory software, where we give an added value and differentiation. StockIn's UX/UI design is more focused on being minimalist and simple. 
-
-![image](https://github.com/user-attachments/assets/c8ec8e30-9e7e-4efa-9862-230a5675bcce)
+SigIn Page - 2/09/2024 (v1)
+![Captura de pantalla 2024-09-02 165357](https://github.com/user-attachments/assets/5b760ba5-48d9-4c8e-9e8a-819d2f7de81c)
