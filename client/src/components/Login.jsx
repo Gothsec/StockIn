@@ -24,7 +24,7 @@ export default function Component() {
           
           {/* Sección de inicio de sesión */}
           <div className="p-8 flex flex-col justify-center">
-            <div className="text-center mb-6">
+            <div className="text-center mb-10">
               <h1 className="text-3xl font-bold text-gray-800">Welcome to StockIn</h1>
               <p className="text-gray-600">Sign in to your account</p>
             </div>
