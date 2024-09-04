@@ -1,18 +1,46 @@
 import { useState } from 'react';
 import Banner from '../assets/login-banner.png';
+import Home from '../pages/Home'
 
 
-export default function Component() {
+export default function Login() {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loginSuccessful, setLoginSuccessful] = useState(false);
 
   const handleLogin = () => {
     event.preventDefault(); // Temporal para evitar enviar el form por http
-    console.log({password: password, email: email});
+    const data = {
+      email: email,
+      password: password
+    }
+    fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+
+      if(result.token){
+        localStorage.setItem('token', result.token)
+        setLoginSuccessful(true);
+      } else {
+        setLoginSuccessful(false);
+      }
+    })
+
+    .catch(error => {
+      console.log(error);
+    })
   }
 
   return (
+    <>{loginSuccessful ? <Home /> : 
+
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white rounded-3xl shadow-lg w-full max-w-4xl overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -49,5 +77,6 @@ export default function Component() {
         </div>
       </div>
     </div>
+    }</>
   );
 }
