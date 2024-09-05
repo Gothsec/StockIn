@@ -8,7 +8,7 @@ import { DashboardIcon } from "./Dashboard-icon"
 const options = ["Dashboard", "Productos", "Gestion de empleados", "Reportes", "Ventas"]
 const icons = [<DashboardIcon/>, <ProductIcon/>, <EmployeeIcon/>, <ReportIcon/>, <SalesIcon/>]
 
-export function Nav() {
+export default function Nav() {
   return (
     <nav className="bg-blue-600 w-[20%] h-[100vh] py-5 px-1">
       <div className="flex items-center ml-4 mb-5">
