@@ -1,21 +1,18 @@
 import React, { useEffect } from 'react';
 
-export function ProductFile(props) {
+export function ProductFile({name, id}) {
 
-  useEffect(() => {
-    const deleteButton = document.getElementById(`delete-${props.id}`);
-    const row = deleteButton.closest("tr");
-    deleteButton.addEventListener("click", () => {
-      row.remove();
-    });
-  }, [props.id])
+  const deleteRow = () => {
+    const row = document.getElementById(`row-${id}`);
+    row.remove();
+  }
   
 
   return (
-    <tr id={`file-${props.id}`} className="border border-black">
-      <td>{props.name}</td>
-      <td className="flex justify-between">
-        <button id={`delete-${props.id}`}>Eliminar</button>
+    <tr id={`row-${id}`} className="w-full border border-black px-2">
+      <td>{name}</td>
+      <td>
+        <button className="text-red-500" onClick={deleteRow}>Eliminar</button>
         <button>Editar</button>
         <button>Info</button>
       </td>
