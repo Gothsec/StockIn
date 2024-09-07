@@ -9,7 +9,7 @@ export function login(req, res) {
   try {
     db.query(consult, [email, password], (err, result) =>{
       if(err){
-        res.send(err);
+        return res.status(500).json({ message: 'Internal server error', error: err });
       }
 
       if(result.length > 0){
@@ -19,11 +19,11 @@ export function login(req, res) {
         res.send({token});
 
       } else {
-        res.send({message: 'wrong user'});
+        return res.status(401).json({ message: 'Invalid email or password' });
       }
     })
   } catch (e) {
-
+    return res.status(500).json({ message: 'Internal server error', error: e.message });
   }
 
 }

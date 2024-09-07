@@ -8,6 +8,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loginSuccessful, setLoginSuccessful] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleLogin = () => {
     event.preventDefault(); // Temporal para evitar enviar el form por http
@@ -28,13 +29,16 @@ export default function Login() {
       if(result.token){
         localStorage.setItem('token', result.token)
         setLoginSuccessful(true);
+        setErrorMessage('');
       } else {
         setLoginSuccessful(false);
+        setErrorMessage(result.message || 'Login failed. Please try again.');
       }
     })
 
     .catch(error => {
       console.log(error);
+      setErrorMessage('An error ocurred. Please try again later.');
     })
   }
 
@@ -69,6 +73,7 @@ export default function Login() {
                 </label>
                 <input id="password" type="password" placeholder="••••••••" required minLength="8" onChange={(event =>{setPassword(event.target.value)})} className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"/>
               </div>
+              {errorMessage && (<div className="text-red-500 text-sm">{errorMessage}</div>)}
               <button onClick={handleLogin} type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Sign In
               </button>
