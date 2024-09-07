@@ -14,7 +14,7 @@ export function login(req, res) {
 
       if(result.length > 0){
         const token = jwt.sign({email}, "Stack", {
-          expiresIn: '1m'
+          expiresIn: '12h'
         });
         res.send({token});
 
