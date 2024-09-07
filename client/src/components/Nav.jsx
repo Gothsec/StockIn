@@ -1,10 +1,10 @@
-import { StockInLogo } from "./Stokin-logo";
-import { SalesIcon } from "./Sales-icon";
-import { EmployeeIcon } from "./Employee-icon";
-import { ReportIcon } from "./Report-icon";
-import { ProductIcon } from "./Product-icon";
-import { DashboardIcon } from "./Dashboard-icon";
-import { LogoutIcon } from "./Logout-icon";
+import { StockInLogo } from "../assets/Stokin-logo";
+import { SalesIcon } from "../assets/Sales-icon";
+import { EmployeeIcon } from "../assets/Employee-icon";
+import { ReportIcon } from "../assets/Report-icon";
+import { ProductIcon } from "../assets/Product-icon";
+import { DashboardIcon } from "../assets/Dashboard-icon";
+import { LogoutIcon } from "../assets/Logout-icon";
 
 const navItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
