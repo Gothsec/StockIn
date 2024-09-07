@@ -14,6 +14,11 @@ const navItems = [
   { text: "Ventas", icon: <SalesIcon /> },
 ];
 
+const handleLogout = () => {
+  localStorage.removeItem('token'); // Delete token :)
+  window.location.href = '/signin'; // Go back to login :)
+};
+
 export default function Nav() {
   return (
     <nav className="bg-blue-600 w-72 h-screen pt-6 px-1 flex flex-col">
@@ -38,7 +43,7 @@ export default function Nav() {
             </li>
           ))}
         </div>
-        <li className="px-6 py-3 mb-1 rounded-lg text-red-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-red-500 hover:text-white cursor-pointer">
+        <li onClick={handleLogout} className="px-6 py-3 mb-1 rounded-lg text-white font-medium flex items-center gap-3 text-base transition-colors hover:bg-red-500 hover:text-white cursor-pointer">
           <LogoutIcon />
           <span>Logout</span>
         </li>
