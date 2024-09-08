@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [newProductName, setNewProductName] = useState("");
+  const [searchProduct, setSearchProduct] = useState("");
 
   useEffect(() => {
     fetch("http://localhost:3000/read-product", {
@@ -23,11 +24,11 @@ export default function ProductsPage() {
   }, []);
 
   const handleAddProduct = (e) => {
-    e.preventDefault();
-    if (newProductName.trim === "") {
+    if (newProductName.trim() === "") {
       console.log("Please enter a product name");
       return;
     }
+    e.preventDefault();
 
     const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
 
@@ -55,6 +56,10 @@ export default function ProductsPage() {
       });
   };
 
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchProduct.toLowerCase())
+  );
+
   return (
     <div className="flex max-h-screen overflow-hidden">
       <Nav />
@@ -66,6 +71,7 @@ export default function ProductsPage() {
               className="border border-gray-400 w-96 pl-2 rounded-md"
               type="search"
               placeholder="Buscar producto"
+              onChange={(e) => setSearchProduct(e.target.value)}
             />
             <button className="bg-slate-400 py-1 px-2 rounded-md text-white hover:bg-slate-600">
               Buscar
@@ -81,7 +87,7 @@ export default function ProductsPage() {
               </tr>
             </thead>
             <tbody>
-              {products.map((product, index) => (
+              {filteredProducts.map((product, index) => (
                 <ProductFile
                   key={product.id}
                   id={product.id}
@@ -100,8 +106,10 @@ export default function ProductsPage() {
             onChange={(e) => setNewProductName(e.target.value)}
             className="border border-gray-400 p-2 rounded-md w-full"
             placeholder="Nombre del nuevo producto"
+            required
           />
           <button
+            type="submit"
             onClick={handleAddProduct}
             className="bg-slate-400 py-1 px-2 rounded-md text-white hover:bg-slate-600 mt-2"
           >
