@@ -36,8 +36,8 @@ export default function Nav() {
       </div>
       <ul className="flex flex-col justify-between h-full flex-1">
         <div>
-          {navItems.map((item) => (
-            <li className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer">
+          {navItems.map((item, index) => (
+            <li key={index} className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer">
               {item.icon}
               {item.text}
             </li>

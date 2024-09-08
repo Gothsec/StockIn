@@ -7,10 +7,6 @@ import './index.css'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
-    {/* <div className='flex'>
-      <Nav/>
-      <ProductsPage/>
-    </div> */}
+    <App/>
   </StrictMode>,
 )
