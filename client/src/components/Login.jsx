@@ -45,7 +45,7 @@ export default function Login() {
   return (
     <>{loginSuccessful ? <Home /> : 
 
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex px-4 items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white rounded-3xl shadow-lg w-full max-w-4xl overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
 
