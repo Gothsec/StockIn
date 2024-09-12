@@ -27,7 +27,8 @@ export default function Login() {
     .then(result => {
 
       if(result.token){
-        localStorage.setItem('token', result.token)
+        localStorage.setItem('token', result.token);
+        localStorage.setItem('role', result.role);
         setLoginSuccessful(true);
         setErrorMessage('');
       } else {
