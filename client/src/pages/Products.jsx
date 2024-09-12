@@ -1,11 +1,29 @@
 import { ProductFile } from "../components/Product-file";
 import Nav from "../components/Nav";
 import { useEffect, useState } from "react";
+import ModalWidows from "../components/ModalWindows";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [newProductName, setNewProductName] = useState("");
   const [searchProduct, setSearchProduct] = useState("");
+  const [modalProps, setModalProps] = useState({
+    titleModal: "",
+    buttonText: "",
+    onClickFunction: () => {},
+  });
+  const [windowsModal, setWindowsModal] = useState(false);
+  
+  
+  const abrirCerrarModal = (titleModal, buttonText, onClickFunction) => {
+    console.log("Modal props:", { titleModal, buttonText, onClickFunction });
+    setModalProps({
+      titleModal,
+      buttonText,
+      onClickFunction,
+    });
+    setWindowsModal(!windowsModal);
+  };
 
   useEffect(() => {
     fetch("http://localhost:3000/read-product", {
@@ -64,7 +82,7 @@ export default function ProductsPage() {
     <div className="flex max-h-screen overflow-hidden">
       <Nav />
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="flex mb-5 justify-between items-baseline border-b border-black pb-8">
+        <header className="flex mb-5 justify-between items-baseline border-b border pb-8">
           <h1 className="font-bold text-4xl">Productos</h1>
           <div className="flex gap-4">
             <input
@@ -78,7 +96,7 @@ export default function ProductsPage() {
             </button>
           </div>
         </header>
-
+        
         <div className="flex-grow overflow-y-auto border border-gray-600">
           <table className="w-full border-collapse relative">
             <thead>
@@ -99,6 +117,7 @@ export default function ProductsPage() {
           </table>
         </div>
         <form action="/add-product" method="POST" className="mt-4">
+        
           <input
             type="text"
             name="name"
@@ -108,15 +127,44 @@ export default function ProductsPage() {
             placeholder="Nombre del nuevo producto"
             required
           />
+
           <button
+
             type="submit"
-            onClick={handleAddProduct}
+            titletext="Ingrese un producto"
+            buttontext="Agregar producto"
+            //manejarclic={handleAddProduct}
+            
             className="bg-slate-400 py-1 px-2 rounded-md text-white hover:bg-slate-600 mt-2"
           >
             Agregar Producto
           </button>
+
+          <button
+            onClick={() => abrirCerrarModal("Nuevo Producto", "Guardar", () => console.log("Función del botón clickeada"))}
+          >
+            Crear producto
+          </button>
+
+          <button
+            onClick={() => abrirCerrarModal("Modificar Producto", "Modificar", () => console.log("Función del botón clickeada"))}
+          >
+            Modificar producto
+          </button>
+
+          <button
+            onClick={() => abrirCerrarModal("Información Producto", "Mostrar", () => console.log("Función del botón clickeada"))}
+          >
+            Mostrar producto
+          </button>
+
         </form>
+
       </div>
+
+      
+
     </div>
+
   );
 }
