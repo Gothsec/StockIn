@@ -13,10 +13,11 @@ export function login(req, res) {
       }
 
       if(result.length > 0){
+        const user = result[0];
         const token = jwt.sign({email}, "Stack", {
           expiresIn: '12h'
         });
-        res.send({token});
+        res.send({token, role: user.role});
 
       } else {
         return res.status(401).json({ message: 'Invalid email or password' });
