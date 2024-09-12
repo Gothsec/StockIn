@@ -162,7 +162,12 @@ export default function ProductsPage() {
 
       </div>
 
-      
+      <ModalWidows
+      open={windowsModal}
+      onClose={() => abrirCerrarModal("", "", () => {})}
+      titleModal={modalProps.titleModal}
+      buttonText={modalProps.buttonText}
+      onClickFunction={modalProps.onClickFunction}/>
 
     </div>
 

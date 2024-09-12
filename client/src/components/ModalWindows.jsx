@@ -113,7 +113,6 @@ function ModalWidows({open, onClose, titleModal, buttonText, onClickFunction }) 
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
