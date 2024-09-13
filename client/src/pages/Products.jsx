@@ -5,7 +5,6 @@ import ModalWidows from "../components/ModalWindows";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
-  const [newProductName, setNewProductName] = useState("");
   const [searchProduct, setSearchProduct] = useState("");
   const [modalProps, setModalProps] = useState({
     titleModal: "",
@@ -13,10 +12,8 @@ export default function ProductsPage() {
     onClickFunction: () => {},
   });
   const [windowsModal, setWindowsModal] = useState(false);
-  
-  
+
   const abrirCerrarModal = (titleModal, buttonText, onClickFunction) => {
-    console.log("Modal props:", { titleModal, buttonText, onClickFunction });
     setModalProps({
       titleModal,
       buttonText,
@@ -25,7 +22,7 @@ export default function ProductsPage() {
     setWindowsModal(!windowsModal);
   };
 
-  useEffect(() => {
+  const fetchProducts = () => {
     fetch("http://localhost:3000/read-product", {
       method: "GET",
       headers: {
@@ -39,39 +36,15 @@ export default function ProductsPage() {
       .catch((err) => {
         console.error("Error: ", err);
       });
+  };
+
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   const handleAddProduct = (e) => {
-    if (newProductName.trim() === "") {
-      console.log("Please enter a product name");
-      return;
-    }
-    e.preventDefault();
-
-    const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
-
-    const newProduct = {
-      id: newId,
-      name: newProductName,
-    };
-
-    fetch('http://localhost:3000/add-product', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(newProduct),
-    })
-      .then(response => response.json())
-      .then(result => {
-        if (result.message === 'Product added successfully') {
-          setProducts([...products, newProduct]);
-          setNewProductName("");
-        }
-      })
-      .catch(err => {
-        console.error("Error: ", err);
-      });
+    if (e) e.preventDefault();
+    fetchProducts(); // Actualiza la lista de productos después de agregar uno nuevo
   };
 
   const filteredProducts = products.filter((product) =>
@@ -96,7 +69,7 @@ export default function ProductsPage() {
             </button>
           </div>
         </header>
-        
+
         <div className="flex-grow overflow-y-auto border border-gray-600">
           <table className="w-full border-collapse relative">
             <thead>
@@ -111,65 +84,32 @@ export default function ProductsPage() {
                   id={product.id}
                   name={product.name}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
+                  onUpdate={fetchProducts} // Agrega la función de actualización
                 />
               ))}
             </tbody>
           </table>
         </div>
-        <form action="/add-product" method="POST" className="mt-4">
-        
-          <input
-            type="text"
-            name="name"
-            value={newProductName}
-            onChange={(e) => setNewProductName(e.target.value)}
-            className="border border-gray-400 p-2 rounded-md w-full"
-            placeholder="Nombre del nuevo producto"
-            required
-          />
 
-          <button
-
-            type="submit"
-            titletext="Ingrese un producto"
-            buttontext="Agregar producto"
-            //manejarclic={handleAddProduct}
-            
-            className="bg-slate-400 py-1 px-2 rounded-md text-white hover:bg-slate-600 mt-2"
-          >
-            Agregar Producto
-          </button>
-
-          <button
-            onClick={() => abrirCerrarModal("Nuevo Producto", "Guardar", () => console.log("Función del botón clickeada"))}
-          >
-            Crear producto
-          </button>
-
-          <button
-            onClick={() => abrirCerrarModal("Modificar Producto", "Modificar", () => console.log("Función del botón clickeada"))}
-          >
-            Modificar producto
-          </button>
-
-          <button
-            onClick={() => abrirCerrarModal("Información Producto", "Mostrar", () => console.log("Función del botón clickeada"))}
-          >
-            Mostrar producto
-          </button>
-
-        </form>
-
+        <button
+          className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto"
+          onClick={() => abrirCerrarModal("Nuevo Producto", "Crear", handleAddProduct)}
+        >
+          Agregar Producto
+        </button>
       </div>
-
       <ModalWidows
-      open={windowsModal}
-      onClose={() => abrirCerrarModal("", "", () => {})}
-      titleModal={modalProps.titleModal}
-      buttonText={modalProps.buttonText}
-      onClickFunction={modalProps.onClickFunction}/>
-
+        open={windowsModal}
+        onClose={() => abrirCerrarModal("", "", () => {})}
+        titleModal={modalProps.titleModal}
+        buttonText={modalProps.buttonText}
+        onClickFunction={(e) => {
+          modalProps.onClickFunction(e);
+          setWindowsModal(false); // Cierra el modal después de ejecutar la función
+        }}
+      />
     </div>
-
   );
 }
+
+
