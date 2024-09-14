@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import Banner from '../assets/login-banner.png';
+import Banner from '../../public/login-banner.png';
 import Home from '../pages/Home'
-
 
 export default function Login() {
 
