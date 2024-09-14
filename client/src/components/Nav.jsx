@@ -14,6 +14,7 @@ const navAdminItems = [
   { text: "Ventas", icon: <SalesIcon /> },
 ];
 
+// Opciones para los usuarios sin privilegios de administrador
 const navItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon /> },
@@ -21,8 +22,8 @@ const navItems = [
 ];
 
 const handleLogout = () => {
-  localStorage.removeItem('token'); // Delete token :)
-  window.location.href = '/signin'; // Go back to login :)
+  localStorage.removeItem('token');
+  window.location.href = '/signin';
 };
 
 export default function Nav() {

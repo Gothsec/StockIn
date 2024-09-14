@@ -103,7 +103,7 @@ export function ProductFile({ name, id, className, onUpdate }) {
       .then((response) => response.json())
       .then((result) => {
         if (result.message === "Product deleted successfully") {
-          if (onUpdate) onUpdate(); // Llama a la función de actualización
+          if (onUpdate) onUpdate();
         } else {
           console.error('Failed to delete product:', result.message);
         }
