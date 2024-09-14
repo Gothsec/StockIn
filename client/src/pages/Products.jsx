@@ -1,4 +1,4 @@
-import { ProductFile } from "../components/Product-file";
+import { ProductFile } from "../components/ProductFile";
 import Nav from "../components/Nav";
 import { useEffect, useState } from "react";
 import ModalWidows from "../components/ModalWindows";

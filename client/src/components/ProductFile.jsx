@@ -74,7 +74,7 @@ export function ProductFile({ name, id, className }) {
 }*/
 
 import { useState } from "react";
-import ModalWidows from "../components/ModalWindows";
+import ModalWidows from "./ModalWindows";
 
 export function ProductFile({ name, id, className, onUpdate }) {
   const [modalProps, setModalProps] = useState({
