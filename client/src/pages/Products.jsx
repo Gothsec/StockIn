@@ -43,7 +43,7 @@ export default function ProductsPage() {
   }, []);
 
   const handleAddProduct = (e) => {
-    if (e) e.preventDefault();
+    if (e) e.preventDefault(); // 🤠
     fetchProducts(); // Actualiza la lista de productos después de agregar uno nuevo
   };
 
