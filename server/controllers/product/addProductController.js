@@ -1,4 +1,4 @@
-import db from "../database/db.js";
+import db from "../../database/db.js";
 
 export function addProduct(req, res) {
   const { codigo, nombre, stock, precioCosto, precioPublico, ganancia, estado, categoria, cantidadMinima, marca, bodega, proveedor } = req.body;

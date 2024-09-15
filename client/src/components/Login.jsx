@@ -72,8 +72,11 @@ export default function Login() {
                   Password
                 </label>
                 <input id="password" type="password" placeholder="••••••••" required minLength="8" onChange={(event =>{setPassword(event.target.value)})} className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"/>
+                <div className='flex justify-between'>
+                  {errorMessage && (<div className="text-red-500 ml-2 mt-3 text-sm">{errorMessage}</div>)}
+                  <p className='inline-block text-sm text-blue-600 ml-2 mt-3 mr-3 cursor-pointer hover:underline'>Forgot password?</p>
+                </div>
               </div>
-              {errorMessage && (<div className="text-red-500 text-sm">{errorMessage}</div>)}
               <button onClick={handleLogin} type="submit" className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                 Sign In
               </button>
