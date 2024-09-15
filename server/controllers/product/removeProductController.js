@@ -1,4 +1,4 @@
-import db from "../database/db.js";
+import db from "../../database/db.js";
 
 export function removeProduct(req, res) {
   const consult = "DELETE FROM product WHERE id = ?";

@@ -1,4 +1,4 @@
-import db from "../database/db.js";
+import db from "../../database/db.js";
 
 export function readProduct(req, res) {
   const consult = 'SELECT id, name FROM product';
