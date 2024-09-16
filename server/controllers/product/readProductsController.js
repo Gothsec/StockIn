@@ -1,7 +1,7 @@
 import db from "../../database/db.js";
 
 export function readProduct(req, res) {
-  const consult = 'SELECT id, name FROM product';
+  const consult = "SELECT id, name FROM product WHERE estado = 'activo'";
 
   try {
     db.query(consult, (err, result) => {
