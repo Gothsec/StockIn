@@ -31,7 +31,12 @@ export default function ProductsPage() {
     })
       .then((response) => response.json())
       .then((result) => {
-        setProducts(result);
+        if (Array.isArray(result)) { // Comprobacion de que lo que se obtenga sea un array
+          setProducts(result);
+        } else {
+          console.error("Unexpected result format:", result);
+          setProducts([]); // Establecer productos como un array vacío si el formato es inesperado
+        }
       })
       .catch((err) => {
         console.error("Error: ", err);
@@ -47,9 +52,9 @@ export default function ProductsPage() {
     fetchProducts(); // Actualiza la lista de productos después de agregar uno nuevo
   };
 
-  const filteredProducts = products.filter((product) =>
+  const filteredProducts = Array.isArray(products) ? products.filter((product) =>
     product.name.toLowerCase().includes(searchProduct.toLowerCase())
-  );
+  ) : [];  
 
   return (
     <div className="flex max-h-screen overflow-hidden">
