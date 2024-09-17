@@ -18,6 +18,30 @@ export function ProductFile({ name, id, className, onUpdate }) {
     setWindowsModal(!windowsModal);
   };
 
+  const updateProduct = () => {
+    fetch(`http://localhost:3000/update-product/${id}`, {
+      method: "PATCH", // Usar PATCH para actualizar parcialmente el recurso
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        estado: "inactivo", // El campo que se va a actualizar
+      }),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.message === "Product updated successfully") { // Mensaje de éxito para la actualización
+          if (onUpdate) onUpdate(); // Actualiza la lista de productos después de la actualización
+        } else {
+          console.error('Failed to update product:', result.message);
+        }
+      })
+      .catch((error) => {
+        console.error("Error: ", error);
+      });
+  };
+  
+
   const deleteProduct = () => {
     fetch(`http://localhost:3000/remove-product/${id}`, {
       method: "DELETE",
@@ -45,7 +69,7 @@ export function ProductFile({ name, id, className, onUpdate }) {
         <td className="flex justify-between p-3 w-[25%]">
           <button
             className="py-1 px-2 bg-red-500 text-white"
-            onClick={deleteProduct}
+            onClick={updateProduct}
           >
             Eliminar
           </button>
