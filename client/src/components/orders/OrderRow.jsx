@@ -1,4 +1,10 @@
-export function OrderRow({ name, id, className }) {
+import React from "react";
+
+export function OrderRow({ name, id, className, onDelete }) {
+  const handleDelete = () => {
+    onDelete(id);
+  };
+
   return (
     <>
       <tr
@@ -9,6 +15,7 @@ export function OrderRow({ name, id, className }) {
         <td className="flex justify-between p-3 w-[25%]">
           <button
             className="py-1 px-2 bg-red-500 text-white"
+            onClick={handleDelete}
           >
             Eliminar
           </button>

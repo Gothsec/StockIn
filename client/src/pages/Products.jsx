@@ -93,7 +93,9 @@ export default function ProductsPage() {
 
         <button
           className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto"
-          onClick={() => abrirCerrarModal("Nuevo Producto", "Crear", handleAddProduct)}
+          onClick={() =>
+            abrirCerrarModal("Nuevo Producto", "Crear", handleAddProduct)
+          }
         >
           Agregar Producto
         </button>
@@ -111,5 +113,3 @@ export default function ProductsPage() {
     </div>
   );
 }
-
-
