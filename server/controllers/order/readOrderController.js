@@ -1,7 +1,7 @@
 import db from "../../database/db.js";
 
 export function readOrder(req, res) {
-  const consult = 'SELECT id, name FROM _order'
+  const consult = 'SELECT id, name FROM _order WHERE active = "activo"'
 
   try {
     db.query(consult, (err, result) => {
