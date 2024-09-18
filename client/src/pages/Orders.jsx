@@ -26,28 +26,6 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
-
-  const handleDeleteOrder = (orderId) => {
-    fetch(`http://localhost:3000/delete-order/${orderId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((response) => {
-        if (response.ok) {
-          setOrders((prevOrders) =>
-            prevOrders.filter((order) => order.id !== orderId)
-          );
-        } else {
-          console.error("No se pudo eliminar el pedido.");
-        }
-      })
-      .catch((err) => {
-        console.error("Error: ", err);
-      });
-  };
-
   const filteredOrders = Array.isArray(orders)
     ? orders.filter((order) =>
         order.name.toLowerCase().includes(searchOrder.toLowerCase())
@@ -87,7 +65,7 @@ export default function OrdersPage() {
                   id={order.id}
                   name={order.name}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
-                  onDelete={handleDeleteOrder}
+                  onUpdate={fetchOrders}
                 />
               ))}
             </tbody>

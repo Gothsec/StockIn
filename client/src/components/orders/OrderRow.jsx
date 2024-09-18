@@ -5,6 +5,28 @@ export function OrderRow({ name, id, className, onDelete }) {
     onDelete(id);
   };
 
+  const handleDeleteOrder = () => {
+    fetch(`http://localhost:3000/delete-order/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          setOrders((prevOrders) =>
+            prevOrders.filter((order) => order.id !== id)
+          );
+        } else {
+          console.error("No se pudo eliminar el pedido.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error: ", err);
+      });
+  };
+
+
   return (
     <>
       <tr
@@ -15,7 +37,7 @@ export function OrderRow({ name, id, className, onDelete }) {
         <td className="flex justify-between p-3 w-[25%]">
           <button
             className="py-1 px-2 bg-red-500 text-white"
-            onClick={handleDelete}
+            onClick={handleDeleteOrder}
           >
             Eliminar
           </button>
