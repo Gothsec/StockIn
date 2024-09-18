@@ -1,8 +1,8 @@
 // import Nav from "../components/Nav";
-import ProductsPage from '../pages/Products'
+import OrdersPage from '../pages/Orders'
 
 export default function Home() {
   return (
-    <ProductsPage/>
+    <OrdersPage/>
   );
 }
