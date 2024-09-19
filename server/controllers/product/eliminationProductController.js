@@ -1,6 +1,6 @@
 import db from "../../database/db.js";
 
-export function updateProduct(req, res) {
+export function eliminationProduct(req, res) {
   const { estado } = req.body;
   const consult = "UPDATE product SET estado = ? WHERE id = ?";
   const id = parseInt(req.params.id);
