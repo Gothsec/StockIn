@@ -1,4 +1,3 @@
-
 import Nav from "../components/Nav";
 import { OrderRow } from "../components/orders/OrderRow";
 import { useEffect, useState } from "react";
@@ -6,21 +5,6 @@ import { useEffect, useState } from "react";
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [searchOrder, setSearchOrder] = useState("");
-  // const [modalProps, setModalProps] = useState({
-  //   titleModal: "",
-  //   buttonText: "",
-  //   onClickFunction: () => {},
-  // });
-  // const [windowsModal, setWindowsModal] = useState(false);
-
-  // const abrirCerrarModal = (titleModal, buttonText, onClickFunction) => {
-  //   setModalProps({
-  //     titleModal,
-  //     buttonText,
-  //     onClickFunction,
-  //   });
-  //   setWindowsModal(!windowsModal);
-  // };
 
   const fetchOrders = () => {
     fetch("http://localhost:3000/read-order", {
@@ -41,15 +25,12 @@ export default function OrdersPage() {
   useEffect(() => {
     fetchOrders();
   }, []);
-  // const handleAddProduct = (e) => {
-  //   if (e) e.preventDefault();
-  //   fetchorders();
-  // };
 
-  const filteredOrders = Array.isArray(orders) ? orders.filter((order) =>
-    order.name.toLowerCase().includes(searchOrder.toLowerCase())
-  ) : [];
-  
+  const filteredOrders = Array.isArray(orders)
+    ? orders.filter((order) =>
+        order.name.toLowerCase().includes(searchOrder.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="flex max-h-screen overflow-hidden">
@@ -84,16 +65,14 @@ export default function OrdersPage() {
                   id={order.id}
                   name={order.name}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
-                  // onUpdate={fetchOrders}
+                  onUpdate={fetchOrders}
                 />
               ))}
             </tbody>
           </table>
         </div>
 
-        <button
-          className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto"
-        >
+        <button className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto">
           Agregar Pedido
         </button>
       </div>

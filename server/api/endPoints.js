@@ -7,6 +7,7 @@ import { removeProduct } from '../controllers/product/removeProductController.js
 import { updateProduct } from '../controllers/product/updateProductController.js';
 import { readOrder } from '../controllers/order/readOrderController.js';
 import { requestPasswordReset, resetPassword } from '../controllers/passwordrecovery/authController.js';
+import { removeOrder } from '../controllers/order/removeOrderController.js';
 
 router.post('/login', login);
 
@@ -18,6 +19,7 @@ router.patch('/update-product/:id', updateProduct);
 
 // orders
 router.get('/read-order', readOrder)
+router.patch('/delete-order/:id', removeOrder)
 
 // password recovery
 router.post('/request-password-reset', requestPasswordReset);
