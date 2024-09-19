@@ -1,4 +1,4 @@
-import { ProductFile } from "../components/ProductFile";
+import { ProductRow } from "../components/ProductRow";
 import Nav from "../components/Nav";
 import { useEffect, useState } from "react";
 import ModalWidows from "../components/ModalWindows";
@@ -84,7 +84,7 @@ export default function ProductsPage() {
             </thead>
             <tbody>
               {filteredProducts.map((product, index) => (
-                <ProductFile
+                <ProductRow
                   key={product.id}
                   id={product.id}
                   name={product.name}

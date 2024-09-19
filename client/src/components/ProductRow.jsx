@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ModalWidows from "./ModalWindows";
 
-export function ProductFile({ name, id, className, onUpdate }) {
+export function ProductRow({ name, id, className, onUpdate }) {
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     buttonText: "",
