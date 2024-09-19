@@ -40,24 +40,6 @@ export function ProductFile({ name, id, className, onUpdate }) {
         console.error("Error: ", error);
       });
   };
-  
-
-  const deleteProduct = () => {
-    fetch(`http://localhost:3000/remove-product/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.message === "Product deleted successfully") {
-          if (onUpdate) onUpdate();
-        } else {
-          console.error('Failed to delete product:', result.message);
-        }
-      });
-  };
 
   return (
     <>
