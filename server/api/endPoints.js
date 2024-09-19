@@ -8,6 +8,7 @@ import { eliminationProduct } from '../controllers/product/eliminationProductCon
 import { createOrder } from '../controllers/order/addOrderController.js';
 import { requestPasswordReset, resetPassword } from '../controllers/passwordrecovery/authController.js';
 import { removeOrder } from '../controllers/order/removeOrderController.js';
+import { readOrder } from '../controllers/order/readOrderController.js'
 
 router.post('/login', login);
 
