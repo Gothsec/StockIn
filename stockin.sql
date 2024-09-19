@@ -28,13 +28,13 @@ CREATE TABLE IF NOT EXISTS `login` (
 
 -- Volcando datos para la tabla stockin.login: ~2 rows (aproximadamente)
 INSERT INTO `login` (`email`, `password`, `role`) VALUES
-	('jhon2020@gmail.com', 'root', 'admin'),
+	('rodriguezjhon2090@gmail.com', 'root', 'admin'),
 	('empleado@gmail.com', 'root', 'empleado');
 
 -- Volcando estructura para tabla stockin.product
 CREATE TABLE IF NOT EXISTS `product` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT '0',
   `stock` int(11) DEFAULT NULL,
   `precioCosto` decimal(20,2) DEFAULT NULL,
   `precioPublico` decimal(20,2) DEFAULT NULL,
@@ -46,14 +46,21 @@ CREATE TABLE IF NOT EXISTS `product` (
   `bodega` varchar(50) DEFAULT NULL,
   `proveedor` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Volcando datos para la tabla stockin.product: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla stockin.product: ~11 rows (aproximadamente)
 INSERT INTO `product` (`id`, `name`, `stock`, `precioCosto`, `precioPublico`, `ganancia`, `estado`, `categoria`, `cantidadMinima`, `marca`, `bodega`, `proveedor`) VALUES
-	(6, 'Cera', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-	(12345, 'Crema para peinar', 50, 37500.00, 42500.00, 5000.00, 'activo', 'cuidado cabelludo', 5, 'loreal', 'principal', 'recamier'),
-	(122222, 'Capa', 50, 36000.00, 47000.00, 11000.00, 'activo', 'barberia', 5, 'loreal', 'principal', 'recamier'),
-	(146223, 'Maquina shavear', 10, 120000.00, 160000.00, 40000.00, 'activo', 'barberia', 2, 'whall', 'principal', 'whall medillin');
+	(1, 'CAPA XXL', 20, 65000.00, 75000.00, 10000.00, 'activo', 'utileria', 2, 'TEXTIL', 'PRINCIPAL', 'TEXTIL CALI'),
+	(2, 'VGR VOYAGER V-300', 11, 165000.00, 213000.00, 48000.00, 'activo', 'maquinas', 2, 'VGR', 'PRINCIPAL', 'VOYAGER'),
+	(3, 'Cera de Peinado Suave', 24, 23000.00, 30000.00, 7000.00, 'activo', 'maquinas', 4, 'American Crew', 'Principal', 'Loreal CALI'),
+	(4, 'Gel Fijador de Alto Poder', 25, 14000.00, 25000.00, 11000.00, 'activo', 'maquinas', 3, 'Loreal Pro', 'PRINCIPAL', 'LOREAL CALI'),
+	(5, 'Espuma de Afeitar Sensible', 34, 17000.00, 29000.00, 12000.00, 'activo', 'cremas', 7, 'GILLETE', 'PRINCIPAL', 'CARREFUL'),
+	(6, 'Aceite Hidratante para Barba', 7, 21000.00, 30000.00, 9000.00, 'activo', 'cremas', 2, 'The Bearded Man', 'PRINCIPAL', 'LOREAL'),
+	(7, 'Tijeras Profesionales para Barbero', 34, 94000.00, 120000.00, 26000.00, 'activo', 'cremas', 6, 'Joewell', 'PRINCIPAL', 'Joewell Medillin'),
+	(8, 'Navajas de Afeitar de Acero Inoxidable', 12, 23000.00, 32000.00, 9000.00, 'activo', 'cremas', 2, 'Merkur', 'PRINCIPAL', 'Merkur Bella'),
+	(9, 'Corta Barbas Eléctrico', 15, 63500.00, 75300.00, 11800.00, 'activo', 'cremas', 3, 'Philips', 'PRINCIPAL', 'Philis Tulua'),
+	(10, 'Brocha de Afeitar de Pelo de Tejón', 31, 13000.00, 24000.00, 11000.00, 'activo', 'cremas', 4, 'Omega', 'PRINCIPAL', 'Omega TM'),
+	(11, 'Secador de Cabello Profesional', 29, 150000.00, 214000.00, 64000.00, 'inactivo', 'maquinas', 2, 'Remingtong', 'PRINCIPAL', 'RR cimbur');
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

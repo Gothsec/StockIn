@@ -1,5 +1,6 @@
 import express from 'express';
 import routes from './server/api/endPoints.js';
+import 'dotenv/config';
 import cors from 'cors';
 
 const app = express();

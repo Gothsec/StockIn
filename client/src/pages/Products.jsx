@@ -22,6 +22,7 @@ export default function ProductsPage() {
     setWindowsModal(!windowsModal);
   };
 
+  // Trae todos los productos activos de la bd
   const fetchProducts = () => {
     fetch("http://localhost:3000/read-product", {
       method: "GET",
@@ -47,9 +48,9 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const handleAddProduct = (e) => {
+  const onUpdate = (e) => {
     if (e) e.preventDefault();
-    fetchProducts(); // Actualiza la lista de productos después de agregar uno nuevo
+    fetchProducts(); // Lista todos los productos activos que hay en la bd, dando el efecto de actualización
   };
 
   const filteredProducts = Array.isArray(products) ? products.filter((product) =>
@@ -84,12 +85,13 @@ export default function ProductsPage() {
             </thead>
             <tbody>
               {filteredProducts.map((product, index) => (
+                // se llama el componente ProductRow para mostrar la lista de productos
                 <ProductRow
                   key={product.id}
                   id={product.id}
                   name={product.name}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
-                  onUpdate={fetchProducts} // Agrega la función de actualización
+                  onUpdate={fetchProducts} // se le Asigna la función que lista los productos de la bd, dando un efecto de actualización
                 />
               ))}
             </tbody>
@@ -99,7 +101,7 @@ export default function ProductsPage() {
         <button
           className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto"
           onClick={() =>
-            abrirCerrarModal("Nuevo Producto", "Crear", handleAddProduct)
+            abrirCerrarModal("Nuevo Producto", "Crear", onUpdate)
           }
         >
           Agregar Producto
