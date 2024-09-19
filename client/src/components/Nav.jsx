@@ -5,10 +5,12 @@ import { ReportIcon } from "../assets/ReportIcon";
 import { ProductIcon } from "../assets/ProductIcon";
 import { DashboardIcon } from "../assets/DashboardIcon";
 import { LogoutIcon } from "../assets/LogoutIcon";
+import { OrdersIcon } from "../assets/OrdersIcon";
 
 const navAdminItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon /> },
+  { text: "Pedidos", icon: <OrdersIcon/>},
   { text: "Empleados", icon: <EmployeeIcon /> },
   { text: "Reportes", icon: <ReportIcon /> },
   { text: "Ventas", icon: <SalesIcon /> },
@@ -18,6 +20,7 @@ const navAdminItems = [
 const navItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon /> },
+  { text: "Pedidos", icon: <OrdersIcon/>},
   { text: "Ventas", icon: <SalesIcon /> },
 ];
 
