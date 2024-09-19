@@ -97,6 +97,7 @@ export default function OrdersPage() {
                   id={order.id}
                   name={order.name}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
+                  onUpdate={fetchOrders}
                 />
               ))}
             </tbody>
