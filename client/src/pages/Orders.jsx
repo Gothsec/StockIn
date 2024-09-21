@@ -28,6 +28,25 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
+  const handleDeleteOrder = (id) => {
+    fetch(`http://localhost:3000/delete-order/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          setOrders((prevOrders) => prevOrders.filter((order) => order.id !== id));
+        } else {
+          console.error("No se pudo eliminar el pedido.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error: ", err);
+      });
+  };
+  
   const handleCreateOrder = (e) => {
     e.preventDefault();
     const newOrder = {
@@ -97,6 +116,7 @@ export default function OrdersPage() {
                   id={order.id}
                   name={order.name}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
+                  onDelete={handleDeleteOrder}
                   onUpdate={fetchOrders}
                 />
               ))}
