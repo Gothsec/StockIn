@@ -1,11 +1,9 @@
 import React from "react";
 
 export function OrderRow({ name, id, className, onDelete }) {
-  const handleDelete = () => {
-    onDelete(id);
-  };
-
+ 
   const handleDeleteOrder = () => {
+    onDelete(id);
     fetch(`http://localhost:3000/delete-order/${id}`, {
       method: "PATCH",
       headers: {
