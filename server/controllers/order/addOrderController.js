@@ -9,7 +9,7 @@ export function createOrder(req, res) {
       return res.status(400).json({ message: "El nombre del pedido es obligatorio" });
     }
 
-    const query = "INSERT INTO `order` (name) VALUES (?)";
+    const query = "INSERT INTO _order (name) VALUES (?)";
     const result = db.query(query, [name]);
 
     res.status(201).json({ message: "Pedido creado exitosamente", orderId: result.insertId });
