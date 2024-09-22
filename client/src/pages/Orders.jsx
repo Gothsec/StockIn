@@ -7,6 +7,7 @@ export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [searchOrder, setSearchOrder] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newOrderName, setNewOrderName] = useState("");
 
   const fetchOrders = () => {
     fetch("http://localhost:3000/read-order", {
@@ -46,7 +47,33 @@ export default function OrdersPage() {
         console.error("Error: ", err);
       });
   };
-  
+
+  const handleCreateOrder = (e) => {
+    e.preventDefault();
+    const newOrder = {
+      name: newOrderName,
+    };
+
+    fetch("http://localhost:3000/create-order", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newOrder),
+    })
+      .then((response) => {
+        if (response.ok) {
+          setOrders((prevOrders) => [...prevOrders, newOrder]);
+          setNewOrderName("");
+          fetchOrders();
+        } else {
+          console.error("No se pudo crear el pedido.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error: ", err);
+      });
+  };
 
   const filteredOrders = Array.isArray(orders)
     ? orders.filter((order) =>
