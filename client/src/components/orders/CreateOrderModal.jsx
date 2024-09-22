@@ -52,12 +52,12 @@ export default function CreateOrderModal({ onCreate, toggleModal }) {
 
     const newOrder = {
       name: newOrderName,
-      quantity,
-      content,
-      category,
-      supplier,
-      date,
-      description,
+      quantity: quantity,
+      content: content,
+      category: category,
+      supplier: supplier,
+      date: date,
+      description: description,
     };
 
     fetch("http://localhost:3000/create-order", {
