@@ -38,7 +38,7 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
               type="text"
               readOnly={option === "read"}
               placeholder="Nombre del pedido"
-              value={data.name || ''}
+              value={JSON.stringify(data.name) || ""}
               onChange={(e) => setData({ ...data, name: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
@@ -48,7 +48,7 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
               type="number"
               readOnly={option === "read"}
               placeholder="Cantidad"
-              value={data.quantity || ''}
+              value={JSON.stringify(data.quantity) || 1}
               onChange={(e) => setData({ ...data, quantity: Number(e.target.value) })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
@@ -58,14 +58,14 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
               type="text"
               readOnly={option === "read"}
               placeholder="Contenido"
-              value={data.content || ''}
+              value={JSON.stringify(data.content) || ""}
               onChange={(e) => setData({ ...data, content: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="mb-4">
             <select
-              value={data.category || ''}
+              value={JSON.stringify(data.category) || ""}
               disabled={option === "read"}
               onChange={(e) => setData({ ...data, category: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
@@ -85,7 +85,7 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
               type="text"
               readOnly={option === "read"}
               placeholder="Proveedor"
-              value={data.supplier || ''}
+              value={JSON.stringify(data.supplier) || ""}
               onChange={(e) => setData({ ...data, supplier: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
@@ -94,7 +94,7 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             <input
               type="date"
               readOnly={option === "read"}
-              value={data.date || ''}
+              value={JSON.stringify(data.date) || ""}
               onChange={(e) => setData({ ...data, date: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
@@ -103,7 +103,7 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             <textarea
               placeholder="Descripción del pedido (opcional)"
               readOnly={option === "read"}
-              value={data.description || ''}
+              value={JSON.stringify(data.description) || ""}
               onChange={(e) => setData({ ...data, description: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />

@@ -1,4 +1,4 @@
-import db from "../../database/db.js";
+import db from '../../database/db.js';
 
 export async function getOrderById(req, res) {
   const { id } = req.params;
@@ -9,10 +9,13 @@ export async function getOrderById(req, res) {
       if (err) {
         return res.status(500).json({ message: 'Internal server error', error: err });
       }
-      console.log(result);
-      res.json(result)
-    })
+      if (result.length > 0) {
+        res.json(result[0]);
+      } else {
+        res.status(404).json({ message: 'Order not found' });
+      }
+    });
   } catch (err) {
-    return res.status(500).json({ message: 'Internal server error', error: err.message })
+    return res.status(500).json({ message: 'Internal server error', error: err.message });
   }
 }
