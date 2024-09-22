@@ -1,12 +1,13 @@
 import Nav from "../components/Nav";
 import { OrderRow } from "../components/orders/OrderRow";
 import { useEffect, useState } from "react";
+import CreateOrderModal from "../components/orders/CreateOrderModal";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
   const [searchOrder, setSearchOrder] = useState("");
-  const [newOrderName, setNewOrderName] = useState(""); // Para el nombre del nuevo pedido
-  const [isModalOpen, setIsModalOpen] = useState(false); // Para manejar la visibilidad del modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newOrderName, setNewOrderName] = useState("");
 
   const fetchOrders = () => {
     fetch("http://localhost:3000/read-order", {
@@ -46,30 +47,31 @@ export default function OrdersPage() {
         console.error("Error: ", err);
       });
   };
-  
 
   const handleCreateOrder = (e) => {
     e.preventDefault();
     const newOrder = {
-      name: newOrderName, // Aquí puedes agregar otros campos que se requieran
+      name: newOrderName,
     };
 
     fetch("http://localhost:3000/create-order", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-type": "application/json",
       },
       body: JSON.stringify(newOrder),
     })
-      .then((response) => response.json())
-      .then((result) => {
-        console.log("Pedido creado: ", result);
-        setNewOrderName(""); // Limpiar el input después de crear el pedido
-        fetchOrders(); // Actualizar la lista de pedidos
-        setIsModalOpen(false); // Cerrar el modal después de crear el pedido
+      .then((response) => {
+        if (response.ok) {
+          setOrders((prevOrders) => [...prevOrders, newOrder]);
+          setNewOrderName("");
+          fetchOrders();
+        } else {
+          console.error("No se pudo crear el pedido.");
+        }
       })
-      .catch((error) => {
-        console.error("Error creando pedido:", error);
+      .catch((err) => {
+        console.error("Error: ", err);
       });
   };
 
@@ -79,7 +81,6 @@ export default function OrdersPage() {
       )
     : [];
 
-  // Función para abrir y cerrar el modal
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
@@ -125,7 +126,6 @@ export default function OrdersPage() {
           </table>
         </div>
 
-        {/* Botón para abrir el modal */}
         <button
           className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto"
           onClick={toggleModal}
@@ -133,38 +133,8 @@ export default function OrdersPage() {
           Agregar Pedido
         </button>
 
-        {/* Modal para crear nuevo pedido */}
         {isModalOpen && (
-          <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-6 rounded-lg w-1/3">
-              <h2 className="text-xl font-bold mb-4">Crear nuevo pedido</h2>
-              <form onSubmit={handleCreateOrder}>
-                <input
-                  type="text"
-                  placeholder="Nombre del pedido"
-                  value={newOrderName}
-                  onChange={(e) => setNewOrderName(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 w-full mb-4"
-                  required
-                />
-                <div className="flex justify-end gap-4">
-                  <button
-                    type="button"
-                    className="bg-gray-400 py-1 px-3 rounded-md text-white hover:bg-gray-600"
-                    onClick={toggleModal}
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-yellow-500 py-1 px-3 rounded-md text-white hover:bg-yellow-600"
-                  >
-                    Crear
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+          <CreateOrderModal onCreate={fetchOrders} toggleModal={toggleModal} />
         )}
       </div>
     </div>
