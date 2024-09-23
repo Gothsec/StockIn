@@ -9,6 +9,8 @@ import { createOrder } from '../controllers/order/addOrderController.js';
 import { requestPasswordReset, resetPassword } from '../controllers/passwordrecovery/authController.js';
 import { removeOrder } from '../controllers/order/removeOrderController.js';
 import { readOrder } from '../controllers/order/readOrderController.js'
+import { getOrderById } from '../controllers/order/getOrderByIdController.js'
+import { updateOrder } from '../controllers/order/updateOrderController.js'
 
 router.post('/login', login);
 
@@ -20,8 +22,10 @@ router.get('/get-product/:id', getProductById)
 
 // orders
 router.get('/read-order', readOrder);
+router.get('/get-order/:id', getOrderById)
 router.post("/create-order", createOrder);
 router.patch('/delete-order/:id', removeOrder)
+router.put('/update-order/:id', updateOrder)
 
 // password recovery
 router.post('/request-password-reset', requestPasswordReset);

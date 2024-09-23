@@ -1,20 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
+import ReadUpdateOrderModal from "./ReadUpdateOrderModal";
 
 export function OrderRow({ name, id, className, onDelete }) {
- 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalOption, setModalOption] = useState("read");
+
   const handleDeleteOrder = () => {
     onDelete(id);
     fetch(`http://localhost:3000/delete-order/${id}`, {
       method: "PATCH",
       headers: {
-        "Content-type": "application/json",
+        "Content-Type": "application/json",
       },
     })
       .then((response) => {
         if (response.ok) {
-          setOrders((prevOrders) =>
-            prevOrders.filter((order) => order.id !== id)
-          );
+          // Aquí deberías actualizar el estado de la lista de pedidos
         } else {
           console.error("No se pudo eliminar el pedido.");
         }
@@ -24,6 +25,14 @@ export function OrderRow({ name, id, className, onDelete }) {
       });
   };
 
+  const openModal = (option) => {
+    setModalOption(option);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <>
@@ -41,26 +50,22 @@ export function OrderRow({ name, id, className, onDelete }) {
           </button>
           <button
             className="py-1 px-2 bg-green-500 text-white"
-            onClick={() =>
-              abrirCerrarModal("Modificar Producto", "Modificar", () =>
-                console.log("Función del botón clickeada")
-              )
-            }
+            onClick={() => openModal("update")}
           >
             Editar
           </button>
           <button
             className="py-1 px-2 bg-blue-500 text-white"
-            onClick={() =>
-              abrirCerrarModal("Información Producto", "Mostrar", () =>
-                console.log("Función del botón clickeada")
-              )
-            }
+            onClick={() => openModal("read")}
           >
             Info
           </button>
         </td>
       </tr>
+
+      {isModalOpen && (
+        <ReadUpdateOrderModal option={modalOption} id={id} onClose={closeModal} />
+      )}
     </>
   );
 }
