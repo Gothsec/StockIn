@@ -12,9 +12,11 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(response);
         console.log(data);
-        setData(data);
+        setData({
+          ...data,
+          quantity: data.quantity || 1
+        });
       })
       .catch((error) => {
         console.error("Error obteniendo datos:", error);
@@ -22,8 +24,27 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
   }, [id]);
 
   const handleSubmit = (e) => {
+    console.log(data);
     e.preventDefault();
-    console.log("Datos a modificar:", data);
+    fetch(`http://localhost:3000/update-order/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("Pedido modificado con éxito.");
+          onClose();
+          window.location.reload();
+        } else {
+          console.error("No se pudo modificar el pedido.");
+        }
+      })
+      .catch((err) => {
+        console.error("Error: ", err);
+      });
   };
 
   return (
@@ -35,37 +56,41 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <input
+              name="name"
               type="text"
               readOnly={option === "read"}
               placeholder="Nombre del pedido"
-              value={JSON.stringify(data.name) || ""}
+              value={data.name || ""}
               onChange={(e) => setData({ ...data, name: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="mb-4">
             <input
+              name="quantity"
               type="number"
               readOnly={option === "read"}
               placeholder="Cantidad"
-              value={JSON.stringify(data.quantity) || 1}
+              value={data.quantity || 1}
               onChange={(e) => setData({ ...data, quantity: Number(e.target.value) })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="mb-4">
             <input
+              name="content"
               type="text"
               readOnly={option === "read"}
               placeholder="Contenido"
-              value={JSON.stringify(data.content) || ""}
+              value={data.content || ""}
               onChange={(e) => setData({ ...data, content: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="mb-4">
             <select
-              value={JSON.stringify(data.category) || ""}
+              name="category"
+              value={data.category || ""}
               disabled={option === "read"}
               onChange={(e) => setData({ ...data, category: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
@@ -82,28 +107,32 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
           </div>
           <div className="mb-4">
             <input
+              name="supplier"
               type="text"
               readOnly={option === "read"}
               placeholder="Proveedor"
-              value={JSON.stringify(data.supplier) || ""}
+              value={data.supplier || ""}
               onChange={(e) => setData({ ...data, supplier: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="mb-4">
             <input
+              name="date"
               type="date"
               readOnly={option === "read"}
-              value={JSON.stringify(data.date) || ""}
+              value={data.date || ""}
               onChange={(e) => setData({ ...data, date: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
           </div>
           <div className="mb-4">
             <textarea
+              name="description"
               placeholder="Descripción del pedido (opcional)"
+              maxLength={1000}
               readOnly={option === "read"}
-              value={JSON.stringify(data.description) || ""}
+              value={data.description || ""}
               onChange={(e) => setData({ ...data, description: e.target.value })}
               className="border border-gray-300 rounded-md px-3 py-2 w-full"
             />
