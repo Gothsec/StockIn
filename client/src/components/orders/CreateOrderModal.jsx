@@ -82,6 +82,8 @@ export default function CreateOrderModal({ onCreate, toggleModal }) {
       .catch((error) => {
         console.error("Error creando pedido:", error);
       });
+
+      window.location.reload();
   };
 
   return (

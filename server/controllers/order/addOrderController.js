@@ -9,8 +9,8 @@ export function createOrder(req, res) {
       return res.status(400).json({ message: "El nombre del pedido es obligatorio" });
     }
 
-    const query = "INSERT INTO _order (name, quantity, content, category, supplier, date, description) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    const result = db.query(query, [name, quantity, content, category, supplier, date, description]);
+    const query = "INSERT INTO _order (name, state , quantity, content, category, supplier, date, description) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    const result = db.query(query, [name, "activo", quantity, content, category, supplier, date, description]);
 
     res.status(201).json({ message: "Pedido creado exitosamente", orderId: result.insertId });
   } catch (error) {
