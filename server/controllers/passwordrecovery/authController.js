@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import { sendPasswordResetEmail } from './mailService.js';
 import { getUserByEmail, updateUserPassword } from '../../models/userModel.js';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'default-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET || 'secret';
 
 const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
@@ -13,10 +13,30 @@ const requestPasswordReset = async (req, res) => {
   }
 
   const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: '1h' });
-
   await sendPasswordResetEmail(email, token);
 
   return res.json({ message: 'Password reset link has been sent to your email.' });
+};
+
+const showResetPasswordForm = (req, res) => {
+  const { token } = req.params;
+
+  res.send(`
+    <html>
+      <head>
+        <title>Reset Password</title>
+      </head>
+      <body>
+        <h2>Reset your password</h2>
+        <form action="/reset-password" method="POST">
+          <input type="hidden" name="token" value="${token}" />
+          <label for="newPassword">New Password:</label>
+          <input type="password" name="newPassword" id="newPassword" required />
+          <button type="submit">Submit</button>
+        </form>
+      </body>
+    </html>
+  `);
 };
 
 const resetPassword = async (req, res) => {
@@ -37,5 +57,6 @@ const resetPassword = async (req, res) => {
 
 export {
   requestPasswordReset,
+  showResetPasswordForm,
   resetPassword,
 };

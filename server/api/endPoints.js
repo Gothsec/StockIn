@@ -6,7 +6,7 @@ import { addProduct } from '../controllers/product/addProductController.js';
 import { getProductById } from '../controllers/product/getProductController.js'
 import { eliminationProduct } from '../controllers/product/eliminationProductController.js';
 import { createOrder } from '../controllers/order/addOrderController.js';
-import { requestPasswordReset, resetPassword } from '../controllers/passwordrecovery/authController.js';
+import { requestPasswordReset, resetPassword, showResetPasswordForm } from '../controllers/passwordrecovery/authController.js';
 import { removeOrder } from '../controllers/order/removeOrderController.js';
 import { readOrder } from '../controllers/order/readOrderController.js'
 import { getOrderById } from '../controllers/order/getOrderByIdController.js'
@@ -29,6 +29,7 @@ router.put('/update-order/:id', updateOrder)
 
 // password recovery
 router.post('/request-password-reset', requestPasswordReset);
+router.get('/reset-password/:token', showResetPasswordForm);
 router.post('/reset-password', resetPassword);
 
 export default router;
