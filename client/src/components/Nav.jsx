@@ -10,17 +10,16 @@ import { OrdersIcon } from "../assets/OrdersIcon";
 const navAdminItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon /> },
-  { text: "Pedidos", icon: <OrdersIcon/>},
+  { text: "Pedidos", icon: <OrdersIcon /> },
   { text: "Empleados", icon: <EmployeeIcon /> },
   { text: "Reportes", icon: <ReportIcon /> },
   { text: "Ventas", icon: <SalesIcon /> },
 ];
 
-// Opciones para los usuarios sin privilegios de administrador
 const navItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon /> },
-  { text: "Pedidos", icon: <OrdersIcon/>},
+  { text: "Pedidos", icon: <OrdersIcon /> },
   { text: "Ventas", icon: <SalesIcon /> },
 ];
 
@@ -33,38 +32,49 @@ export default function Nav() {
   const role = localStorage.getItem('role');
 
   return (
-    <nav className="bg-blue-600 w-72 h-screen pt-6 px-1 flex flex-col">
+    <nav className="bg-blue-600 w-72 h-screen pt-6 px-1 flex flex-col transition-all duration-300 sm:w-min">
       <div>
-        <div className="flex items-center ml-6 mb-4">
+        <div className="flex items-center ml-5 mb-4 sm:ml-6">
           <StockInLogo color="#fff" width="35px" />
-          <span className="ml-2 mb-1 inline-block text-white font-bold text-2xl">
+          <span className="ml-2 mb-1 hidden text-white font-bold text-2xl sm:block">
             StockIn
           </span>
         </div>
         <hr className="mb-4 w-[90%] mx-auto border-blue-200" />
-        <span className="font-bold text-xs uppercase inline-block ml-6 mb-2 text-blue-200">
+        <span className="font-bold text-xs uppercase inline-block ml-4 mb-2 text-blue-200 sm:block sm:ml-6">
           {role === 'admin' ? 'Admin' : 'Empleado'}
         </span>
       </div>
       <ul className="flex flex-col justify-between h-full flex-1">
         <div>
-          {role === 'employee' && navItems.map((item, index) => (
-            <li key={index} className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer">
-              {item.icon}
-              {item.text}
-            </li>
-          ))}
+          {role === 'employee' &&
+            navItems.map((item, index) => (
+              <li
+                key={index}
+                className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
+              >
+                {item.icon}
+                <span className="hidden sm:inline">{item.text}</span>
+              </li>
+            ))}
 
-          {role === 'admin' && navAdminItems.map((item, index) => (
-            <li key={index} className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer">
-              {item.icon}
-              {item.text}
-            </li>
-          ))}
+          {role === 'admin' &&
+            navAdminItems.map((item, index) => (
+              <li
+                key={index}
+                className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
+              >
+                {item.icon}
+                <span className="hidden sm:inline">{item.text}</span>
+              </li>
+            ))}
         </div>
-        <li onClick={handleLogout} className="px-6 py-3 mb-1 rounded-lg text-white font-medium flex items-center gap-3 text-base transition-colors hover:bg-red-500 hover:text-white cursor-pointer">
+        <li
+          onClick={handleLogout}
+          className="px-6 py-3 mb-1 rounded-lg text-white font-medium flex items-center gap-3 text-base transition-colors hover:bg-red-500 hover:text-white cursor-pointer"
+        >
           <LogoutIcon />
-          <span>Logout</span>
+          <span className="hidden sm:inline">Logout</span>
         </li>
       </ul>
     </nav>
