@@ -43,7 +43,7 @@ export function ProductRow({ name, id, className, onUpdate }) {
   // setea los valores del abrirCerrarModal
   const setOnClose = () => {abrirCerrarModal("", "", () => {})}
 
-  const getProductById = (id) => {
+  const getProductById = (id, option) => {
     // Verifica que el id es válido
     if (!id) {
       console.error('No se proporcionó un ID de producto válido.');
@@ -57,12 +57,21 @@ export function ProductRow({ name, id, className, onUpdate }) {
         return response.json();
       })
       .then((result) => {
-        abrirCerrarModal(
-          "Información Producto",
-          "Mostrar",
-          setOnClose,
-          result
-        );
+        if (option === "update") {
+          abrirCerrarModal(
+            "Información Producto",
+            "Modificar",
+            setOnClose,
+            result
+          );
+        } else {
+          abrirCerrarModal(
+            "Información Producto",
+            "Mostrar",
+            setOnClose,
+            result
+          );
+        }
       })
       .catch((error) => {
         console.error("Error al obtener información del producto: ", error);
@@ -88,14 +97,14 @@ export function ProductRow({ name, id, className, onUpdate }) {
           </button>
           <button 
             className="py-1 px-2 bg-green-500 text-white"
-            onClick={() => abrirCerrarModal("Modificar Producto", "Modificar", )}
+            onClick={() => getProductById(id, "update")}
           >
             Editar
           </button>
 
           <button 
             className="py-1 px-2 bg-blue-500 text-white"
-            onClick={() => getProductById(id)}
+            onClick={() => getProductById(id, "read")}
           >
             Info
           </button>
@@ -108,7 +117,8 @@ export function ProductRow({ name, id, className, onUpdate }) {
         titleModal={modalProps.titleModal}
         buttonText={modalProps.buttonText}
         onClickFunction={modalProps.onClickFunction}
-        productInfo={modalProps.productInfo} // Pasa la información del producto al modal
+        productInfo={modalProps.productInfo}
+        productId={id}
       />
     </tr>
     </>

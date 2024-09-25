@@ -3,6 +3,7 @@ const router = express.Router();
 import { login } from '../controllers/loginController.js';
 import { readProduct } from '../controllers/product/readProductsController.js';
 import { addProduct } from '../controllers/product/addProductController.js';
+import { updateProduct } from '../controllers/product/editProductController.js'
 import { getProductById } from '../controllers/product/getProductController.js'
 import { eliminationProduct } from '../controllers/product/eliminationProductController.js';
 import { createOrder } from '../controllers/order/addOrderController.js';
@@ -18,6 +19,7 @@ router.post('/login', login);
 router.get('/read-product', readProduct)
 router.post('/add-product', addProduct)
 router.patch('/elimination-product/:id', eliminationProduct)
+router.put('/update-product/:id', updateProduct)
 router.get('/get-product/:id', getProductById)
 
 // orders
