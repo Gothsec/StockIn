@@ -32,16 +32,16 @@ export default function Nav() {
   const role = localStorage.getItem('role');
 
   return (
-    <nav className="bg-blue-600 w-72 h-screen pt-6 px-1 flex flex-col transition-all duration-300 sm:w-min">
+    <nav className="bg-blue-600 w-72 h-screen pt-6 px-1 flex flex-col transition-all duration-300 md:w-min">
       <div>
-        <div className="flex items-center ml-5 mb-4 sm:ml-6">
+        <div className="flex items-center ml-5 mb-4 md:ml-6">
           <StockInLogo color="#fff" width="35px" />
-          <span className="ml-2 mb-1 hidden text-white font-bold text-2xl sm:block">
+          <span className="ml-2 mb-1 hidden text-white font-bold text-2xl md:block">
             StockIn
           </span>
         </div>
         <hr className="mb-4 w-[90%] mx-auto border-blue-200" />
-        <span className="font-bold text-xs uppercase inline-block ml-4 mb-2 text-blue-200 sm:block sm:ml-6">
+        <span className="font-bold text-xs uppercase inline-block ml-4 mb-2 text-blue-200 md:block md:ml-6">
           {role === 'admin' ? 'Admin' : 'Empleado'}
         </span>
       </div>
@@ -54,7 +54,7 @@ export default function Nav() {
                 className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
               >
                 {item.icon}
-                <span className="hidden sm:inline">{item.text}</span>
+                <span className="hidden md:inline">{item.text}</span>
               </li>
             ))}
 
@@ -65,7 +65,7 @@ export default function Nav() {
                 className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
               >
                 {item.icon}
-                <span className="hidden sm:inline">{item.text}</span>
+                <span className="hidden md:inline">{item.text}</span>
               </li>
             ))}
         </div>
@@ -74,7 +74,7 @@ export default function Nav() {
           className="px-6 py-3 mb-1 rounded-lg text-white font-medium flex items-center gap-3 text-base transition-colors hover:bg-red-500 hover:text-white cursor-pointer"
         >
           <LogoutIcon />
-          <span className="hidden sm:inline">Logout</span>
+          <span className="hidden md:inline">Logout</span>
         </li>
       </ul>
     </nav>
