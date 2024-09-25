@@ -32,7 +32,7 @@ export default function Nav() {
   const role = localStorage.getItem('role');
 
   return (
-    <nav className="bg-blue-600 w-72 h-screen pt-6 px-1 flex flex-col transition-all duration-300 md:w-min">
+    <nav className="bg-blue-600 w-min h-screen pt-6 px-1 flex flex-col transition-all duration-300 md:w-72">
       <div>
         <div className="flex items-center ml-5 mb-4 md:ml-6">
           <StockInLogo color="#fff" width="35px" />
