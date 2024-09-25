@@ -26,15 +26,15 @@
         console.log(productInfo);
         // Actualiza los campos con la información del producto
         setNewProductName(productInfo.name || "");
-        setStock(productInfo.stock || "");
-        setPrecioCosto(productInfo.precioCosto || "");
-        setPrecioPublico(productInfo.precioPublico || "");
-        setCantidadMinima(productInfo.cantidadMinima || "");
-        setMarca(productInfo.marca || "");
-        setBodega(productInfo.bodega || "");
-        setProveedor(productInfo.proveedor || "");
-        setEstadoProducto(productInfo.estado || "activo");
-        setCategoria(productInfo.categoria || "maquinas");
+        setStock(productInfo.total_stock || "");
+        setPrecioCosto(productInfo.cost_price || "");
+        setPrecioPublico(productInfo.public_price || "");
+        setCantidadMinima(productInfo.minimum_quantity || "");
+        setMarca(productInfo.brand || "");
+        setBodega(productInfo.cellar || "");
+        setProveedor(productInfo.supplier || "");
+        setEstadoProducto(productInfo.state || "activo");
+        setCategoria(productInfo.category || "maquinas");
       }
     }, [productInfo]);
 

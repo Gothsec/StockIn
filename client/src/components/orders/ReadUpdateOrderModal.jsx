@@ -13,9 +13,11 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
+        const formattedDate = data.date ? data.date.split('/').reverse().join('-') : '';
         setData({
           ...data,
-          quantity: data.quantity || 1
+          quantity: data.quantity || 1,
+          date: formattedDate,
         });
       })
       .catch((error) => {
@@ -24,14 +26,16 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
   }, [id]);
 
   const handleSubmit = (e) => {
-    console.log(data);
     e.preventDefault();
+    
+    const dateToSend = data.date ? data.date.split('-').reverse().join('/') : '';
+    
     fetch(`http://localhost:3000/update-order/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify({ ...data, date: dateToSend })
     })
       .then((response) => {
         if (response.ok) {
@@ -55,7 +59,9 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
+            <label className="text-sm" htmlFor="name">Nombre</label>
             <input
+              id="name"
               name="name"
               type="text"
               readOnly={option === "read"}
@@ -66,7 +72,9 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             />
           </div>
           <div className="mb-4">
+            <label className="text-sm" htmlFor="quantity">Cantidad</label>
             <input
+              id="quantity"
               name="quantity"
               type="number"
               readOnly={option === "read"}
@@ -77,7 +85,9 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             />
           </div>
           <div className="mb-4">
+            <label className="text-sm" htmlFor="content">Contenido</label>
             <input
+              id="content"
               name="content"
               type="text"
               readOnly={option === "read"}
@@ -88,7 +98,9 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             />
           </div>
           <div className="mb-4">
+            <label className="text-sm" htmlFor="category">Categoría</label>
             <select
+              id="category"
               name="category"
               value={data.category || ""}
               disabled={option === "read"}
@@ -106,7 +118,9 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             </select>
           </div>
           <div className="mb-4">
+            <label className="text-sm" htmlFor="supplier">Proveedor</label>
             <input
+              id="supplier"
               name="supplier"
               type="text"
               readOnly={option === "read"}
@@ -117,7 +131,9 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             />
           </div>
           <div className="mb-4">
+            <label className="text-sm" htmlFor="date">Fecha</label>
             <input
+              id="date"
               name="date"
               type="date"
               readOnly={option === "read"}
@@ -127,7 +143,9 @@ export default function ReadUpdateOrderModal({ option, id, onClose }) {
             />
           </div>
           <div className="mb-4">
+            <label className="text-sm" htmlFor="description">Descripción</label>
             <textarea
+              id="description"
               name="description"
               placeholder="Descripción del pedido (opcional)"
               maxLength={1000}

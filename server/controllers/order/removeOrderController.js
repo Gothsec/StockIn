@@ -1,7 +1,7 @@
 import db from "../../database/db.js";
 
 export function removeOrder(req, res) {
-  const consult = "UPDATE _order SET active = 'inactive' WHERE id = ?";
+  const consult = "UPDATE order_ SET state = 'N' WHERE id = ?"; 
   const id = parseInt(req.params.id);
 
   if (!id || isNaN(id)) {

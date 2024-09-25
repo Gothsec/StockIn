@@ -1,7 +1,7 @@
 import db from "../../database/db.js";
 
 export function editProduct(req, res) {
-    const { nombre, stock, precioCosto, precioPublico, estado, categoria, cantidadMinima, marca, bodega, proveedor } = req.body;
+    const { nombre, stock, precioCosto, precioPublico, categoria, cantidadMinima, marca, bodega, proveedor } = req.body;
     const id = parseInt(req.params.id);
   
     // Validar ID
@@ -14,16 +14,15 @@ export function editProduct(req, res) {
     let queryParams = [];
     
     // Añadir atributos a actualizar
-    if (nombre) { query += "nombre = ?, "; queryParams.push(nombre); }
-    if (stock !== undefined) { query += "stock = ?, "; queryParams.push(stock); }
-    if (precioCosto !== undefined) { query += "precioCosto = ?, "; queryParams.push(precioCosto); }
-    if (precioPublico !== undefined) { query += "precioPublico = ?, "; queryParams.push(precioPublico); }
-    if (estado) { query += "estado = ?, "; queryParams.push(estado); }
-    if (categoria) { query += "categoria = ?, "; queryParams.push(categoria); }
-    if (cantidadMinima !== undefined) { query += "cantidadMinima = ?, "; queryParams.push(cantidadMinima); }
-    if (marca) { query += "marca = ?, "; queryParams.push(marca); }
-    if (bodega) { query += "bodega = ?, "; queryParams.push(bodega); }
-    if (proveedor) { query += "proveedor = ?, "; queryParams.push(proveedor); }
+    if (nombre) { query += "name = ?, "; queryParams.push(nombre); }
+    if (stock !== undefined) { query += "total_stock = ?, "; queryParams.push(stock); }
+    if (precioCosto !== undefined) { query += "cost_price = ?, "; queryParams.push(precioCosto); }
+    if (precioPublico !== undefined) { query += "public_price = ?, "; queryParams.push(precioPublico); }
+    if (categoria) { query += "category = ?, "; queryParams.push(categoria); }
+    if (cantidadMinima !== undefined) { query += "minimum_quantity = ?, "; queryParams.push(cantidadMinima); }
+    if (marca) { query += "brand = ?, "; queryParams.push(marca); }
+    if (bodega) { query += "cellar = ?, "; queryParams.push(bodega); }
+    if (proveedor) { query += "supplier = ?, "; queryParams.push(proveedor); }
   
     // Eliminar la última coma y espacio de la consulta
     query = query.slice(0, -2);
