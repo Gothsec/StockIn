@@ -26,9 +26,6 @@ export function ProductRow({ name, id, className, onUpdate }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        estado: "inactivo", // El campo que se va a actualizar
-      }),
     })
       .then((response) => response.json())
       .then((result) => {

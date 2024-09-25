@@ -1,16 +1,15 @@
 import db from "../../database/db.js";
 
 export function eliminationProduct(req, res) {
-  const { estado } = req.body;
-  const consult = "UPDATE product SET estado = ? WHERE id = ?";
+  const consult = "UPDATE product SET state = 'N' WHERE id = ?";
   const id = parseInt(req.params.id);
 
-  if (!id || isNaN(id) || !estado) {
+  if (!id || isNaN(id)) {
     return res.status(400).json({ message: "Invalid or missing product ID or state" });
   }
 
   try {
-    db.query(consult, [estado, id], (err, result) => {
+    db.query(consult, [id], (err, result) => {
       if (err) {
         return res.status(500).json({ message: "Internal server error", error: err });
       }

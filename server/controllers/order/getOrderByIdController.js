@@ -2,7 +2,7 @@ import db from '../../database/db.js';
 
 export async function getOrderById(req, res) {
   const { id } = req.params;
-  const consult = `SELECT * FROM _order WHERE id = ?`;
+  const consult = `SELECT * FROM order_ WHERE id = ?`;
 
   try {
     await db.query(consult, [id], (err, result) => {

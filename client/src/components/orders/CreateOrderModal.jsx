@@ -50,14 +50,18 @@ export default function CreateOrderModal({ onCreate, toggleModal }) {
       return;
     }
 
+    const formattedDate = date
+      ? date.split('-').reverse().join('/') // Convierte de yyyy-mm-dd a dd/mm/yyyy
+      : '';
+
     const newOrder = {
       name: newOrderName,
+      description: description,
       quantity: quantity,
       content: content,
       category: category,
+      date: formattedDate,
       supplier: supplier,
-      date: date,
-      description: description,
     };
 
     fetch("http://localhost:3000/create-order", {
@@ -70,20 +74,20 @@ export default function CreateOrderModal({ onCreate, toggleModal }) {
       .then((response) => response.json())
       .then(() => {
         setNewOrderName("");
+        setDescription("");
         setQuantity(1);
         setContent("");
         setCategory("");
-        setSupplier("");
         setDate("");
-        setDescription("");
+        setSupplier("");
         onCreate();
         toggleModal();
+        window.location.reload();
       })
       .catch((error) => {
         console.error("Error creando pedido:", error);
       });
 
-      window.location.reload();
   };
 
   return (
