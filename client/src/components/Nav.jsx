@@ -10,19 +10,19 @@ import { OrdersIcon } from "../assets/OrdersIcon";
 // Hola
 
 const navAdminItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
-  { text: "Productos", icon: <ProductIcon /> },
-  { text: "Pedidos", icon: <OrdersIcon /> },
-  { text: "Empleados", icon: <EmployeeIcon /> },
-  { text: "Reportes", icon: <ReportIcon /> },
-  { text: "Ventas", icon: <SalesIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />, route: "dashboard" },
+  { text: "Productos", icon: <ProductIcon />, route: "products" },
+  { text: "Pedidos", icon: <OrdersIcon />, route: "pedidos" },
+  { text: "Ventas", icon: <SalesIcon />, route: "ventas" },
+  { text: "Reportes", icon: <ReportIcon />, route: "reportes" },
+  { text: "Empleados", icon: <EmployeeIcon />, route: "empleados"},
 ];
 
 const navItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
-  { text: "Productos", icon: <ProductIcon /> },
-  { text: "Pedidos", icon: <OrdersIcon /> },
-  { text: "Ventas", icon: <SalesIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />, route: "dashboard" },
+  { text: "Productos", icon: <ProductIcon />, route: "products" },
+  { text: "Pedidos", icon: <OrdersIcon />, route: "pedidos" },
+  { text: "Ventas", icon: <SalesIcon />, route: "ventas" },
 ];
 
 const handleLogout = () => {
@@ -30,8 +30,12 @@ const handleLogout = () => {
   window.location.href = '/signin';
 };
 
-export default function Nav() {
+export default function Nav({ onNavigate }) {
   const role = localStorage.getItem('role');
+
+  const handleClick = (route) => {
+    onNavigate(route);
+  };
 
   return (
     <nav className="bg-blue-600 w-min h-screen pt-6 px-1 flex flex-col transition-all duration-300 md:w-60">
@@ -54,6 +58,7 @@ export default function Nav() {
               <li
                 key={index}
                 className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
+                onClick={() => handleClick(item.route)}
               >
                 {item.icon}
                 <span className="hidden md:inline">{item.text}</span>
@@ -65,6 +70,7 @@ export default function Nav() {
               <li
                 key={index}
                 className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
+                onClick={() => handleClick(item.route)}
               >
                 {item.icon}
                 <span className="hidden md:inline">{item.text}</span>
