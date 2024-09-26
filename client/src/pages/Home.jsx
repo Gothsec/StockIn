@@ -1,9 +1,13 @@
-// import Nav from "../components/Nav";
-import OrdersPage from '../pages/Orders'
-import ProductsPage from '../pages/Products'
+import ProductsPage from '../pages/Products';
+import Nav from "../components/Nav";
 
 export default function Home() {
   return (
-    <ProductsPage/>
+    <div className='flex h-screen'>
+      <Nav /> 
+      <div className="flex-grow">
+        <ProductsPage />
+      </div>
+    </div>
   );
 }

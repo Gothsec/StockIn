@@ -1,5 +1,4 @@
 import { ProductRow } from "../components/ProductRow";
-import Nav from "../components/Nav";
 import { useEffect, useState } from "react";
 import ModalWidows from "../components/ModalWindows";
 
@@ -59,24 +58,18 @@ export default function ProductsPage() {
 
   return (
     <div className="flex max-h-screen overflow-hidden">
-      <Nav />
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="flex mb-5 justify-between items-baseline border-b border pb-8">
+        <header className="flex mb-5 justify-between items-baseline pb-8">
           <h1 className="font-bold text-4xl">Productos</h1>
-          <div className="flex gap-4">
-            <input
-              className="border border-gray-400 w-96 pl-2 rounded-md"
-              type="search"
-              placeholder="Buscar producto"
-              onChange={(e) => setSearchProduct(e.target.value)}
-            />
-            <button className="bg-slate-400 py-1 px-2 rounded-md text-white hover:bg-slate-600">
-              Buscar
-            </button>
-          </div>
+          <input
+            className="flex-auto border border-gray-400 h-9 pl-2 rounded-lg ml-4"
+            type="search"
+            placeholder="Buscar producto"
+            onChange={(e) => setSearchProduct(e.target.value)}
+          />
         </header>
 
-        <div className="flex-grow overflow-y-auto border border-gray-600">
+        <div className="flex-grow overflow-y-auto border rounded-lg">
           <table className="w-full border-collapse relative">
             <thead>
               <tr className="bg-gray-200 sticky top-0 left-0">
