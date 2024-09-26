@@ -1,4 +1,3 @@
-import Nav from "../components/Nav";
 import { OrderRow } from "../components/orders/OrderRow";
 import { useEffect, useState } from "react";
 import CreateOrderModal from "../components/orders/CreateOrderModal";
@@ -87,7 +86,6 @@ export default function OrdersPage() {
 
   return (
     <div className="flex max-h-screen overflow-hidden">
-      <Nav />
       <div className="py-6 px-10 w-full flex flex-col">
         <header className="flex mb-5 justify-between items-baseline border-b border pb-8">
           <h1 className="font-bold text-4xl">Pedidos</h1>
