@@ -7,6 +7,8 @@ import { DashboardIcon } from "../assets/DashboardIcon";
 import { LogoutIcon } from "../assets/LogoutIcon";
 import { OrdersIcon } from "../assets/OrdersIcon";
 
+// Hola
+
 const navAdminItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon /> },

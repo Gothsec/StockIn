@@ -1,6 +1,8 @@
 import Home from './pages/Home';
 import Signin from './pages/Signin';
 
+// Hola
+
 function parseJwt(token) {
   if (!token) {
     return null;
