@@ -1,26 +1,16 @@
-import React from 'react';
 import ProductsPage from '../pages/Products';
-import OrdersPage from '../pages/Orders';
 import Nav from "../components/Nav";
 
-export default function Home({ currentPage, setCurrentPage }) {
-  const renderPage = () => {
-    switch (currentPage) {
-      case 'products':
-        return <ProductsPage />;
-      case 'pedidos':
-        return <OrdersPage />;
-      default:
-        return <div><h1>Página en desarrollo</h1></div>;
-    }
-  };
+// Hola
 
+export default function Home() {
   return (
     <div className='flex h-screen'>
-      <Nav onNavigate={setCurrentPage} />
+      <Nav /> 
       <div className="flex-grow">
-        {renderPage()}
+        <ProductsPage />
       </div>
     </div>
   );
 }
+
