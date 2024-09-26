@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Home from './pages/Home';
 import Signin from './pages/Signin';
 
@@ -25,9 +26,14 @@ const parsedToken = token ? parseJwt(token) : null;
 const tokenExistAndStillValid = parsedToken && parsedToken.exp * 1000 > Date.now();
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState('products'); // Inicializa con la página deseada
+
+  if (!tokenExistAndStillValid) {
+    return <Signin />;
+  }
+
+  // Pasamos la función para navegar y el estado actual a Home
   return (
-    <>
-    {tokenExistAndStillValid ? <Home /> : <Signin />}
-  </>
+    <Home currentPage={currentPage} setCurrentPage={setCurrentPage} />
   );
 }
