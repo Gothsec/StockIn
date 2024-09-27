@@ -43,19 +43,19 @@ export function OrderRow({ name, id, className, onDelete }) {
         <td className="p-3">{name}</td>
         <td className="flex justify-between p-3 w-[25%]">
           <button
-            className="py-1 px-2 bg-red-500 text-white"
+            className="py-1 px-2 bg-red-500 text-white rounded-md"
             onClick={handleDeleteOrder}
           >
             Eliminar
           </button>
           <button
-            className="py-1 px-2 bg-green-500 text-white"
+            className="py-1 px-2 bg-green-500 text-white rounded-md"
             onClick={() => openModal("update")}
           >
             Editar
           </button>
           <button
-            className="py-1 px-2 bg-blue-500 text-white"
+            className="py-1 px-2 bg-blue-500 text-white rounded-md"
             onClick={() => openModal("read")}
           >
             Info

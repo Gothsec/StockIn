@@ -90,20 +90,20 @@ export function ProductRow({ name, id, className, onUpdate }) {
         <td className="flex justify-between p-3 w-[25%]">
 
           <button
-            className="py-1 px-2 bg-red-500 text-white"
+            className="py-1 px-2 bg-red-500 text-white rounded-md"
             onClick={eliminationProduct}
           >
             Eliminar
           </button>
           <button 
-            className="py-1 px-2 bg-green-500 text-white"
+            className="py-1 px-2 bg-green-500 text-white rounded-md"
             onClick={() => getProductById(id, "update")}
           >
             Editar
           </button>
 
           <button 
-            className="py-1 px-2 bg-blue-500 text-white"
+            className="py-1 px-2 bg-blue-500 text-white rounded-md"
             onClick={() => getProductById(id, "read")}
           >
             Info
