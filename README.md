@@ -6,10 +6,14 @@
 
 ---
 
-SigIn Page - 2/09/2024 (v1)
-![Captura de pantalla 2024-09-05 124426](https://github.com/user-attachments/assets/a6b36d2f-06a1-467b-a037-bf89164a2391)
+SigIn Page - 27/09/2024 (v2)
+![Captura de pantalla 2024-09-27 174003](https://github.com/user-attachments/assets/ad2a9fcd-e0ab-4ecd-a3e9-300d46c86221)
+![Captura de pantalla 2024-09-27 174017](https://github.com/user-attachments/assets/552548e3-de43-458d-8a46-14cacf542238)
 
-Nav bar (v1.2) + Products page CRUD (v1.1) - 12/09/2024
-![image](https://github.com/user-attachments/assets/25b28907-d196-4187-9dfe-777d1bd76f10)
+
+
+Nav bar (v2) + Products page CRUD (v2) - 27/09/2024
+![Captura de pantalla 2024-09-27 174112](https://github.com/user-attachments/assets/f9c78c73-64a0-405e-ad47-80be9150bb2a)
+
 
 
