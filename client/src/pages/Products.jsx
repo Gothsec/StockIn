@@ -21,7 +21,6 @@ export default function ProductsPage() {
     setWindowsModal(!windowsModal);
   };
 
-  // Trae todos los productos activos de la bd
   const fetchProducts = () => {
     fetch("http://localhost:3000/read-product", {
       method: "GET",
@@ -31,11 +30,11 @@ export default function ProductsPage() {
     })
       .then((response) => response.json())
       .then((result) => {
-        if (Array.isArray(result)) { // Comprobacion de que lo que se obtenga sea un array
+        if (Array.isArray(result)) {
           setProducts(result);
         } else {
           console.error("Unexpected result format:", result);
-          setProducts([]); // Establecer productos como un array vacío si el formato es inesperado
+          setProducts([]);
         }
       })
       .catch((err) => {
@@ -59,14 +58,22 @@ export default function ProductsPage() {
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="flex mb-5 justify-between items-baseline pb-8">
+        <header className="flex justify-between items-baseline pb-8">
           <h1 className="font-bold text-4xl">Productos</h1>
           <input
-            className="flex-auto border border-gray-400 h-9 pl-2 rounded-lg ml-4"
+            className="flex-auto border border-gray-400 h-9 rounded-xl pl-2 ml-9"
             type="search"
             placeholder="Buscar producto"
             onChange={(e) => setSearchProduct(e.target.value)}
           />
+          <button
+            className="bg-blue-500 py-1 px-2 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
+            onClick={() =>
+              abrirCerrarModal("Nuevo Producto", "Crear", onUpdate)
+            }
+          >
+            Agregar Producto
+          </button>
         </header>
 
         <div className="flex-grow overflow-y-auto border rounded-lg">
@@ -78,27 +85,17 @@ export default function ProductsPage() {
             </thead>
             <tbody>
               {filteredProducts.map((product, index) => (
-                // se llama el componente ProductRow para mostrar la lista de productos
                 <ProductRow
                   key={product.id}
                   id={product.id}
                   name={product.name}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
-                  onUpdate={fetchProducts} // se le Asigna la función que lista los productos de la bd, dando un efecto de actualización
+                  onUpdate={fetchProducts}
                 />
               ))}
             </tbody>
           </table>
         </div>
-
-        <button
-          className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto"
-          onClick={() =>
-            abrirCerrarModal("Nuevo Producto", "Crear", onUpdate)
-          }
-        >
-          Agregar Producto
-        </button>
       </div>
       <ModalWidows
         open={windowsModal}

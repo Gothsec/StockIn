@@ -87,22 +87,23 @@ export default function OrdersPage() {
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="flex mb-5 justify-between items-baseline border-b border pb-8">
+        <header className="flex justify-between items-baseline pb-8">
           <h1 className="font-bold text-4xl">Pedidos</h1>
-          <div className="flex gap-4">
             <input
-              className="border border-gray-400 w-96 pl-2 rounded-md"
+              className="flex-auto border border-gray-400 h-9 rounded-xl pl-2 ml-9"
               type="search"
               placeholder="Buscar pedido"
               onChange={(e) => setSearchOrder(e.target.value)}
             />
-            <button className="bg-slate-400 py-1 px-2 rounded-md text-white hover:bg-slate-600">
-              Buscar
+            <button
+              className="bg-blue-500 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
+              onClick={toggleModal}
+            >
+              Agregar Pedido
             </button>
-          </div>
         </header>
 
-        <div className="flex-grow overflow-y-auto border border-gray-600">
+        <div className="flex-grow overflow-y-auto border rounded-lg">
           <table className="w-full border-collapse relative">
             <thead>
               <tr className="bg-gray-200 sticky top-0 left-0">
@@ -123,13 +124,6 @@ export default function OrdersPage() {
             </tbody>
           </table>
         </div>
-
-        <button
-          className="bg-yellow-500 py-1 px-2 rounded-md text-white hover:bg-yellow-600 mt-2 ml-auto"
-          onClick={toggleModal}
-        >
-          Agregar Pedido
-        </button>
 
         {isModalOpen && (
           <CreateOrderModal onCreate={fetchOrders} toggleModal={toggleModal} />
