@@ -8,19 +8,19 @@ import { LogoutIcon } from "../assets/LogoutIcon";
 import { OrdersIcon } from "../assets/OrdersIcon";
 
 const navAdminItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
-  { text: "Productos", icon: <ProductIcon /> },
-  { text: "Pedidos", icon: <OrdersIcon /> },
-  { text: "Empleados", icon: <EmployeeIcon /> },
-  { text: "Reportes", icon: <ReportIcon /> },
-  { text: "Ventas", icon: <SalesIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />},
+  { text: "Productos", icon: <ProductIcon />, href: "/productos" },
+  { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
+  { text: "Empleados", icon: <EmployeeIcon />},
+  { text: "Reportes", icon: <ReportIcon />},
+  { text: "Ventas", icon: <SalesIcon />},
 ];
 
 const navItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
-  { text: "Productos", icon: <ProductIcon /> },
-  { text: "Pedidos", icon: <OrdersIcon /> },
-  { text: "Ventas", icon: <SalesIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />},
+  { text: "Productos", icon: <ProductIcon />, href: "/productos" },
+  { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
+  { text: "Ventas", icon: <SalesIcon />},
 ];
 
 const handleLogout = () => {
@@ -51,6 +51,7 @@ export default function Nav() {
             navItems.map((item, index) => (
               <li
                 key={index}
+                onClick={() => (window.location.href = item.href)}
                 className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
               >
                 {item.icon}
@@ -62,6 +63,7 @@ export default function Nav() {
             navAdminItems.map((item, index) => (
               <li
                 key={index}
+                onClick={() => (window.location.href = item.href)}
                 className="px-6 py-3 mb-1 rounded-lg text-blue-100 font-medium flex items-center gap-3 text-base transition-colors hover:bg-blue-700 hover:text-white cursor-pointer"
               >
                 {item.icon}
