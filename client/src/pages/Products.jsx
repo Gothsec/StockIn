@@ -66,7 +66,7 @@ export default function ProductsPage() {
             onChange={(e) => setSearchProduct(e.target.value)}
           />
           <button
-            className="bg-blue-500 py-1 px-2 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
+            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out transform hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
             onClick={() =>
               abrirCerrarModal("Nuevo Producto", "Crear", onUpdate)
             }
