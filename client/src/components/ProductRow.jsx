@@ -1,126 +1,130 @@
 import { useState } from "react";
-import ModalWidows from "./ModalWindows";
+import supabase from "../utils/supabase";
+import ModalWindows from "./ModalWindows";
 
-export function ProductRow({ name, id, className, onUpdate }) {
+export default function ProductRow({ name, id, className, onUpdate }) {
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     buttonText: "",
     onClickFunction: () => {},
-    productInfo: {}
+    productInfo: {},
   });
   const [windowsModal, setWindowsModal] = useState(false);
 
-  const abrirCerrarModal = (titleModal, buttonText, onClickFunction, productInfo) => {
+  const abrirCerrarModal = (
+    titleModal,
+    buttonText,
+    onClickFunction,
+    productInfo
+  ) => {
     setModalProps({
       titleModal,
       buttonText,
       onClickFunction,
-      productInfo
+      productInfo,
     });
     setWindowsModal(!windowsModal);
   };
 
-  const eliminationProduct = () => {
-    fetch(`http://localhost:3000/elimination-product/${id}`, {
-      method: "PATCH", // Usar PATCH para actualizar parcialmente el recurso
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (result.message === "Product updated successfully") { // Mensaje de éxito para la actualización
-          if (onUpdate) onUpdate(); // Actualiza la lista de productos después de la actualización
-        } else {
-          console.error('Failed to update product:', result.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error: ", error);
-      });
+  const handleDelete = async () => {
+    const { error } = await supabase
+      .from("product")
+      .update({ state: false })
+      .eq("id", id);
+
+    if (error) {
+      console.error("Error al actualizar el estado del producto: ", error);
+    } else {
+      if (onUpdate) onUpdate();
+    }
   };
 
-  // setea los valores del abrirCerrarModal
-  const setOnClose = () => {abrirCerrarModal("", "", () => {})}
-
-  const getProductById = (id, option) => {
-    // Verifica que el id es válido
+  const getProductById = async (id, option) => {
     if (!id) {
-      console.error('No se proporcionó un ID de producto válido.');
+      console.error("No se proporcionó un ID de producto válido.");
       return;
     }
-    fetch(`http://localhost:3000/get-product/${id}`) // Endpoint para obtener el producto específico
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((result) => {
-        if (option === "update") {
-          abrirCerrarModal(
-            "Información Producto",
-            "Modificar",
-            setOnClose,
-            result
-          );
-        } else {
-          abrirCerrarModal(
-            "Información Producto",
-            "Mostrar",
-            setOnClose,
-            result
-          );
-        }
-      })
-      .catch((error) => {
-        console.error("Error al obtener información del producto: ", error);
-      });
+
+    const { data, error } = await supabase
+      .from("product")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Error al obtener información del producto: ", error);
+      return;
+    }
+
+    if (option === "update") {
+      abrirCerrarModal(
+        "Información Producto",
+        "Modificar",
+        () => handleUpdate(data),
+        data
+      );
+    } else {
+      abrirCerrarModal("Información Producto", "Mostrar", () => {}, data);
+    }
   };
-  
+
+  const handleUpdate = async (productData) => {
+    if (!productData.id) {
+      console.error("ID de producto no está definido para la actualización.");
+      return;
+    }
+
+    const { error } = await supabase
+      .from("product")
+      .update(productData)
+      .eq("id", productData.id);
+
+    if (error) {
+      console.error("Error actualizando producto: ", error);
+    } else {
+      if (onUpdate) onUpdate();
+    }
+
+    abrirCerrarModal("", "", () => {}, {});
+  };
 
   return (
     <>
       <tr
-        id={`${id}`}
+        id={id}
         className={`flex justify-between items-center w-full ${className}`}
       >
         <td className="p-3">{name}</td>
-
         <td className="flex justify-between p-3 w-[25%]">
-
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
-            onClick={eliminationProduct}
+            onClick={handleDelete}
           >
             Eliminar
           </button>
-          <button 
+          <button
             className="py-1 px-2 bg-green-500 text-white rounded-md"
             onClick={() => getProductById(id, "update")}
           >
             Editar
           </button>
-
-          <button 
+          <button
             className="py-1 px-2 bg-blue-500 text-white rounded-md"
             onClick={() => getProductById(id, "read")}
           >
             Info
           </button>
-
         </td>
-      
-      <ModalWidows
+      </tr>
+      <ModalWindows
         open={windowsModal}
-        onClose={() => abrirCerrarModal("", "", () => {})}
+        onClose={() => abrirCerrarModal("", "", () => {}, {})}
         titleModal={modalProps.titleModal}
         buttonText={modalProps.buttonText}
         onClickFunction={modalProps.onClickFunction}
         productInfo={modalProps.productInfo}
         productId={id}
       />
-    </tr>
     </>
   );
 }
