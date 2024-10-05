@@ -1,5 +1,5 @@
-import { useState } from "react";
 import supabase from "../../utils/supabase";
+import { useState } from "react";
 import ModalWindows from "./ModalWindows";
 
 export default function ProductRow({ name, id, className, onUpdate }) {
