@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import OrderRow from "../components/orders/OrderRow";
-import ModalWindows from "../components/ModalWindows";
+import { ModalOrder } from "../components/orders/ModalOrder"; // Importa ModalOrder en vez de ModalWindows
 import supabase from "../utils/supabase";
 
 export default function OrdersPage() {
@@ -10,17 +10,21 @@ export default function OrdersPage() {
     titleModal: "",
     buttonText: "",
     onClickFunction: () => {},
+    orderId: "",
+    option: "",
   });
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
 
-  const abrirCerrarModal = (titleModal, buttonText, onClickFunction) => {
+  const abrirCerrarModal = (titleModal, buttonText, onClickFunction, orderId = "", option = "") => {
     setModalProps({
       titleModal,
       buttonText,
       onClickFunction,
+      orderId,
+      option,
     });
-    setWindowsModal((prev) => !prev);
+    setWindowsModal((prev) => !prev); // Abrir o cerrar el modal
   };
 
   const fetchOrders = async () => {
@@ -34,7 +38,6 @@ export default function OrdersPage() {
       setError("Error al cargar los pedidos.");
       setOrders([]);
     } else {
-
       if (Array.isArray(data)) {
         setOrders(data);
       } else if (data !== null && typeof data === "object") {
@@ -42,7 +45,6 @@ export default function OrdersPage() {
       } else {
         setOrders([]);
       }
-      
       setError(null);
     }
   };
@@ -77,7 +79,9 @@ export default function OrdersPage() {
           />
           <button
             className="bg-blue-500 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
-            onClick={() => abrirCerrarModal("Nuevo Pedido", "Crear", onUpdate)}
+            onClick={() =>
+              abrirCerrarModal("Nuevo Pedido", "", "create")
+            }
           >
             Agregar Pedido
           </button>
@@ -110,16 +114,17 @@ export default function OrdersPage() {
           </table>
         </div>
       </div>
-      <ModalWindows
-        open={windowsModal}
-        onClose={() => abrirCerrarModal("", "", () => {})}
-        titleModal={modalProps.titleModal}
-        buttonText={modalProps.buttonText}
-        onClickFunction={() => {
-          modalProps.onClickFunction();
-          setWindowsModal(false);
-        }}
-      />
+
+      {/* Mostrar ModalOrder cuando 'windowsModal' sea verdadero */}
+      {windowsModal && (
+        <ModalOrder
+          open={windowsModal}
+          onClose={() => setWindowsModal(false)}
+          title={modalProps.titleModal}
+          orderId={modalProps.orderId}
+          option={modalProps.option}
+        />
+      )}
     </div>
   );
 }
