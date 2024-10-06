@@ -117,7 +117,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
                 required={option === "create" || option === "update"}
               >
                 {productsList.map((product) => (
-                  <option selected={orderInfo.product_id === product.id} key={product.name} value={product.name}>
+                  <option defaultValue={orderInfo.product_id === product.id} key={product.name} value={product.name}>
                     {product.name}
                   </option>
                 ))}
@@ -167,7 +167,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
                 required={option === "create"}
               >
                 {suppliersList.map((supplier) => (
-                  <option selected={orderInfo.supplier_id === supplier.id} key={supplier.name} value={supplier.name}>
+                  <option defaultValue={orderInfo.supplier_id === supplier.id} key={supplier.name} value={supplier.name}>
                     {supplier.name}
                   </option>
                 ))}
