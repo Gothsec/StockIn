@@ -1,45 +1,35 @@
-import { useState } from 'react';
-import Banner from '../../public/login-banner.png';
-import Home from '../pages/Home';
-import PasswordRecoveryDialog from '../components/ForgotPassword';
+import { useState } from "react";
+import supabase from "../utils/supabase";
+import Home from "../pages/Home";
+import PasswordRecoveryDialog from "../components/ForgotPassword";
+import Banner from "../../public/login-banner.png";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loginSuccessful, setLoginSuccessful] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const handleLogin = (event) => {
-    event.preventDefault(); // Evita el envío del formulario por HTTP
-    const data = {
-      email: email,
-      password: password
+  const handleLogin = async (event) => {
+    event.preventDefault();
+
+    const { data, error } = await supabase
+      .from("user")
+      .select("user_type")
+      .eq("email", email)
+      .eq("password", password)
+      .single();
+
+    if (error || !data) {
+      setErrorMessage("Email o contraseña incorrectos.");
+      setLoginSuccessful(false);
+    } else {
+      localStorage.setItem("role", data.user_type);
+      setLoginSuccessful(true);
+      setErrorMessage("");
     }
-    fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-      if (result.token) {
-        localStorage.setItem('token', result.token);
-        localStorage.setItem('role', result.role);
-        setLoginSuccessful(true);
-        setErrorMessage('');
-      } else {
-        setLoginSuccessful(false);
-        setErrorMessage(result.message || 'Login failed. Please try again.');
-      }
-    })
-    .catch(error => {
-      console.log(error);
-      setErrorMessage('An error occurred. Please try again later.');
-    });
-  }
+  };
 
   return (
     <>
@@ -50,17 +40,26 @@ export default function Login() {
           <div className="bg-white rounded-3xl shadow-lg w-full max-w-4xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="hidden md:block">
-                <img src={Banner} alt="Login illustration" className="w-full h-full object-cover"/>
+                <img
+                  src={Banner}
+                  alt="Login illustration"
+                  className="w-full h-full object-cover"
+                />
               </div>
 
               <div className="p-8 flex flex-col justify-center">
                 <div className="text-center mb-10">
-                  <h1 className="text-3xl font-bold text-gray-800">Welcome to StockIn</h1>
+                  <h1 className="text-3xl font-bold text-gray-800">
+                    Welcome to StockIn
+                  </h1>
                   <p className="text-gray-600">Sign in to your account</p>
                 </div>
                 <form method="post" className="space-y-6">
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700"
+                    >
                       Email
                     </label>
                     <input
@@ -73,7 +72,10 @@ export default function Login() {
                     />
                   </div>
                   <div>
-                    <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                    <label
+                      htmlFor="password"
+                      className="block text-sm font-medium text-gray-700"
+                    >
                       Password
                     </label>
                     <input
@@ -81,13 +83,14 @@ export default function Login() {
                       type="password"
                       placeholder="••••••••"
                       required
-                      minLength="8"
                       onChange={(event) => setPassword(event.target.value)}
                       className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <div className="flex justify-between items-center">
                       {errorMessage && (
-                        <div className="text-red-500 ml-2 mt-3 text-sm">{errorMessage}</div>
+                        <div className="text-red-500 ml-2 mt-3 text-sm">
+                          {errorMessage}
+                        </div>
                       )}
                       <button
                         type="button"
