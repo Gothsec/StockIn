@@ -1,6 +1,7 @@
-import { ProductRow } from "../components/ProductRow";
+import ProductRow from "../components/ProductRow";
 import { useEffect, useState } from "react";
-import ModalWidows from "../components/ModalWindows";
+import ModalWindows from "../components/ModalWindows";
+import supabase from "../utils/supabase";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -11,6 +12,7 @@ export default function ProductsPage() {
     onClickFunction: () => {},
   });
   const [windowsModal, setWindowsModal] = useState(false);
+  const [error, setError] = useState(null);
 
   const abrirCerrarModal = (titleModal, buttonText, onClickFunction) => {
     setModalProps({
@@ -18,28 +20,23 @@ export default function ProductsPage() {
       buttonText,
       onClickFunction,
     });
-    setWindowsModal(!windowsModal);
+    setWindowsModal((prev) => !prev);
   };
 
-  const fetchProducts = () => {
-    fetch("http://localhost:3000/read-product", {
-      method: "GET",
-      headers: {
-        "Content-type": "application/json",
-      },
-    })
-      .then((response) => response.json())
-      .then((result) => {
-        if (Array.isArray(result)) {
-          setProducts(result);
-        } else {
-          console.error("Unexpected result format:", result);
-          setProducts([]);
-        }
-      })
-      .catch((err) => {
-        console.error("Error: ", err);
-      });
+  const fetchProducts = async () => {
+    const { data, error } = await supabase
+      .from("product")
+      .select("*")
+      .eq("state", true);
+
+    if (error) {
+      console.error("Error fetching products: ", error);
+      setError("Error al cargar los productos.");
+      setProducts([]);
+    } else {
+      setProducts(data || []);
+      setError(null);
+    }
   };
 
   useEffect(() => {
@@ -48,12 +45,14 @@ export default function ProductsPage() {
 
   const onUpdate = (e) => {
     if (e) e.preventDefault();
-    fetchProducts(); // Lista todos los productos activos que hay en la bd, dando el efecto de actualización
+    fetchProducts();
   };
 
-  const filteredProducts = Array.isArray(products) ? products.filter((product) =>
-    product.name.toLowerCase().includes(searchProduct.toLowerCase())
-  ) : [];  
+  const filteredProducts = Array.isArray(products)
+    ? products.filter((product) =>
+        product.name.toLowerCase().includes(searchProduct.toLowerCase())
+      )
+    : [];
 
   return (
     <div className="flex max-h-screen overflow-hidden">
@@ -67,7 +66,7 @@ export default function ProductsPage() {
             onChange={(e) => setSearchProduct(e.target.value)}
           />
           <button
-            className="bg-blue-500 py-1 px-2 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
+            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out transform hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
             onClick={() =>
               abrirCerrarModal("Nuevo Producto", "Crear", onUpdate)
             }
@@ -75,6 +74,12 @@ export default function ProductsPage() {
             Agregar Producto
           </button>
         </header>
+
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
 
         <div className="flex-grow overflow-y-auto border rounded-lg">
           <table className="w-full border-collapse relative">
@@ -97,14 +102,14 @@ export default function ProductsPage() {
           </table>
         </div>
       </div>
-      <ModalWidows
+      <ModalWindows
         open={windowsModal}
         onClose={() => abrirCerrarModal("", "", () => {})}
         titleModal={modalProps.titleModal}
         buttonText={modalProps.buttonText}
         onClickFunction={(e) => {
           modalProps.onClickFunction(e);
-          setWindowsModal(false); // Cierra el modal después de ejecutar la función
+          setWindowsModal(false);
         }}
       />
     </div>

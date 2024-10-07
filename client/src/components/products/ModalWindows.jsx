@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import supabase from "../utils/supabase";
+import supabase from "../../utils/supabase";
 
 function ModalWindows({
   open,
