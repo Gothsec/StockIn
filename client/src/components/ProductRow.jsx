@@ -2,7 +2,7 @@ import { useState } from "react";
 import supabase from "../utils/supabase";
 import ModalWindows from "./ModalWindows";
 
-export default function ProductRow({ name, id, className, onUpdate }) {
+export default function ProductRow({ name, id, quantity, minimum_quantity, brand, onUpdate, index }) {
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     buttonText: "",
@@ -47,8 +47,8 @@ export default function ProductRow({ name, id, className, onUpdate }) {
 
     const { data, error } = await supabase
       .from("product")
-      .select("*")
-      .eq("id", id)
+      .select("id, name, quantity, minimum_quantity, brand, state")
+      .eq("state", true)
       .single();
 
     if (error) {
@@ -88,14 +88,18 @@ export default function ProductRow({ name, id, className, onUpdate }) {
     abrirCerrarModal("", "", () => {}, {});
   };
 
+  const isLowStock = quantity <= minimum_quantity;
+
   return (
     <>
       <tr
         id={id}
-        className={`flex justify-between items-center w-full ${className}`}
+        className={`cursor-pointer ${isLowStock ? "bg-red-100 hover:bg-red-200" : index % 2 === 0 ? "bg-white" : "bg-blue-50"} transition-colors duration-200`}  
       >
         <td className="p-3">{name}</td>
-        <td className="flex justify-between p-3 w-[25%]">
+        <td className="p-3 text-center">{quantity}</td> 
+        <td className="p-3 w-1/3">{brand}</td> 
+        <td className="p-3 flex justify-start items-center space-x-2"> 
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
             onClick={handleDelete}

@@ -12,6 +12,7 @@ export default function ProductsPage() {
     onClickFunction: () => {},
   });
   const [windowsModal, setWindowsModal] = useState(false);
+  const [showLowStock, setShowLowStock] = useState(false); 
   const [error, setError] = useState(null);
 
   const abrirCerrarModal = (titleModal, buttonText, onClickFunction) => {
@@ -26,7 +27,7 @@ export default function ProductsPage() {
   const fetchProducts = async () => {
     const { data, error } = await supabase
       .from("product")
-      .select("*")
+      .select("id, name, quantity, minimum_quantity, brand, state")
       .eq("state", true);
 
     if (error) {
@@ -34,7 +35,11 @@ export default function ProductsPage() {
       setError("Error al cargar los productos.");
       setProducts([]);
     } else {
-      setProducts(data || []);
+      const updatedProducts = data.map((product) => ({
+        ...product,
+        isLowStock: product.quantity <= product.minimum_quantity,
+      }));
+      setProducts(updatedProducts|| []);
       setError(null);
     }
   };
@@ -54,11 +59,42 @@ export default function ProductsPage() {
       )
     : [];
 
+    const lowStockProducts = filteredProducts.filter(
+      (product) => product.isLowStock
+  );
+
+  const productsToDisplay = showLowStock ? lowStockProducts : filteredProducts; // Condicional para mostrar productos
+
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="flex justify-between items-baseline pb-8">
+        <div className="pb-4">
           <h1 className="font-bold text-4xl">Productos</h1>
+          {lowStockProducts.length > 0 && (
+            <div className="text-sm text-red-600 font-semibold pt-2">
+              Tienes {lowStockProducts.length} producto(s) bajo en stock.
+            </div>
+          )}
+        </div>
+
+        <div className="flex justify-between items-center pb-4">
+          {/* Botones de filtro */}
+          <div className="space-x-4">
+            <button
+              className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500 hover:border-blue-500" : "bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500 hover:border-blue-500"}`}
+              onClick={() => setShowLowStock(false)}
+            >
+              Stock completo
+            </button>
+            <button
+               className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-red-500 text-white border-red-500 hover:bg-white hover:text-red-500 hover:border-red-500" : "bg-red-500 text-white border-red-500 hover:bg-white hover:text-red-500 hover:border-red-500"}`}
+               onClick={() => setShowLowStock(true)}
+            >
+               Bajos en stock
+            </button>
+          </div>
+
+
           <input
             className="flex-auto border border-gray-400 h-9 rounded-xl pl-2 ml-9"
             type="search"
@@ -73,7 +109,7 @@ export default function ProductsPage() {
           >
             Agregar Producto
           </button>
-        </header>
+        </div>
 
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -86,16 +122,23 @@ export default function ProductsPage() {
             <thead>
               <tr className="bg-gray-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre</th>
+                <th className="py-2 text-left px-40">Stock Actual</th>
+                <th className="py-2 text-left px-2">Marca</th>
+                <th className="py-2 text-left px-10"></th>
               </tr>
             </thead>
             <tbody>
-              {filteredProducts.map((product, index) => (
+              {productsToDisplay.map((product, index) => (
                 <ProductRow
                   key={product.id}
                   id={product.id}
                   name={product.name}
-                  className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
+                  quantity={product.quantity}
+                  minimum_quantity={product.minimum_quantity}
+                  brand={product.brand}
+                  isLowStock={product.isLowStock}
                   onUpdate={fetchProducts}
+                  index={index}
                 />
               ))}
             </tbody>
