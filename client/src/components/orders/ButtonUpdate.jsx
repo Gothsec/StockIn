@@ -1,9 +1,9 @@
 import supabase from "../../utils/supabase";
 
-export default function ButtonUpdate(orderUpdated, orderId) {
+export default function ButtonUpdate({ orderUpdated, orderId, onClose }) {
   const handleUpdateOrder = async () => {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("order")
         .update(orderUpdated)
         .eq("id", orderId);
@@ -11,9 +11,8 @@ export default function ButtonUpdate(orderUpdated, orderId) {
       if (error) {
         console.error("Error: ", error);
       } else {
-        if (data) {
-          window.location.reload();
-        }
+        onClose();
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error: ", error);
@@ -21,7 +20,7 @@ export default function ButtonUpdate(orderUpdated, orderId) {
   };
 
   return (
-    <button className="bg-green-500 text-white py-1 px-3 rounded-md" onClick={handleUpdateOrder}>
+    <button className="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 focus:outline-none" onClick={handleUpdateOrder}>
       Modificar
     </button>
   );
