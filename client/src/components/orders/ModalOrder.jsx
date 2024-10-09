@@ -153,7 +153,6 @@ export function ModalOrder({ title, option, onClose, orderId }) {
             </div>
           </div>
 
-          {/* Supplier and Date in another row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
               <label htmlFor="supplier" className="text-sm font-medium text-gray-700">Supplier</label>
@@ -189,7 +188,6 @@ export function ModalOrder({ title, option, onClose, orderId }) {
             </div>
           </div>
 
-          {/* Description in a separate row */}
           <div className="flex flex-col">
             <label htmlFor="description" className="text-sm font-medium text-gray-700">Description</label>
             <textarea
@@ -212,7 +210,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
             Volver
           </button>
           {option === "info" ? null : option === "update" ? (
-            <ButtonUpdate orderUpdated={orderInfo} orderId={orderId} />
+            <ButtonUpdate orderUpdated={orderInfo} orderId={orderId} onClose={onClose} />
           ) : (
             <ButtonCreate newOrder={newOrder} />
           )}
