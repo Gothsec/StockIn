@@ -7,10 +7,10 @@ export function ModalOrder({ title, option, onClose, orderId }) {
   const [productsList, setProductsList] = useState([]);
   const [suppliersList, setSuppliersList] = useState([]);
   const [orderInfo, setOrderInfo] = useState({
-    name: "",
+    product_id: "",
     quantity: "",
     content: "",
-    supplier: "",
+    supplier_id: "",
     date: "",
     description: "",
   });
@@ -20,7 +20,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
       const { data, error } = await supabase
         .from("product")
         .select("*")
-        .eq("state", true)
+        .eq("state", true);
 
       if (error) {
         console.error("Error: ", error);
@@ -43,7 +43,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
       const { data, error } = await supabase
         .from("supplier")
         .select("*")
-        .eq("state", true)
+        .eq("state", true);
 
       if (error) {
         console.error("Error: ", error);
@@ -63,7 +63,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
 
   const handleGetOrderInfo = async () => {
     if (!orderId) {
-      console.error("No se proporcionó un ID de producto válido.");
+      console.error("No se proporcionó un ID de orden válido.");
       return;
     }
 
@@ -75,13 +75,13 @@ export function ModalOrder({ title, option, onClose, orderId }) {
         .single();
 
       if (error) {
-        console.error("Error al obtener información del producto: ", error);
+        console.error("Error al obtener información de la orden: ", error);
         return;
       } else {
         setOrderInfo(data);
       }
     } catch (error) {
-      console.error("Error al obtener información del producto: ", error);
+      console.error("Error al obtener información de la orden: ", error);
     }
   };
 
@@ -90,10 +90,10 @@ export function ModalOrder({ title, option, onClose, orderId }) {
   }, [orderId]);
 
   const newOrder = {
-    name: orderInfo.name,
+    product_id: orderInfo.product_id,
     quantity: orderInfo.quantity,
     content: orderInfo.content,
-    supplier: orderInfo.supplier,
+    supplier_id: orderInfo.supplier_id,
     date: orderInfo.date,
     description: orderInfo.description,
   };
@@ -107,17 +107,21 @@ export function ModalOrder({ title, option, onClose, orderId }) {
           {/* Product, Quantity, and Content in one row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="product" className="text-sm font-medium text-gray-700">Producto</label>
+              <label htmlFor="product" className="text-sm font-medium text-gray-700">
+                Producto
+              </label>
               <select
-                name="productName"
+                name="product_id"
                 id="product"
                 className="mt-1 p-2 border rounded-md"
                 disabled={option === "info"}
-                onChange={(e) => setOrderInfo({ ...orderInfo, name: e.target.value })}
+                value={orderInfo.product_id}
+                onChange={(e) => setOrderInfo({ ...orderInfo, product_id: e.target.value })}
                 required={option === "create" || option === "update"}
               >
+                <option value="">Selecciona un producto</option>
                 {productsList.map((product) => (
-                  <option defaultValue={orderInfo.product_id === product.id} key={product.name} value={product.name}>
+                  <option key={product.id} value={product.id}>
                     {product.name}
                   </option>
                 ))}
@@ -125,28 +129,32 @@ export function ModalOrder({ title, option, onClose, orderId }) {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="quantity" className="text-sm font-medium text-gray-700">Quantity</label>
+              <label htmlFor="quantity" className="text-sm font-medium text-gray-700">
+                Quantity
+              </label>
               <input
                 name="quantity"
                 id="quantity"
                 type="number"
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
-                value={option === "create" ? "" : orderInfo.quantity}
+                value={orderInfo.quantity}
                 onChange={(e) => setOrderInfo({ ...orderInfo, quantity: e.target.value })}
                 required={option === "create" || option === "update"}
               />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="content" className="text-sm font-medium text-gray-700">Content</label>
+              <label htmlFor="content" className="text-sm font-medium text-gray-700">
+                Content
+              </label>
               <input
                 name="content"
                 id="content"
                 type="text"
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
-                value={option === "create" ? "" : orderInfo.content}
+                value={orderInfo.content}
                 onChange={(e) => setOrderInfo({ ...orderInfo, content: e.target.value })}
                 required={option === "create" || option === "update"}
               />
@@ -155,18 +163,21 @@ export function ModalOrder({ title, option, onClose, orderId }) {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="supplier" className="text-sm font-medium text-gray-700">Supplier</label>
+              <label htmlFor="supplier" className="text-sm font-medium text-gray-700">
+                Supplier
+              </label>
               <select
-                name="supplier"
+                name="supplier_id"
                 id="supplier"
                 className="mt-1 p-2 border rounded-md"
                 disabled={option === "info"}
-                value={option === "create" ? "" : orderInfo.supplier}
-                onChange={(e) => setOrderInfo({ ...orderInfo, supplier: e.target.value })}
-                required={option === "create"}
+                value={orderInfo.supplier_id}
+                onChange={(e) => setOrderInfo({ ...orderInfo, supplier_id: e.target.value })}
+                required={option === "create" || option === "update"}
               >
+                <option value="">Selecciona un proveedor</option>
                 {suppliersList.map((supplier) => (
-                  <option defaultValue={orderInfo.supplier_id === supplier.id} key={supplier.name} value={supplier.name}>
+                  <option key={supplier.id} value={supplier.id}>
                     {supplier.name}
                   </option>
                 ))}
@@ -174,14 +185,16 @@ export function ModalOrder({ title, option, onClose, orderId }) {
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="date" className="text-sm font-medium text-gray-700">Date</label>
+              <label htmlFor="date" className="text-sm font-medium text-gray-700">
+                Date
+              </label>
               <input
                 name="date"
                 id="date"
                 type="date"
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
-                value={option === "create" ? "" : orderInfo.date}
+                value={orderInfo.date}
                 onChange={(e) => setOrderInfo({ ...orderInfo, date: e.target.value })}
                 required={option === "create" || option === "update"}
               />
@@ -189,13 +202,15 @@ export function ModalOrder({ title, option, onClose, orderId }) {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="description" className="text-sm font-medium text-gray-700">Description</label>
+            <label htmlFor="description" className="text-sm font-medium text-gray-700">
+              Description
+            </label>
             <textarea
               name="description"
               id="description"
               className="mt-1 p-2 border rounded-md"
               readOnly={option === "info"}
-              value={option === "create" ? "" : orderInfo.description}
+              value={orderInfo.description}
               onChange={(e) => setOrderInfo({ ...orderInfo, description: e.target.value })}
               required={option === "create" || option === "update"}
             ></textarea>
@@ -212,7 +227,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
           {option === "info" ? null : option === "update" ? (
             <ButtonUpdate orderUpdated={orderInfo} orderId={orderId} onClose={onClose} />
           ) : (
-            <ButtonCreate newOrder={newOrder} />
+            <ButtonCreate newOrder={newOrder} onClose={onClose} />
           )}
         </div>
       </div>

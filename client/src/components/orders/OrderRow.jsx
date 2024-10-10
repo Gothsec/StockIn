@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { ModalOrder } from "./ModalOrder"; 
-import supabase from "../../utils/supabase";
+import { ModalOrder } from "./ModalOrder";
 
-export default function OrderRow({ description, id, className }) {
+export default function OrderRow({ name, quantity, id, className, onUpdate }) {
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
@@ -29,7 +28,7 @@ export default function OrderRow({ description, id, className }) {
       if (error) {
         console.error("Error eliminando el pedido:", error.message);
       } else {
-        window.location.reload();
+        onUpdate();
       }
     } catch (error) {
       console.error("Error al eliminar el pedido:", error);
@@ -38,9 +37,10 @@ export default function OrderRow({ description, id, className }) {
 
   return (
     <>
-      <tr className={`flex justify-between items-center w-full ${className}`}>
-        <td className="p-3">{description}</td>
-        <td className="flex justify-between p-3 w-[25%]">
+      <tr className={`${className} text-left border-b`}>
+        <td className="p-3">{name}</td>
+        <td className="p-3 text-center">{quantity}</td>
+        <td className="p-3 flex gap-2 justify-end">
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
             onClick={handleDelete}

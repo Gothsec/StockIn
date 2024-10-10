@@ -1,22 +1,21 @@
 import supabase from "../../utils/supabase";
 
-export default function ButtonCreate(newOrder) {
+export default function ButtonCreate({ newOrder, onClose }) {
   const handleCreateOrder = async () => {
     try {
-      const { data, error } = await supabase
-        .from("product")
-        .insert(newOrder)
+      const { error } = await supabase
+        .from("order")
+        .insert([newOrder])
         .single();
 
       if (error) {
-        console.error("Error: ", error);
+        console.error("Error al crear la orden: ", error);
       } else {
-        if (data) {
-          window.location.reload();
-        }
+        onClose();
+        window.location.reload();
       }
     } catch (error) {
-      console.error("Error: ", error);
+      console.error("Error al crear la orden: ", error);
     }
   };
 

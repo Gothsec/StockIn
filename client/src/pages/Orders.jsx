@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import OrderRow from "../components/orders/OrderRow";
-import { ModalOrder } from "../components/orders/ModalOrder"; // Importa ModalOrder en vez de ModalWindows
+import { ModalOrder } from "../components/orders/ModalOrder";
 import supabase from "../utils/supabase";
 
 export default function OrdersPage() {
@@ -24,13 +24,17 @@ export default function OrdersPage() {
       orderId,
       option,
     });
-    setWindowsModal((prev) => !prev); // Abrir o cerrar el modal
+    setWindowsModal((prev) => !prev);
   };
 
   const fetchOrders = async () => {
     const { data, error } = await supabase
       .from("order")
-      .select("*")
+      .select(`
+        id, 
+        quantity, 
+        product:product_id(name)  -- JOIN con la tabla product para obtener el nombre
+      `)
       .eq("state", true);
 
     if (error) {
@@ -38,13 +42,7 @@ export default function OrdersPage() {
       setError("Error al cargar los pedidos.");
       setOrders([]);
     } else {
-      if (Array.isArray(data)) {
-        setOrders(data);
-      } else if (data !== null && typeof data === "object") {
-        setOrders([data]);
-      } else {
-        setOrders([]);
-      }
+      setOrders(data || []);
       setError(null);
     }
   };
@@ -60,9 +58,9 @@ export default function OrdersPage() {
 
   const filteredOrders = Array.isArray(orders)
     ? orders.filter((order) => {
-        if (!order.description) return false;
+        if (!order.product?.name) return false;
         if (searchOrder === "") return true;
-        return order.description.toLowerCase().includes(searchOrder.toLowerCase());
+        return order.product.name.toLowerCase().includes(searchOrder.toLowerCase());
       })
     : [];
 
@@ -97,7 +95,9 @@ export default function OrdersPage() {
           <table className="w-full border-collapse relative">
             <thead>
               <tr className="bg-gray-200 sticky top-0 left-0">
-                <th className="py-2 text-left px-4">Descripcion</th>
+                <th className="py-2 text-left px-4">Nombre del Producto</th>
+                <th className="py-2 text-center px-4">Cantidad</th>
+                <th className="py-2 text-left px-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -105,7 +105,8 @@ export default function OrdersPage() {
                 <OrderRow
                   key={order.id}
                   id={order.id}
-                  description={order.description}
+                  name={order.product.name} 
+                  quantity={order.quantity} 
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                   onUpdate={fetchOrders}
                 />
@@ -115,7 +116,6 @@ export default function OrdersPage() {
         </div>
       </div>
 
-      {/* Mostrar ModalOrder cuando 'windowsModal' sea verdadero */}
       {windowsModal && (
         <ModalOrder
           open={windowsModal}
