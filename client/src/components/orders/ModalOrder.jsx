@@ -20,7 +20,6 @@ export function ModalOrder({ title, option, onClose, orderId }) {
       const { data, error } = await supabase
         .from("product")
         .select("*")
-        .eq("state", true);
 
       if (error) {
         console.error("Error: ", error);
@@ -99,7 +98,7 @@ export function ModalOrder({ title, option, onClose, orderId }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white rounded-lg w-full max-w-4xl p-8 shadow-lg overflow-auto">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
 
