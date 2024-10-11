@@ -48,6 +48,7 @@ export default function ProductRow({ name, id, quantity, minimum_quantity, brand
     const { data, error } = await supabase
       .from("product")
       .select("id, name, quantity, minimum_quantity, brand, state")
+      .eq("id", id)
       .eq("state", true)
       .single();
 
