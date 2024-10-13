@@ -1,25 +1,29 @@
-import ProductRow from "../components/ProductRow";
+import ProductRow from "../components/products/ProductRow";
 import { useEffect, useState } from "react";
-import ModalWindows from "../components/ModalWindows";
+import { ModalProduct } from "../components/products/ModalProduct";
 import supabase from "../utils/supabase";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
   const [searchProduct, setSearchProduct] = useState("");
+  const [showLowStock, setShowLowStock] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     buttonText: "",
     onClickFunction: () => {},
+    productId: "",
+    option: "",
   });
   const [windowsModal, setWindowsModal] = useState(false);
-  const [showLowStock, setShowLowStock] = useState(false); 
   const [error, setError] = useState(null);
 
-  const abrirCerrarModal = (titleModal, buttonText, onClickFunction) => {
+  const abrirCerrarModal = (titleModal, buttonText, onClickFunction, productId = "", option = "") => {
     setModalProps({
       titleModal,
       buttonText,
       onClickFunction,
+      productId,
+      option,
     });
     setWindowsModal((prev) => !prev);
   };
@@ -39,7 +43,7 @@ export default function ProductsPage() {
         ...product,
         isLowStock: product.quantity <= product.minimum_quantity,
       }));
-      setProducts(updatedProducts|| []);
+      setProducts(updatedProducts || []);
       setError(null);
     }
   };
@@ -48,22 +52,16 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
-  const onUpdate = (e) => {
-    if (e) e.preventDefault();
-    fetchProducts();
-  };
-
-  const filteredProducts = Array.isArray(products)
-    ? products.filter((product) =>
-        product.name.toLowerCase().includes(searchProduct.toLowerCase())
-      )
-    : [];
-
-    const lowStockProducts = filteredProducts.filter(
-      (product) => product.isLowStock
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchProduct.toLowerCase())
   );
 
-  const productsToDisplay = showLowStock ? lowStockProducts : filteredProducts; // Condicional para mostrar productos
+  const lowStockProducts = filteredProducts.filter(
+    (product) => product.isLowStock
+  );
+
+  const productsToDisplay = showLowStock ? lowStockProducts : filteredProducts;
+
 
   return (
     <div className="flex max-h-screen overflow-hidden">
@@ -78,22 +76,20 @@ export default function ProductsPage() {
         </div>
 
         <div className="flex justify-between items-center pb-4">
-          {/* Botones de filtro */}
           <div className="space-x-4">
             <button
-              className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500 hover:border-blue-500" : "bg-blue-500 text-white border-blue-500 hover:bg-white hover:text-blue-500 hover:border-blue-500"}`}
+              className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-blue-500 text-white" : "bg-white text-blue-500 border-blue-500"}`}
               onClick={() => setShowLowStock(false)}
             >
               Stock completo
             </button>
             <button
-               className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-red-500 text-white border-red-500 hover:bg-white hover:text-red-500 hover:border-red-500" : "bg-red-500 text-white border-red-500 hover:bg-white hover:text-red-500 hover:border-red-500"}`}
-               onClick={() => setShowLowStock(true)}
+              className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-red-500 text-white" : "bg-white text-red-500 border-red-500"}`}
+              onClick={() => setShowLowStock(true)}
             >
-               Bajos en stock
+              Bajos en stock
             </button>
           </div>
-
 
           <input
             className="flex-auto border border-gray-400 h-9 rounded-xl pl-2 ml-9"
@@ -102,10 +98,8 @@ export default function ProductsPage() {
             onChange={(e) => setSearchProduct(e.target.value)}
           />
           <button
-            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out transform hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
-            onClick={() =>
-              abrirCerrarModal("Nuevo Producto", "Crear", onUpdate)
-            }
+            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
+            onClick={() => abrirCerrarModal("Nuevo Producto", "", "create")}
           >
             Agregar Producto
           </button>
@@ -122,9 +116,9 @@ export default function ProductsPage() {
             <thead>
               <tr className="bg-gray-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre</th>
-                <th className="py-2 text-left px-40">Stock Actual</th>
-                <th className="py-2 text-left px-2">Marca</th>
-                <th className="py-2 text-left px-10"></th>
+                <th className="py-2 text-center px-40">Stock Actual</th>
+                <th className="py-2 text-center px-2">Marca</th>
+                <th className="py-2 text-center px-10"></th>
               </tr>
             </thead>
             <tbody>
@@ -134,27 +128,25 @@ export default function ProductsPage() {
                   id={product.id}
                   name={product.name}
                   quantity={product.quantity}
-                  minimum_quantity={product.minimum_quantity}
                   brand={product.brand}
                   isLowStock={product.isLowStock}
                   onUpdate={fetchProducts}
-                  index={index}
                 />
               ))}
             </tbody>
           </table>
         </div>
       </div>
-      <ModalWindows
-        open={windowsModal}
-        onClose={() => abrirCerrarModal("", "", () => {})}
-        titleModal={modalProps.titleModal}
-        buttonText={modalProps.buttonText}
-        onClickFunction={(e) => {
-          modalProps.onClickFunction(e);
-          setWindowsModal(false);
-        }}
-      />
+
+      {windowsModal && (
+        <ModalProduct
+          open={windowsModal}
+          onClose={() => setWindowsModal(false)}
+          title={modalProps.titleModal}
+          productId={modalProps.productId}
+          option={modalProps.option}
+        />
+      )}
     </div>
   );
 }
