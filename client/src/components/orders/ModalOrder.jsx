@@ -61,11 +61,6 @@ export function ModalOrder({ title, option, onClose, orderId }) {
   }, []);
 
   const handleGetOrderInfo = async () => {
-    if (!orderId) {
-      console.error("No se proporcionó un ID de orden válido.");
-      return;
-    }
-
     try {
       const { data, error } = await supabase
         .from("order")

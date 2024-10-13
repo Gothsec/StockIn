@@ -1,19 +1,19 @@
-import supabase from "../../utils/supabase";
 import { useState } from "react";
-import { ModalProduct } from "./ModalProduct";
+import { ModalSupplier } from "./ModalSupplier";
+import supabase from "../../utils/supabase";
 
-export default function ProductRow({ name, quantity, id, brand, className, onUpdate }) {
+export default function SupplierRow({ name, email, phone_number, id, className, onUpdate, }) {
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
-    productId: "",
+    supplierId: "",
     option: "",
   });
 
-  const abrirCerrarModal = (titleModal, productId, option) => {
+  const abrirCerrarModal = (titleModal, supplierId, option) => {
     setModalProps({
       titleModal,
-      productId,
+      supplierId,
       option,
     });
     setWindowsModal(!windowsModal);
@@ -22,27 +22,27 @@ export default function ProductRow({ name, quantity, id, brand, className, onUpd
   const handleDelete = async () => {
     try {
       const { error } = await supabase
-        .from("product")
+        .from("supplier")
         .update({ state: false })
         .eq("id", id);
 
       if (error) {
-        console.error("Error eliminando el producto:", error.message);
+        console.error("Error eliminando el proveedor:", error.message);
       } else {
-        onUpdate();
+        onUpdate(); 
       }
     } catch (error) {
-      console.error("Error al eliminar el producto:", error);
+      console.error("Error al eliminar el proveedor:", error);
     }
   };
 
   return (
     <>
-      <tr id={id} className={className}>
+      <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3 text-center">{quantity}</td>
-        <td className="p-3 text-center">{brand}</td>
-        <td className="p-3 justify-end flex gap-2 text-center">
+        <td className="p-3">{email}</td>
+        <td className="p-3 text-center">{phone_number}</td>
+        <td className="p-3 flex gap-2 justify-end">
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
             onClick={handleDelete}
@@ -51,13 +51,13 @@ export default function ProductRow({ name, quantity, id, brand, className, onUpd
           </button>
           <button
             className="py-1 px-2 bg-green-500 text-white rounded-md"
-            onClick={() => abrirCerrarModal("Modificar Producto", id, "update")}
+            onClick={() => abrirCerrarModal("Modificar Proveedor", id, "update")}
           >
             Editar
           </button>
           <button
             className="py-1 px-2 bg-blue-500 text-white rounded-md"
-            onClick={() => abrirCerrarModal("Información Producto", id, "info")}
+            onClick={() => abrirCerrarModal("Información Proveedor", id, "info")}
           >
             Info
           </button>
@@ -65,14 +65,15 @@ export default function ProductRow({ name, quantity, id, brand, className, onUpd
       </tr>
 
       {windowsModal && (
-        <ModalProduct
+        <ModalSupplier
           open={windowsModal}
           onClose={() => setWindowsModal(false)}
           title={modalProps.titleModal}
-          productId={modalProps.productId}
+          supplierId={modalProps.supplierId}
           option={modalProps.option}
         />
       )}
     </>
   );
 }
+
