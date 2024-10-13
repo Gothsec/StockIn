@@ -1,6 +1,12 @@
 import supabase from "../../utils/supabase";
+import React, { useContext } from 'react';
+import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
 
-export default function ButtonCreate({ newProduct, onClose }) {
+
+export default function ButtonCreate({ newProduct, onClose, onUpdate }) {
+  
+  const { showNotification } = useContext(ConfirmationDataContext);
+  
   const handleCreateProduct = async () => {
     try {
       const { error } = await supabase
@@ -10,9 +16,11 @@ export default function ButtonCreate({ newProduct, onClose }) {
 
       if (error) {
         console.error("Error al crear el producto: ", error);
+        showNotification("Error al crear el producto", "error");
       } else {
+        showNotification("El producto fue creado correctamente", "success");
         onClose();
-        window.location.reload();
+        onUpdate();
       }
     } catch (error) {
       console.error("Error al crear el producto: ", error);
