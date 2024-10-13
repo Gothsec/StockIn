@@ -1,7 +1,15 @@
+import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalOrder } from "./ModalOrder";
+import ConfirmationModal from "./ConfirmationModal";
+import React, { useContext } from 'react';
+import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
 
 export default function OrderRow({ name, quantity, id, className, onUpdate }) {
+
+  const { showNotification } = useContext(ConfirmationDataContext);
+
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
@@ -27,12 +35,19 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
 
       if (error) {
         console.error("Error eliminando el pedido:", error.message);
+        showNotification("Error al eliminar el pedido", "error");
       } else {
+        showNotification("El pedido ha sido eliminado correctamente", "success");
         onUpdate();
       }
     } catch (error) {
       console.error("Error al eliminar el pedido:", error);
     }
+  };
+
+  const confirmDelete = () => {
+    handleDelete();
+    setConfirmModalOpen(false);
   };
 
   return (
@@ -43,7 +58,7 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
         <td className="p-3 flex gap-2 justify-end">
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
-            onClick={handleDelete}
+            onClick={() => setConfirmModalOpen(true)}
           >
             Eliminar
           </button>
@@ -69,8 +84,16 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
           title={modalProps.titleModal}
           orderId={modalProps.orderId}
           option={modalProps.option}
+          onUpdate={onUpdate}
         />
       )}
+
+      <ConfirmationModal
+        isOpen={confirmModalOpen}
+        onClose={() => setConfirmModalOpen(false)}
+        onConfirm={confirmDelete}
+        orderName={name}
+      />
     </>
   );
 }
