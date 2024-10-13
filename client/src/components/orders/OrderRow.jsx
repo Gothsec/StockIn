@@ -34,8 +34,8 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
         .eq("id", id);
 
       if (error) {
-        console.error("Error eliminando el pedido:", error.message);
         showNotification("Error al eliminar el pedido", "error");
+        console.error("Error eliminando el pedido:", error.message);
       } else {
         showNotification("El pedido ha sido eliminado correctamente", "success");
         onUpdate();

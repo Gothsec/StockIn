@@ -1,6 +1,11 @@
 import supabase from "../../utils/supabase";
+import React, { useContext } from 'react';
+import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
 
-export default function ButtonCreateSupplier({ newSupplier, onClose }) {
+export default function ButtonCreateSupplier({ newSupplier, onClose, onUpdate }) {
+  
+  const { showNotification } = useContext(ConfirmationDataContext);
+  
   const handleCreateSupplier = async () => {
     try {
       const { error } = await supabase
@@ -10,9 +15,11 @@ export default function ButtonCreateSupplier({ newSupplier, onClose }) {
 
       if (error) {
         console.error("Error al crear el proveedor: ", error);
+        showNotification("Error al crear el proveedor", "error");
       } else {
+        showNotification("El proveedor fue creado correctamente", "success");
         onClose();
-        window.location.reload();
+        onUpdate();
       }
     } catch (error) {
       console.error("Error al crear el proveedor: ", error);
