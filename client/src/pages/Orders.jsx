@@ -51,11 +51,6 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
-  const onUpdate = (e) => {
-    if (e) e.preventDefault();
-    fetchOrders();
-  };
-
   const filteredOrders = Array.isArray(orders)
     ? orders.filter((order) => {
         if (!order.product?.name) return false;
