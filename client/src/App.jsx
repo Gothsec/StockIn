@@ -11,9 +11,11 @@ export default function App() {
     setUserRole(role);
   }, []);
 
-  return <>
-    <ConfirmationProvider>
-      {userRole ? <Home /> : <Login />}
-    </ConfirmationProvider>
- </>;
+  return (
+    <>
+      <ConfirmationProvider>
+        {userRole ? <Home /> : <Login />}
+      </ConfirmationProvider>
+    </>
+  );
 }

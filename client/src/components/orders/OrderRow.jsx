@@ -2,11 +2,10 @@ import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalOrder } from "./ModalOrder";
 import ConfirmationModal from "./ConfirmationModal";
-import React, { useContext } from 'react';
-import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
+import { useContext } from "react";
+import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
 export default function OrderRow({ name, quantity, id, className, onUpdate }) {
-
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -37,7 +36,10 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
         showNotification("Error al eliminar el pedido", "error");
         console.error("Error eliminando el pedido:", error.message);
       } else {
-        showNotification("El pedido ha sido eliminado correctamente", "success");
+        showNotification(
+          "El pedido ha sido eliminado correctamente",
+          "success"
+        );
         onUpdate();
       }
     } catch (error) {

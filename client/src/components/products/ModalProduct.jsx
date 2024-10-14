@@ -46,11 +46,12 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
   };
 
   useEffect(() => {
-      handleGetProductInfo();
+    handleGetProductInfo();
   }, [productId]);
 
   useEffect(() => {
-    const gain = parseFloat(productInfo.public_price) - parseFloat(productInfo.cost_price);
+    const gain =
+      parseFloat(productInfo.public_price) - parseFloat(productInfo.cost_price);
     if (!isNaN(gain)) {
       setProductInfo({ ...productInfo, gain: gain.toFixed(2) });
     }
@@ -238,11 +239,11 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
               onUpdate={onUpdate}
             />
           ) : (
-            <ButtonCreate 
-              newProduct={newProduct} 
-              onClose={onClose} 
+            <ButtonCreate
+              newProduct={newProduct}
+              onClose={onClose}
               onUpdate={onUpdate}
-              />
+            />
           )}
         </div>
       </div>

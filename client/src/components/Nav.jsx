@@ -6,13 +6,15 @@ import { ProductIcon } from "../assets/ProductIcon";
 import { DashboardIcon } from "../assets/DashboardIcon";
 import { LogoutIcon } from "../assets/LogoutIcon";
 import { OrdersIcon } from "../assets/OrdersIcon";
+import SupplierIcon from "../assets/SupplierIcon";
 import supabase from "../utils/supabase";
+
 
 const navAdminItems = [
   { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
-  { text: "Proveedores", icon: <ProductIcon />, href: "/proveedores" },
+  { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Empleados", icon: <EmployeeIcon /> },
   { text: "Reportes", icon: <ReportIcon /> },
   { text: "Ventas", icon: <SalesIcon /> },

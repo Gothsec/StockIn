@@ -1,11 +1,14 @@
 import supabase from "../../utils/supabase";
-import React, { useContext } from 'react';
-import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
+import { useContext } from "react";
+import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonCreateSupplier({ newSupplier, onClose, onUpdate }) {
-  
+export default function ButtonCreateSupplier({
+  newSupplier,
+  onClose,
+  onUpdate,
+}) {
   const { showNotification } = useContext(ConfirmationDataContext);
-  
+
   const handleCreateSupplier = async () => {
     try {
       const { error } = await supabase
@@ -27,7 +30,10 @@ export default function ButtonCreateSupplier({ newSupplier, onClose, onUpdate })
   };
 
   return (
-    <button className="bg-blue-500 text-white py-1 px-3 rounded-md" onClick={handleCreateSupplier}>
+    <button
+      className="bg-blue-500 text-white py-1 px-3 rounded-md"
+      onClick={handleCreateSupplier}
+    >
       Crear
     </button>
   );
