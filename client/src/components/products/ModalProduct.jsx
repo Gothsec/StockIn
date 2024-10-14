@@ -3,7 +3,7 @@ import ButtonCreate from "./ButtonCreate";
 import ButtonUpdate from "./ButtonUpdate";
 import supabase from "../../utils/supabase";
 
-export function ModalProduct({ title, option, onClose, productId }) {
+export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
   const [productInfo, setProductInfo] = useState({
     name: "",
     quantity: "",
@@ -175,11 +175,14 @@ export function ModalProduct({ title, option, onClose, productId }) {
               productUpdated={productInfo}
               productId={productId}
               onClose={onClose}
+              onUpdate={onUpdate}
             />
           ) : (
             <ButtonCreate 
               newProduct={newProduct} 
-              onClose={onClose} />
+              onClose={onClose} 
+              onUpdate={onUpdate}
+              />
           )}
         </div>
       </div>

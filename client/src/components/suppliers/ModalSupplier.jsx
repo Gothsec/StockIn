@@ -3,7 +3,7 @@ import ButtonCreate from "./ButtonCreateSupplier";
 import ButtonUpdate from "./ButtonUpdateSupplier";
 import supabase from "../../utils/supabase";
 
-export function ModalSupplier({ title, option, onClose, supplierId }) {
+export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) {
   const [supplierInfo, setSupplierInfo] = useState({
     name: "",
     phone_number: "",
@@ -166,9 +166,9 @@ export function ModalSupplier({ title, option, onClose, supplierId }) {
             Volver
           </button>
           {option === "info" ? null : option === "update" ? (
-            <ButtonUpdate supplierUpdated={supplierInfo} supplierId={supplierId} onClose={onClose} />
+            <ButtonUpdate supplierUpdated={supplierInfo} supplierId={supplierId} onClose={onClose} onUpdate={onUpdate} />
           ) : (
-            <ButtonCreate newSupplier={newSupplier} onClose={onClose} />
+            <ButtonCreate newSupplier={newSupplier} onClose={onClose} onUpdate={onUpdate} />
           )}
         </div>
       </div>

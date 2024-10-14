@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import OrderRow from "../components/orders/OrderRow";
 import { ModalOrder } from "../components/orders/ModalOrder";
 import supabase from "../utils/supabase";
+import MessageConfirmation from "../components/MessageConfirmation"
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -79,7 +80,7 @@ export default function OrdersPage() {
             Agregar Pedido
           </button>
         </header>
-
+        <MessageConfirmation />
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -118,6 +119,7 @@ export default function OrdersPage() {
           title={modalProps.titleModal}
           orderId={modalProps.orderId}
           option={modalProps.option}
+          onUpdate={fetchOrders}
         />
       )}
     </div>

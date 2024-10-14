@@ -1,7 +1,8 @@
-import ProductRow from "../components/products/ProductRow";
 import { useEffect, useState } from "react";
+import ProductRow from "../components/products/ProductRow";
 import { ModalProduct } from "../components/products/ModalProduct";
 import supabase from "../utils/supabase";
+import MessageConfirmation from "../components/MessageConfirmation"
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -104,7 +105,7 @@ export default function ProductsPage() {
             Agregar Producto
           </button>
         </div>
-
+        <MessageConfirmation />
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -145,6 +146,7 @@ export default function ProductsPage() {
           title={modalProps.titleModal}
           productId={modalProps.productId}
           option={modalProps.option}
+          onUpdate={fetchProducts}
         />
       )}
     </div>

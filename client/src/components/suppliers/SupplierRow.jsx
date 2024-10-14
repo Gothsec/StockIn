@@ -1,8 +1,15 @@
+import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalSupplier } from "./ModalSupplier";
-import supabase from "../../utils/supabase";
+import ConfirmationModal from "./ConfirmationModal";
+import React, { useContext } from 'react';
+import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
 
 export default function SupplierRow({ name, email, phone_number, id, className, onUpdate, }) {
+  
+  const { showNotification } = useContext(ConfirmationDataContext);
+
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
@@ -27,13 +34,20 @@ export default function SupplierRow({ name, email, phone_number, id, className, 
         .eq("id", id);
 
       if (error) {
+        showNotification("Error al eliminar el proveedor", "error");
         console.error("Error eliminando el proveedor:", error.message);
       } else {
+        showNotification("El proveedor ha sido eliminado correctamente", "success");
         onUpdate(); 
       }
     } catch (error) {
       console.error("Error al eliminar el proveedor:", error);
     }
+  };
+
+  const confirmDelete = () => {
+    handleDelete();
+    setConfirmModalOpen(false);
   };
 
   return (
@@ -45,7 +59,7 @@ export default function SupplierRow({ name, email, phone_number, id, className, 
         <td className="p-3 flex gap-2 justify-end">
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
-            onClick={handleDelete}
+            onClick={() => setConfirmModalOpen(true)}
           >
             Eliminar
           </button>
@@ -71,8 +85,16 @@ export default function SupplierRow({ name, email, phone_number, id, className, 
           title={modalProps.titleModal}
           supplierId={modalProps.supplierId}
           option={modalProps.option}
+          onUpdate={onUpdate}
         />
       )}
+
+      <ConfirmationModal
+        isOpen={confirmModalOpen}
+        onClose={() => setConfirmModalOpen(false)}
+        onConfirm={confirmDelete}
+        supplierName={name}
+      />
     </>
   );
 }
