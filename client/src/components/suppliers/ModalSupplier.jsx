@@ -3,7 +3,13 @@ import ButtonCreate from "./ButtonCreateSupplier";
 import ButtonUpdate from "./ButtonUpdateSupplier";
 import supabase from "../../utils/supabase";
 
-export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) {
+export function ModalSupplier({
+  title,
+  option,
+  onClose,
+  supplierId,
+  onUpdate,
+}) {
   const [supplierInfo, setSupplierInfo] = useState({
     name: "",
     phone_number: "",
@@ -57,7 +63,10 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
           {/* Campos del proveedor */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="name" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="name"
+                className="text-sm font-medium text-gray-700"
+              >
                 Nombre
               </label>
               <input
@@ -67,13 +76,18 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
                 value={supplierInfo.name}
-                onChange={(e) => setSupplierInfo({ ...supplierInfo, name: e.target.value })}
+                onChange={(e) =>
+                  setSupplierInfo({ ...supplierInfo, name: e.target.value })
+                }
                 required={option === "create" || option === "update"}
               />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="phone_number" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="phone_number"
+                className="text-sm font-medium text-gray-700"
+              >
                 Teléfono
               </label>
               <input
@@ -83,7 +97,12 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
                 value={supplierInfo.phone_number}
-                onChange={(e) => setSupplierInfo({ ...supplierInfo, phone_number: e.target.value })}
+                onChange={(e) =>
+                  setSupplierInfo({
+                    ...supplierInfo,
+                    phone_number: e.target.value,
+                  })
+                }
                 required={option === "create" || option === "update"}
               />
             </div>
@@ -91,7 +110,10 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-gray-700"
+              >
                 Correo Electrónico
               </label>
               <input
@@ -101,13 +123,18 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
                 value={supplierInfo.email}
-                onChange={(e) => setSupplierInfo({ ...supplierInfo, email: e.target.value })}
+                onChange={(e) =>
+                  setSupplierInfo({ ...supplierInfo, email: e.target.value })
+                }
                 required={option === "create" || option === "update"}
               />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="address" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="address"
+                className="text-sm font-medium text-gray-700"
+              >
                 Dirección
               </label>
               <input
@@ -117,7 +144,9 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
                 value={supplierInfo.address}
-                onChange={(e) => setSupplierInfo({ ...supplierInfo, address: e.target.value })}
+                onChange={(e) =>
+                  setSupplierInfo({ ...supplierInfo, address: e.target.value })
+                }
                 required={option === "create" || option === "update"}
               />
             </div>
@@ -125,7 +154,10 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="city" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="city"
+                className="text-sm font-medium text-gray-700"
+              >
                 Ciudad
               </label>
               <input
@@ -135,7 +167,9 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
                 value={supplierInfo.city}
-                onChange={(e) => setSupplierInfo({ ...supplierInfo, city: e.target.value })}
+                onChange={(e) =>
+                  setSupplierInfo({ ...supplierInfo, city: e.target.value })
+                }
                 required={option === "create" || option === "update"}
               />
             </div>
@@ -150,9 +184,18 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
             Volver
           </button>
           {option === "info" ? null : option === "update" ? (
-            <ButtonUpdate supplierUpdated={supplierInfo} supplierId={supplierId} onClose={onClose} onUpdate={onUpdate} />
+            <ButtonUpdate
+              supplierUpdated={supplierInfo}
+              supplierId={supplierId}
+              onClose={onClose}
+              onUpdate={onUpdate}
+            />
           ) : (
-            <ButtonCreate newSupplier={newSupplier} onClose={onClose} onUpdate={onUpdate} />
+            <ButtonCreate
+              newSupplier={newSupplier}
+              onClose={onClose}
+              onUpdate={onUpdate}
+            />
           )}
         </div>
       </div>

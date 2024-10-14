@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ProductRow from "../components/products/ProductRow";
 import { ModalProduct } from "../components/products/ModalProduct";
 import supabase from "../utils/supabase";
-import MessageConfirmation from "../components/MessageConfirmation"
+import MessageConfirmation from "../components/MessageConfirmation";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -18,7 +18,13 @@ export default function ProductsPage() {
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
 
-  const abrirCerrarModal = (titleModal, buttonText, onClickFunction, productId = "", option = "") => {
+  const abrirCerrarModal = (
+    titleModal,
+    buttonText,
+    onClickFunction,
+    productId = "",
+    option = ""
+  ) => {
     setModalProps({
       titleModal,
       buttonText,
@@ -63,7 +69,6 @@ export default function ProductsPage() {
 
   const productsToDisplay = showLowStock ? lowStockProducts : filteredProducts;
 
-
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
@@ -79,13 +84,21 @@ export default function ProductsPage() {
         <div className="flex justify-between items-center pb-4">
           <div className="space-x-4">
             <button
-              className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-blue-500 text-white" : "bg-white text-blue-500 border-blue-500"}`}
+              className={`py-1 px-3 rounded border transition-colors duration-300 ${
+                showLowStock
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-blue-500 border-blue-500"
+              }`}
               onClick={() => setShowLowStock(false)}
             >
               Stock completo
             </button>
             <button
-              className={`py-1 px-3 rounded border transition-colors duration-300 ${showLowStock ? "bg-red-500 text-white" : "bg-white text-red-500 border-red-500"}`}
+              className={`py-1 px-3 rounded border transition-colors duration-300 ${
+                showLowStock
+                  ? "bg-red-500 text-white"
+                  : "bg-white text-red-500 border-red-500"
+              }`}
               onClick={() => setShowLowStock(true)}
             >
               Bajos en stock
