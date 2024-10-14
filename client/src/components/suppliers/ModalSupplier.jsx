@@ -10,7 +10,6 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
     email: "",
     address: "",
     city: "",
-    state: true,
   });
 
   const handleGetSupplierInfo = async () => {
@@ -47,7 +46,6 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
     email: supplierInfo.email,
     address: supplierInfo.address,
     city: supplierInfo.city,
-    state: supplierInfo.state,
   };
 
   return (
@@ -140,20 +138,6 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 onChange={(e) => setSupplierInfo({ ...supplierInfo, city: e.target.value })}
                 required={option === "create" || option === "update"}
               />
-            </div>
-
-            <div className="flex items-center mt-6">
-              <input
-                type="checkbox"
-                id="state"
-                className="mr-2"
-                checked={supplierInfo.state}
-                onChange={(e) => setSupplierInfo({ ...supplierInfo, state: e.target.checked })}
-                disabled={option === "info"}
-              />
-              <label htmlFor="state" className="text-sm font-medium text-gray-700">
-                Activo
-              </label>
             </div>
           </div>
         </div>
