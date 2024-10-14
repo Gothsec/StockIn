@@ -1,129 +1,98 @@
 import supabase from "../../utils/supabase";
 import { useState } from "react";
-import ModalWindows from "./ModalWindows";
+import { ModalProduct } from "./ModalProduct";
+import ConfirmationModal from "./ConfirmationModal";
+import React, { useContext } from 'react';
+import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
 
-export default function ProductRow({ name, id, className, onUpdate }) {
+
+export default function ProductRow({ name, quantity, id, brand, className, onUpdate }) {
+  const { showNotification } = useContext(ConfirmationDataContext);
+
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
-    buttonText: "",
-    onClickFunction: () => {},
-    productInfo: {},
+    productId: "",
+    option: "",
   });
-  const [windowsModal, setWindowsModal] = useState(false);
 
-  const abrirCerrarModal = (
-    titleModal,
-    buttonText,
-    onClickFunction,
-    productInfo
-  ) => {
+  const abrirCerrarModal = (titleModal, productId, option) => {
     setModalProps({
       titleModal,
-      buttonText,
-      onClickFunction,
-      productInfo,
+      productId,
+      option,
     });
     setWindowsModal(!windowsModal);
   };
 
   const handleDelete = async () => {
-    const { error } = await supabase
-      .from("product")
-      .update({ state: false })
-      .eq("id", id);
+    try {
+      const { error } = await supabase
+        .from("product")
+        .update({ state: false })
+        .eq("id", id);
 
-    if (error) {
-      console.error("Error al actualizar el estado del producto: ", error);
-    } else {
-      if (onUpdate) onUpdate();
+      if (error) {
+        console.error("Error eliminando el producto:", error.message);
+        showNotification("Error al eliminar el producto", "error");
+      } else {
+        showNotification("El producto ha sido eliminado correctamente", "success");
+        onUpdate();
+      }
+    } catch (error) {
+      console.error("Error al eliminar el producto:", error);
     }
   };
 
-  const getProductById = async (id, option) => {
-    if (!id) {
-      console.error("No se proporcionó un ID de producto válido.");
-      return;
-    }
-
-    const { data, error } = await supabase
-      .from("product")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    if (error) {
-      console.error("Error al obtener información del producto: ", error);
-      return;
-    }
-
-    if (option === "update") {
-      abrirCerrarModal(
-        "Información Producto",
-        "Modificar",
-        () => handleUpdate(data),
-        data
-      );
-    } else {
-      abrirCerrarModal("Información Producto", "Mostrar", () => {}, data);
-    }
-  };
-
-  const handleUpdate = async (productData) => {
-    if (!productData.id) {
-      console.error("ID de producto no está definido para la actualización.");
-      return;
-    }
-
-    const { error } = await supabase
-      .from("product")
-      .update(productData)
-      .eq("id", productData.id);
-
-    if (error) {
-      console.error("Error actualizando producto: ", error);
-    } else {
-      if (onUpdate) onUpdate();
-    }
-
-    abrirCerrarModal("", "", () => {}, {});
+  const confirmDelete = () => {
+    handleDelete();
+    setConfirmModalOpen(false);
   };
 
   return (
     <>
-      <tr
-        id={id}
-        className={`flex justify-between items-center w-full ${className}`}
-      >
+      <tr id={id} className={className}>
         <td className="p-3">{name}</td>
-        <td className="flex justify-between p-3 w-[25%]">
+        <td className="p-3 text-center">{quantity}</td>
+        <td className="p-3 text-center">{brand}</td>
+        <td className="p-3 justify-end flex gap-2 text-center">
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
-            onClick={handleDelete}
+            onClick={() => setConfirmModalOpen(true)}
           >
             Eliminar
           </button>
           <button
             className="py-1 px-2 bg-green-500 text-white rounded-md"
-            onClick={() => getProductById(id, "update")}
+            onClick={() => abrirCerrarModal("Modificar Producto", id, "update")}
           >
             Editar
           </button>
           <button
             className="py-1 px-2 bg-blue-500 text-white rounded-md"
-            onClick={() => getProductById(id, "read")}
+            onClick={() => abrirCerrarModal("Información Producto", id, "info")}
           >
             Info
           </button>
         </td>
       </tr>
-      <ModalWindows
-        open={windowsModal}
-        onClose={() => abrirCerrarModal("", "", () => {}, {})}
-        titleModal={modalProps.titleModal}
-        buttonText={modalProps.buttonText}
-        onClickFunction={modalProps.onClickFunction}
-        productInfo={modalProps.productInfo}
-        productId={id}
+
+      {windowsModal && (
+        <ModalProduct
+          open={windowsModal}
+          onClose={() => setWindowsModal(false)}
+          title={modalProps.titleModal}
+          productId={modalProps.productId}
+          option={modalProps.option}
+          onUpdate={onUpdate}
+        />
+      )}
+      <ConfirmationModal
+        isOpen={confirmModalOpen}
+        onClose={() => setConfirmModalOpen(false)}
+        onConfirm={confirmDelete}
+        productName={name}
       />
     </>
   );

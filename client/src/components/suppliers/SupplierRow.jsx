@@ -1,26 +1,26 @@
 import supabase from "../../utils/supabase";
 import { useState } from "react";
-import { ModalOrder } from "./ModalOrder";
+import { ModalSupplier } from "./ModalSupplier";
 import ConfirmationModal from "./ConfirmationModal";
 import React, { useContext } from 'react';
 import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
 
-export default function OrderRow({ name, quantity, id, className, onUpdate }) {
-
+export default function SupplierRow({ name, email, phone_number, id, className, onUpdate, }) {
+  
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
-    orderId: "",
+    supplierId: "",
     option: "",
   });
 
-  const abrirCerrarModal = (titleModal, orderId, option) => {
+  const abrirCerrarModal = (titleModal, supplierId, option) => {
     setModalProps({
       titleModal,
-      orderId,
+      supplierId,
       option,
     });
     setWindowsModal(!windowsModal);
@@ -29,19 +29,19 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
   const handleDelete = async () => {
     try {
       const { error } = await supabase
-        .from("order")
+        .from("supplier")
         .update({ state: false })
         .eq("id", id);
 
       if (error) {
-        showNotification("Error al eliminar el pedido", "error");
-        console.error("Error eliminando el pedido:", error.message);
+        showNotification("Error al eliminar el proveedor", "error");
+        console.error("Error eliminando el proveedor:", error.message);
       } else {
-        showNotification("El pedido ha sido eliminado correctamente", "success");
-        onUpdate();
+        showNotification("El proveedor ha sido eliminado correctamente", "success");
+        onUpdate(); 
       }
     } catch (error) {
-      console.error("Error al eliminar el pedido:", error);
+      console.error("Error al eliminar el proveedor:", error);
     }
   };
 
@@ -54,7 +54,8 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
     <>
       <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3 text-center">{quantity}</td>
+        <td className="p-3">{email}</td>
+        <td className="p-3 text-center">{phone_number}</td>
         <td className="p-3 flex gap-2 justify-end">
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
@@ -64,13 +65,13 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
           </button>
           <button
             className="py-1 px-2 bg-green-500 text-white rounded-md"
-            onClick={() => abrirCerrarModal("Modificar Pedido", id, "update")}
+            onClick={() => abrirCerrarModal("Modificar Proveedor", id, "update")}
           >
             Editar
           </button>
           <button
             className="py-1 px-2 bg-blue-500 text-white rounded-md"
-            onClick={() => abrirCerrarModal("Información Pedido", id, "info")}
+            onClick={() => abrirCerrarModal("Información Proveedor", id, "info")}
           >
             Info
           </button>
@@ -78,11 +79,11 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
       </tr>
 
       {windowsModal && (
-        <ModalOrder
+        <ModalSupplier
           open={windowsModal}
           onClose={() => setWindowsModal(false)}
           title={modalProps.titleModal}
-          orderId={modalProps.orderId}
+          supplierId={modalProps.supplierId}
           option={modalProps.option}
           onUpdate={onUpdate}
         />
@@ -92,8 +93,9 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
         isOpen={confirmModalOpen}
         onClose={() => setConfirmModalOpen(false)}
         onConfirm={confirmDelete}
-        orderName={name}
+        supplierName={name}
       />
     </>
   );
 }
+

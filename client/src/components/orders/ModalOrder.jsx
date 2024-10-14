@@ -3,7 +3,7 @@ import ButtonCreate from "./ButtonCreate";
 import ButtonUpdate from "./ButtonUpdate";
 import supabase from "../../utils/supabase";
 
-export function ModalOrder({ title, option, onClose, orderId }) {
+export function ModalOrder({ title, option, onClose, orderId, onUpdate }) {
   const [productsList, setProductsList] = useState([]);
   const [suppliersList, setSuppliersList] = useState([]);
   const [orderInfo, setOrderInfo] = useState({
@@ -61,11 +61,6 @@ export function ModalOrder({ title, option, onClose, orderId }) {
   }, []);
 
   const handleGetOrderInfo = async () => {
-    if (!orderId) {
-      console.error("No se proporcionó un ID de orden válido.");
-      return;
-    }
-
     try {
       const { data, error } = await supabase
         .from("order")
@@ -224,9 +219,9 @@ export function ModalOrder({ title, option, onClose, orderId }) {
             Volver
           </button>
           {option === "info" ? null : option === "update" ? (
-            <ButtonUpdate orderUpdated={orderInfo} orderId={orderId} onClose={onClose} />
+            <ButtonUpdate orderUpdated={orderInfo} orderId={orderId} onClose={onClose} onUpdate={onUpdate} />
           ) : (
-            <ButtonCreate newOrder={newOrder} onClose={onClose} />
+            <ButtonCreate newOrder={newOrder} onClose={onClose} onUpdate={onUpdate}/>
           )}
         </div>
       </div>
