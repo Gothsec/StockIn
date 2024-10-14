@@ -9,9 +9,22 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
     quantity: "",
     cost_price: "",
     public_price: "",
+    gain: "",
+    category: "",
     minimum_quantity: "",
     brand: "",
   });
+
+  const categories = [
+    "Cuidado del cabello",
+    "Cuidado de la barba",
+    "Cuidado de la piel",
+    "Herramientas de corte",
+    "Maquillaje y cosmética",
+    "Cuidado de uñas",
+    "Fragancias y colonias",
+    "Accesorios",
+  ];
 
   const handleGetProductInfo = async () => {
     try {
@@ -36,11 +49,20 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
       handleGetProductInfo();
   }, [productId]);
 
+  useEffect(() => {
+    const gain = parseFloat(productInfo.public_price) - parseFloat(productInfo.cost_price);
+    if (!isNaN(gain)) {
+      setProductInfo({ ...productInfo, gain: gain.toFixed(2) });
+    }
+  }, [productInfo.cost_price, productInfo.public_price]);
+
   const newProduct = {
     name: productInfo.name,
     quantity: productInfo.quantity,
     cost_price: productInfo.cost_price,
     public_price: productInfo.public_price,
+    gain: productInfo.gain,
+    category: productInfo.category,
     minimum_quantity: productInfo.minimum_quantity,
     brand: productInfo.brand,
   };
@@ -121,6 +143,44 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
               required={option === "create" || option === "update"}
               readOnly={option === "info"}
             />
+          </div>
+
+          <div className="my-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Ganancia
+            </label>
+            <input
+              name="gain"
+              id="gain"
+              type="number"
+              className="w-full mt-1 p-2 border border-gray-300 rounded"
+              value={productInfo.gain}
+              readOnly
+            />
+          </div>
+
+          <div className="my-4 col-span-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Categoría
+            </label>
+            <select
+              name="category"
+              id="category"
+              className="w-full mt-1 p-2 border border-gray-300 rounded"
+              value={productInfo.category}
+              onChange={(e) =>
+                setProductInfo({ ...productInfo, category: e.target.value })
+              }
+              required={option === "create" || option === "update"}
+              disabled={option === "info"}
+            >
+              <option value="">Seleccione una categoría</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="my-4">
