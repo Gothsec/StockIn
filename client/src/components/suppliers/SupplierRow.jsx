@@ -1,15 +1,11 @@
+import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalSupplier } from "./ModalSupplier";
-import supabase from "../../utils/supabase";
+import ConfirmationModal from "./ConfirmationModal";
+import { useContext } from "react";
+import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function SupplierRow({
-  name,
-  email,
-  phone_number,
-  id,
-  className,
-  onUpdate,
-}) {
+export default function SupplierRow({ name, email, phone_number, id, className, onUpdate, }) {
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
@@ -34,13 +30,19 @@ export default function SupplierRow({
         .eq("id", id);
 
       if (error) {
+        showNotification("Error al eliminar el proveedor", "error");
         console.error("Error eliminando el proveedor:", error.message);
       } else {
-        onUpdate();
+        onUpdate(); 
       }
     } catch (error) {
       console.error("Error al eliminar el proveedor:", error);
     }
+  };
+
+  const confirmDelete = () => {
+    handleDelete();
+    setConfirmModalOpen(false);
   };
 
   return (
@@ -52,7 +54,7 @@ export default function SupplierRow({
         <td className="p-3 flex gap-2 justify-end">
           <button
             className="py-1 px-2 bg-red-500 text-white rounded-md"
-            onClick={handleDelete}
+            onClick={() => setConfirmModalOpen(true)}
           >
             Eliminar
           </button>
@@ -82,8 +84,16 @@ export default function SupplierRow({
           title={modalProps.titleModal}
           supplierId={modalProps.supplierId}
           option={modalProps.option}
+          onUpdate={onUpdate}
         />
       )}
+
+      <ConfirmationModal
+        isOpen={confirmModalOpen}
+        onClose={() => setConfirmModalOpen(false)}
+        onConfirm={confirmDelete}
+        supplierName={name}
+      />
     </>
   );
 }

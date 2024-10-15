@@ -1,10 +1,15 @@
 import supabase from "../../utils/supabase";
+import { useContext } from "react";
+import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
 export default function ButtonUpdateSupplier({
   supplierUpdated,
   supplierId,
   onClose,
+  onUpdate,
 }) {
+  const { showNotification } = useContext(ConfirmationDataContext);
+
   const handleUpdateSupplier = async () => {
     try {
       const { error } = await supabase
@@ -14,9 +19,16 @@ export default function ButtonUpdateSupplier({
 
       if (error) {
         console.error("Error al actualizar el proveedor: ", error);
+        showNotification("Error al actualizar el proveedor", "error");
       } else {
+        showNotification(
+          "El proveedor fue actualizado correctamente",
+          "success"
+        );
+
+        // Ejecuta la acción de cierre y actualización.
         onClose();
-        window.location.reload();
+        onUpdate(); 
       }
     } catch (error) {
       console.error("Error al actualizar el proveedor: ", error);

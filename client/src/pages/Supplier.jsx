@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SupplierRow from "../components/suppliers/SupplierRow";
 import { ModalSupplier } from "../components/suppliers/ModalSupplier";
 import supabase from "../utils/supabase";
+import MessageConfirmation from "../components/MessageConfirmation";
 
 export default function SuppliersPage() {
   const [suppliers, setSuppliers] = useState([]);
@@ -86,7 +87,7 @@ export default function SuppliersPage() {
             Agregar Proveedor
           </button>
         </header>
-
+        <MessageConfirmation />
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -127,6 +128,7 @@ export default function SuppliersPage() {
           title={modalProps.titleModal}
           supplierId={modalProps.supplierId}
           option={modalProps.option}
+          onUpdate={fetchSuppliers}
         />
       )}
     </div>

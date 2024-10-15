@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Home from "./pages/Home";
 import Login from "./components/Login";
+import { ConfirmationProvider } from "./contexts/ConfirmationData";
 
 export default function App() {
   const [userRole, setUserRole] = useState(null);
@@ -10,5 +11,11 @@ export default function App() {
     setUserRole(role);
   }, []);
 
-  return <>{userRole ? <Home /> : <Login />}</>;
+  return (
+    <>
+      <ConfirmationProvider>
+        {userRole ? <Home /> : <Login />}
+      </ConfirmationProvider>
+    </>
+  );
 }

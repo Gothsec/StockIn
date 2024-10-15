@@ -3,25 +3,25 @@ import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
 export default function ButtonUpdate({
-  orderUpdated,
-  orderId,
+  productUpdated,
+  productId,
   onClose,
   onUpdate,
 }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
-  const handleUpdateOrder = async () => {
+  const handleUpdateProduct = async () => {
     try {
       const { error } = await supabase
-        .from("order")
-        .update(orderUpdated)
-        .eq("id", orderId);
+        .from("product")
+        .update(productUpdated)
+        .eq("id", productId);
 
       if (error) {
         console.error("Error: ", error);
-        showNotification("Error al actualizar la orden", "error");
+        showNotification("Error al actualizar el producto", "error");
       } else {
-        showNotification("Orden actualizada correctamente", "success");
+        showNotification("Producto actualizado correctamente", "success");
         onClose();
         onUpdate();
       }
@@ -33,7 +33,7 @@ export default function ButtonUpdate({
   return (
     <button
       className="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 focus:outline-none"
-      onClick={handleUpdateOrder}
+      onClick={handleUpdateProduct}
     >
       Modificar
     </button>
