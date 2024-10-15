@@ -34,6 +34,9 @@ const handleLogout = async () => {
     localStorage.removeItem("role");
     localStorage.removeItem("name");
 
+    if (!localStorage.getItem("email")){
+      sessionStorage.removeItem("email")
+    }
     window.location.href = "/signin";
   }
 };
