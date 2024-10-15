@@ -1,9 +1,13 @@
 import supabase from "../../utils/supabase";
-import React, { useContext } from 'react';
-import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
+import { useContext } from "react";
+import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonUpdate({ productUpdated, productId, onClose, onUpdate }) {
-  
+export default function ButtonUpdate({
+  productUpdated,
+  productId,
+  onClose,
+  onUpdate,
+}) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const handleUpdateProduct = async () => {
@@ -27,7 +31,10 @@ export default function ButtonUpdate({ productUpdated, productId, onClose, onUpd
   };
 
   return (
-    <button className="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 focus:outline-none" onClick={handleUpdateProduct}>
+    <button
+      className="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 focus:outline-none"
+      onClick={handleUpdateProduct}
+    >
       Modificar
     </button>
   );

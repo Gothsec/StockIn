@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import OrderRow from "../components/orders/OrderRow";
 import { ModalOrder } from "../components/orders/ModalOrder";
 import supabase from "../utils/supabase";
-import MessageConfirmation from "../components/MessageConfirmation"
+import MessageConfirmation from "../components/MessageConfirmation";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -17,7 +17,13 @@ export default function OrdersPage() {
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
 
-  const abrirCerrarModal = (titleModal, buttonText, onClickFunction, orderId = "", option = "") => {
+  const abrirCerrarModal = (
+    titleModal,
+    buttonText,
+    onClickFunction,
+    orderId = "",
+    option = ""
+  ) => {
     setModalProps({
       titleModal,
       buttonText,
@@ -31,11 +37,13 @@ export default function OrdersPage() {
   const fetchOrders = async () => {
     const { data, error } = await supabase
       .from("order")
-      .select(`
+      .select(
+        `
         id, 
         quantity, 
         product:product_id(name)  -- JOIN con la tabla product para obtener el nombre
-      `)
+      `
+      )
       .eq("state", true);
 
     if (error) {
@@ -56,7 +64,9 @@ export default function OrdersPage() {
     ? orders.filter((order) => {
         if (!order.product?.name) return false;
         if (searchOrder === "") return true;
-        return order.product.name.toLowerCase().includes(searchOrder.toLowerCase());
+        return order.product.name
+          .toLowerCase()
+          .includes(searchOrder.toLowerCase());
       })
     : [];
 
@@ -73,9 +83,7 @@ export default function OrdersPage() {
           />
           <button
             className="bg-blue-500 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
-            onClick={() =>
-              abrirCerrarModal("Nuevo Pedido", "", "create")
-            }
+            onClick={() => abrirCerrarModal("Nuevo Pedido", "", "create")}
           >
             Agregar Pedido
           </button>
@@ -101,8 +109,8 @@ export default function OrdersPage() {
                 <OrderRow
                   key={order.id}
                   id={order.id}
-                  name={order.product.name} 
-                  quantity={order.quantity} 
+                  name={order.product.name}
+                  quantity={order.quantity}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                   onUpdate={fetchOrders}
                 />

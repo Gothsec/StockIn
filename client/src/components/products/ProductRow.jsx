@@ -2,11 +2,17 @@ import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalProduct } from "./ModalProduct";
 import ConfirmationModal from "./ConfirmationModal";
-import React, { useContext } from 'react';
-import {ConfirmationDataContext} from "../../contexts/ConfirmationData"
+import { useContext } from "react";
+import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-
-export default function ProductRow({ name, quantity, id, brand, className, onUpdate }) {
+export default function ProductRow({
+  name,
+  quantity,
+  id,
+  brand,
+  className,
+  onUpdate,
+}) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -37,7 +43,10 @@ export default function ProductRow({ name, quantity, id, brand, className, onUpd
         console.error("Error eliminando el producto:", error.message);
         showNotification("Error al eliminar el producto", "error");
       } else {
-        showNotification("El producto ha sido eliminado correctamente", "success");
+        showNotification(
+          "El producto ha sido eliminado correctamente",
+          "success"
+        );
         onUpdate();
       }
     } catch (error) {
