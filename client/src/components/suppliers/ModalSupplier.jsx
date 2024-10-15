@@ -3,14 +3,19 @@ import ButtonCreate from "./ButtonCreateSupplier";
 import ButtonUpdate from "./ButtonUpdateSupplier";
 import supabase from "../../utils/supabase";
 
-export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) {
+export function ModalSupplier({
+  title,
+  option,
+  onClose,
+  supplierId,
+  onUpdate,
+}) {
   const [supplierInfo, setSupplierInfo] = useState({
     name: "",
     phone_number: "",
     email: "",
     address: "",
     city: "",
-    state: false,
   });
 
   const handleGetSupplierInfo = async () => {
@@ -28,6 +33,7 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
 
       if (error) {
         console.error("Error al obtener información del proveedor: ", error);
+        return;
       } else {
         setSupplierInfo(data);
       }
@@ -46,7 +52,6 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
     email: supplierInfo.email,
     address: supplierInfo.address,
     city: supplierInfo.city,
-    state: supplierInfo.state,
   };
 
   return (
@@ -58,7 +63,10 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
           {/* Campos del proveedor */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="name" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="name"
+                className="text-sm font-medium text-gray-700"
+              >
                 Nombre
               </label>
               <input
@@ -71,12 +79,15 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 onChange={(e) =>
                   setSupplierInfo({ ...supplierInfo, name: e.target.value })
                 }
-                required={option !== "info"}
+                required={option === "create" || option === "update"}
               />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="phone_number" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="phone_number"
+                className="text-sm font-medium text-gray-700"
+              >
                 Teléfono
               </label>
               <input
@@ -92,14 +103,17 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                     phone_number: e.target.value,
                   })
                 }
-                required={option !== "info"}
+                required={option === "create" || option === "update"}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-gray-700"
+              >
                 Correo Electrónico
               </label>
               <input
@@ -112,12 +126,15 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 onChange={(e) =>
                   setSupplierInfo({ ...supplierInfo, email: e.target.value })
                 }
-                required={option !== "info"}
+                required={option === "create" || option === "update"}
               />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="address" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="address"
+                className="text-sm font-medium text-gray-700"
+              >
                 Dirección
               </label>
               <input
@@ -130,14 +147,17 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 onChange={(e) =>
                   setSupplierInfo({ ...supplierInfo, address: e.target.value })
                 }
-                required={option !== "info"}
+                required={option === "create" || option === "update"}
               />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="city" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="city"
+                className="text-sm font-medium text-gray-700"
+              >
                 Ciudad
               </label>
               <input
@@ -150,24 +170,8 @@ export function ModalSupplier({ title, option, onClose, supplierId, onUpdate }) 
                 onChange={(e) =>
                   setSupplierInfo({ ...supplierInfo, city: e.target.value })
                 }
-                required={option !== "info"}
+                required={option === "create" || option === "update"}
               />
-            </div>
-
-            <div className="flex items-center mt-6">
-              <input
-                type="checkbox"
-                id="state"
-                className="mr-2"
-                checked={supplierInfo.state}
-                onChange={(e) =>
-                  setSupplierInfo({ ...supplierInfo, state: e.target.checked })
-                }
-                disabled={option === "info"}
-              />
-              <label htmlFor="state" className="text-sm font-medium text-gray-700">
-                Activo
-              </label>
             </div>
           </div>
         </div>

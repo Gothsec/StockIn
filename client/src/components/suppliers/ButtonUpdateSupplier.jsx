@@ -25,10 +25,8 @@ export default function ButtonUpdateSupplier({
           "El proveedor fue actualizado correctamente",
           "success"
         );
-
-        // Ejecuta la acción de cierre y actualización.
         onClose();
-        onUpdate(); 
+        onUpdate();
       }
     } catch (error) {
       console.error("Error al actualizar el proveedor: ", error);

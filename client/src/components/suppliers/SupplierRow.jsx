@@ -5,7 +5,17 @@ import ConfirmationModal from "./ConfirmationModal";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function SupplierRow({ name, email, phone_number, id, className, onUpdate, }) {
+export default function SupplierRow({
+  name,
+  email,
+  phone_number,
+  id,
+  className,
+  onUpdate,
+}) {
+  const { showNotification } = useContext(ConfirmationDataContext);
+
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
@@ -33,7 +43,11 @@ export default function SupplierRow({ name, email, phone_number, id, className, 
         showNotification("Error al eliminar el proveedor", "error");
         console.error("Error eliminando el proveedor:", error.message);
       } else {
-        onUpdate(); 
+        showNotification(
+          "El proveedor ha sido eliminado correctamente",
+          "success"
+        );
+        onUpdate();
       }
     } catch (error) {
       console.error("Error al eliminar el proveedor:", error);
