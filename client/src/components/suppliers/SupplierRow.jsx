@@ -2,7 +2,14 @@ import { useState } from "react";
 import { ModalSupplier } from "./ModalSupplier";
 import supabase from "../../utils/supabase";
 
-export default function SupplierRow({ name, email, phone_number, id, className, onUpdate, }) {
+export default function SupplierRow({
+  name,
+  email,
+  phone_number,
+  id,
+  className,
+  onUpdate,
+}) {
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
@@ -29,7 +36,7 @@ export default function SupplierRow({ name, email, phone_number, id, className, 
       if (error) {
         console.error("Error eliminando el proveedor:", error.message);
       } else {
-        onUpdate(); 
+        onUpdate();
       }
     } catch (error) {
       console.error("Error al eliminar el proveedor:", error);
@@ -51,13 +58,17 @@ export default function SupplierRow({ name, email, phone_number, id, className, 
           </button>
           <button
             className="py-1 px-2 bg-green-500 text-white rounded-md"
-            onClick={() => abrirCerrarModal("Modificar Proveedor", id, "update")}
+            onClick={() =>
+              abrirCerrarModal("Modificar Proveedor", id, "update")
+            }
           >
             Editar
           </button>
           <button
             className="py-1 px-2 bg-blue-500 text-white rounded-md"
-            onClick={() => abrirCerrarModal("Información Proveedor", id, "info")}
+            onClick={() =>
+              abrirCerrarModal("Información Proveedor", id, "info")
+            }
           >
             Info
           </button>
@@ -76,4 +87,3 @@ export default function SupplierRow({ name, email, phone_number, id, className, 
     </>
   );
 }
-

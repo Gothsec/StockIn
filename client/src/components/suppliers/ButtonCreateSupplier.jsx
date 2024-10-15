@@ -20,7 +20,10 @@ export default function ButtonCreateSupplier({ newSupplier, onClose }) {
   };
 
   return (
-    <button className="bg-blue-500 text-white py-1 px-3 rounded-md" onClick={handleCreateSupplier}>
+    <button
+      className="bg-blue-500 text-white py-1 px-3 rounded-md"
+      onClick={handleCreateSupplier}
+    >
       Crear
     </button>
   );

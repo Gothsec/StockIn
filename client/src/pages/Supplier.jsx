@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import SupplierRow from "../components/suppliers/SupplierRow"; 
-import { ModalSupplier } from "../components/suppliers/ModalSupplier"; 
+import SupplierRow from "../components/suppliers/SupplierRow";
+import { ModalSupplier } from "../components/suppliers/ModalSupplier";
 import supabase from "../utils/supabase";
 
 export default function SuppliersPage() {
@@ -16,7 +16,13 @@ export default function SuppliersPage() {
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
 
-  const abrirCerrarModal = (titleModal, buttonText, onClickFunction, supplierId = "", option = "") => {
+  const abrirCerrarModal = (
+    titleModal,
+    buttonText,
+    onClickFunction,
+    supplierId = "",
+    option = ""
+  ) => {
     setModalProps({
       titleModal,
       buttonText,
@@ -56,7 +62,9 @@ export default function SuppliersPage() {
     ? suppliers.filter((supplier) => {
         if (!supplier.name) return false;
         if (searchSupplier === "") return true;
-        return supplier.name.toLowerCase().includes(searchSupplier.toLowerCase());
+        return supplier.name
+          .toLowerCase()
+          .includes(searchSupplier.toLowerCase());
       })
     : [];
 
@@ -73,9 +81,7 @@ export default function SuppliersPage() {
           />
           <button
             className="bg-blue-500 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
-            onClick={() =>
-              abrirCerrarModal("Nuevo Proveedor", "", "create")
-            }
+            onClick={() => abrirCerrarModal("Nuevo Proveedor", "", "create")}
           >
             Agregar Proveedor
           </button>
@@ -102,8 +108,8 @@ export default function SuppliersPage() {
                 <SupplierRow
                   key={supplier.id}
                   id={supplier.id}
-                  name={supplier.name} 
-                  email={supplier.email}        // Agregar email aquí
+                  name={supplier.name}
+                  email={supplier.email} // Agregar email aquí
                   phone_number={supplier.phone_number} // Agregar phone_number aquí
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                   onUpdate={fetchSuppliers}

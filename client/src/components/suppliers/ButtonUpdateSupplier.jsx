@@ -1,6 +1,10 @@
 import supabase from "../../utils/supabase";
 
-export default function ButtonUpdateSupplier({ supplierUpdated, supplierId, onClose }) {
+export default function ButtonUpdateSupplier({
+  supplierUpdated,
+  supplierId,
+  onClose,
+}) {
   const handleUpdateSupplier = async () => {
     try {
       const { error } = await supabase
@@ -12,7 +16,7 @@ export default function ButtonUpdateSupplier({ supplierUpdated, supplierId, onCl
         console.error("Error al actualizar el proveedor: ", error);
       } else {
         onClose();
-        window.location.reload(); 
+        window.location.reload();
       }
     } catch (error) {
       console.error("Error al actualizar el proveedor: ", error);
