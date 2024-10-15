@@ -7,11 +7,11 @@ import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
 export default function SupplierRow({
   name,
-  email,
   phone_number,
   id,
   className,
   onUpdate,
+  address,
 }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
@@ -63,7 +63,7 @@ export default function SupplierRow({
     <>
       <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3">{email}</td>
+        <td className="p-3">{address}</td>
         <td className="p-3 text-center">{phone_number}</td>
         <td className="p-3 flex gap-2 justify-end">
           <button

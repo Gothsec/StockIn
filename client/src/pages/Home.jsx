@@ -4,7 +4,6 @@ import OrdersPage from "../pages/Orders";
 import SuppliersPage from "./Supplier";
 import Dashboard from "./Dashboard";
 
-
 export default function Home() {
   const currentPath = window.location.pathname;
 
@@ -17,7 +16,7 @@ export default function Home() {
       case "/pedidos":
         return <OrdersPage />;
       case "/proveedores":
-        return <SuppliersPage />; 
+        return <SuppliersPage />;
       default:
         return <Dashboard />;
     }
