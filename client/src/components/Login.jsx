@@ -22,29 +22,48 @@ export default function Login() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
-    const { data, error } = await supabase
-      .from("user")
-      .select("user_type")
-      .eq("email", email)
-      .eq("password", password)
-      .single();
-
-    if (error || !data) {
+  
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+  
+    if (error) {
       setErrorMessage("Email o contraseña incorrectos.");
       setLoginSuccessful(false);
     } else {
-      if (rememberMe) {
-        localStorage.setItem("role", data.user_type);
-        localStorage.setItem("email", email);
+      const userId = data.user.id; // Obtenemos el ID del usuario autenticado
+  
+      // Hacemos una consulta para obtener el nombre y el rol del usuario desde la tabla Users
+      const { data: userData, error: userError } = await supabase
+        .from("user") // Cambia el nombre de la tabla si es necesario
+        .select("name, user_type")
+        .eq("id", userId)
+        .single(); // Obtenemos solo un resultado
+  
+      if (userError) {
+        console.error("Error obteniendo información del usuario:", userError);
       } else {
-        sessionStorage.setItem("role", data.user_type);
-        localStorage.removeItem("email");
+        const userRole = userData.user_type;
+        const userName = userData.name;
+  
+        // Guardamos el rol y el nombre en localStorage o sessionStorage
+        if (rememberMe) {
+          localStorage.setItem("role", userRole);
+          localStorage.setItem("name", userName);
+          localStorage.setItem("email", email);
+        } else {
+          sessionStorage.setItem("role", userRole);
+          sessionStorage.setItem("name", userName);
+        }
+  
+        setLoginSuccessful(true);
+        setErrorMessage("");
       }
-      setLoginSuccessful(true);
-      setErrorMessage("");
     }
   };
+  
+  
 
   return (
     <>

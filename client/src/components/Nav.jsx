@@ -32,14 +32,18 @@ const handleLogout = async () => {
   if (error) {
     console.error("Error al cerrar sesión:", error);
   } else {
-    localStorage.removeItem("token");
     localStorage.removeItem("role");
+    sessionStorage.removeItem("role");
+    localStorage.removeItem("name");
+    sessionStorage.removeItem("name");
+    localStorage.removeItem("email");
     window.location.href = "/signin";
   }
 };
 
 export default function Nav() {
   const role = localStorage.getItem("role");
+  const name = localStorage.getItem("name");
 
   return (
     <nav className="bg-blue-600 w-min h-screen pt-6 px-1 flex flex-col transition-all duration-300 md:w-60">
@@ -52,7 +56,7 @@ export default function Nav() {
         </div>
         <hr className="mb-4 w-[90%] mx-auto border-blue-200" />
         <span className="font-bold text-xs uppercase inline-block ml-4 mb-2 text-blue-200 md:block">
-          {role === "admin" ? "Admin" : "Empleado"}
+          {name}
         </span>
       </div>
       <ul className="flex flex-col justify-between h-full flex-1">
