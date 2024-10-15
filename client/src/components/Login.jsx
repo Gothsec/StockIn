@@ -32,29 +32,28 @@ export default function Login() {
       setErrorMessage("Email o contraseña incorrectos.");
       setLoginSuccessful(false);
     } else {
-      const userId = data.user.id; // Obtenemos el ID del usuario autenticado
-  
-      // Hacemos una consulta para obtener el nombre y el rol del usuario desde la tabla Users
+      const userId = data.user.id;
+
       const { data: userData, error: userError } = await supabase
-        .from("user") // Cambia el nombre de la tabla si es necesario
+        .from("user")
         .select("name, user_type")
         .eq("id", userId)
-        .single(); // Obtenemos solo un resultado
+        .single();
   
       if (userError) {
         console.error("Error obteniendo información del usuario:", userError);
       } else {
         const userRole = userData.user_type;
         const userName = userData.name;
-  
-        // Guardamos el rol y el nombre en localStorage o sessionStorage
+
         if (rememberMe) {
           localStorage.setItem("role", userRole);
           localStorage.setItem("name", userName);
           localStorage.setItem("email", email);
         } else {
-          sessionStorage.setItem("role", userRole);
-          sessionStorage.setItem("name", userName);
+          localStorage.setItem("role", userRole);
+          localStorage.setItem("name", userName);
+          sessionStorage.setItem("email", email);
         }
   
         setLoginSuccessful(true);

@@ -11,7 +11,7 @@ import supabase from "../utils/supabase";
 
 
 const navAdminItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
@@ -21,7 +21,6 @@ const navAdminItems = [
 ];
 
 const navItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
   { text: "Ventas", icon: <SalesIcon /> },
@@ -33,10 +32,8 @@ const handleLogout = async () => {
     console.error("Error al cerrar sesión:", error);
   } else {
     localStorage.removeItem("role");
-    sessionStorage.removeItem("role");
     localStorage.removeItem("name");
-    sessionStorage.removeItem("name");
-    localStorage.removeItem("email");
+
     window.location.href = "/signin";
   }
 };
