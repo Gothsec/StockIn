@@ -7,6 +7,7 @@ import MessageConfirmation from "../components/MessageConfirmation";
 export default function SuppliersPage() {
   const [suppliers, setSuppliers] = useState([]);
   const [searchSupplier, setSearchSupplier] = useState("");
+  const [selectedCity, setSelectedCity] = useState(""); // Estado para la ciudad seleccionada
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     buttonText: "",
@@ -16,6 +17,8 @@ export default function SuppliersPage() {
   });
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
+  const [cities, setCities] = useState([]); // Estado para las ciudades
+  const [showCityFilter, setShowCityFilter] = useState(false); // Estado para mostrar/ocultar el filtro por ciudad
 
   const abrirCerrarModal = (
     titleModal,
@@ -37,8 +40,8 @@ export default function SuppliersPage() {
   const fetchSuppliers = async () => {
     const { data, error } = await supabase
       .from("supplier")
-      .select(`id, name, email, phone_number, city`)
-      .eq("state", true);
+      .select(`id, name, email, phone_number, city, address`)
+      .eq("state", true); 
 
     if (error) {
       console.error("Error fetching suppliers: ", error);
@@ -47,6 +50,7 @@ export default function SuppliersPage() {
     } else {
       setSuppliers(data || []);
       setError(null);
+      setCities([...new Set(data.map(supplier => supplier.city))]); // Obtener las ciudades únicas
     }
   };
 
@@ -59,15 +63,16 @@ export default function SuppliersPage() {
     fetchSuppliers();
   };
 
-  const filteredSuppliers = Array.isArray(suppliers)
-    ? suppliers.filter((supplier) => {
-        if (!supplier.name) return false;
-        if (searchSupplier === "") return true;
-        return supplier.name
-          .toLowerCase()
-          .includes(searchSupplier.toLowerCase());
-      })
-    : [];
+  const filteredSuppliers = suppliers.filter((supplier) => {
+    if (!supplier.name) return false;
+    return (
+      (selectedCity === "" || supplier.city === selectedCity) && // Filtrar por ciudad
+      (searchSupplier === "" || supplier.name.toLowerCase().includes(searchSupplier.toLowerCase()))
+    );
+  });
+
+  console.log("Proveedores: ", suppliers);
+  console.log("Proveedores filtrados: ", filteredSuppliers);
 
   return (
     <div className="flex max-h-screen overflow-hidden">
@@ -86,7 +91,35 @@ export default function SuppliersPage() {
           >
             Agregar Proveedor
           </button>
+          <button
+            className="bg-green-500 rounded-xl text-white hover:bg-green-600 mt-3 w-48 h-9 ml-2"
+            onClick={() => setShowCityFilter(!showCityFilter)} // Alternar la visibilidad del filtro de ciudad
+          >
+            Filtrar por Ciudad
+          </button>
         </header>
+        {showCityFilter && ( // Mostrar el filtro de ciudad si está activo
+          <div className="mb-4">
+            <select
+              className="border border-gray-400 rounded-xl h-9 pl-2"
+              onChange={(e) => setSelectedCity(e.target.value)} // Actualizar la ciudad seleccionada
+              value={selectedCity}
+            >
+              <option value="">Seleccionar Ciudad</option>
+              {cities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
+            </select>
+            <button
+              className="ml-2 bg-blue-500 text-white rounded-xl h-9 px-4"
+              onClick={() => setSelectedCity("")} // Reiniciar el filtro de ciudad
+            >
+              Reiniciar Filtro
+            </button>
+          </div>
+        )}
         <MessageConfirmation />
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
@@ -99,7 +132,7 @@ export default function SuppliersPage() {
             <thead>
               <tr className="bg-gray-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre del Proveedor</th>
-                <th className="py-2 text-left px-4">Correo Electrónico</th>
+                <th className="py-2 text-left px-2">Dirección</th>
                 <th className="py-2 text-center px-4">Teléfono</th>
                 <th className="py-2 text-left px-4"></th>
               </tr>
@@ -110,8 +143,8 @@ export default function SuppliersPage() {
                   key={supplier.id}
                   id={supplier.id}
                   name={supplier.name}
-                  email={supplier.email} // Agregar email aquí
-                  phone_number={supplier.phone_number} // Agregar phone_number aquí
+                  address={supplier.address}
+                  phone_number={supplier.phone_number}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                   onUpdate={fetchSuppliers}
                 />
