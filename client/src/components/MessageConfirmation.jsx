@@ -8,9 +8,14 @@ function MessageConfirmation() {
 
   return (
     <div
-      className={`mt-2 p-2 rounded text-white ${
+      className={`fixed top-10 right-10 p-4 rounded-md text-white ${
         notification.type === "success" ? "bg-green-500" : "bg-red-500"
       }`}
+      style={{
+        zIndex: 9999,  // Aseguramos que esté por encima del modal
+        position: "absolute",
+        transition: "all 0.3s ease-in-out",
+      }}
     >
       {notification.message}
     </div>
