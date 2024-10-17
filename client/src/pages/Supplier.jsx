@@ -7,7 +7,7 @@ import MessageConfirmation from "../components/MessageConfirmation";
 export default function SuppliersPage() {
   const [suppliers, setSuppliers] = useState([]);
   const [searchSupplier, setSearchSupplier] = useState("");
-  const [selectedCity, setSelectedCity] = useState(""); // Estado para la ciudad seleccionada
+  const [selectedCity, setSelectedCity] = useState("");
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     buttonText: "",
@@ -17,8 +17,8 @@ export default function SuppliersPage() {
   });
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
-  const [cities, setCities] = useState([]); // Estado para las ciudades
-  const [showCityFilter, setShowCityFilter] = useState(false); // Estado para mostrar/ocultar el filtro por ciudad
+  const [cities, setCities] = useState([]);
+  const [showCityFilter, setShowCityFilter] = useState(false);
 
   const abrirCerrarModal = (
     titleModal,
@@ -50,7 +50,7 @@ export default function SuppliersPage() {
     } else {
       setSuppliers(data || []);
       setError(null);
-      setCities([...new Set(data.map(supplier => supplier.city))]); // Obtener las ciudades únicas
+      setCities([...new Set(data.map(supplier => supplier.city))]);
     }
   };
 
@@ -66,7 +66,7 @@ export default function SuppliersPage() {
   const filteredSuppliers = suppliers.filter((supplier) => {
     if (!supplier.name) return false;
     return (
-      (selectedCity === "" || supplier.city === selectedCity) && // Filtrar por ciudad
+      (selectedCity === "" || supplier.city === selectedCity) && 
       (searchSupplier === "" || supplier.name.toLowerCase().includes(searchSupplier.toLowerCase()))
     );
   });
@@ -86,23 +86,23 @@ export default function SuppliersPage() {
             onChange={(e) => setSearchSupplier(e.target.value)}
           />
           <button
-            className="bg-blue-500 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
+            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
             onClick={() => abrirCerrarModal("Nuevo Proveedor", "", "create")}
           >
             Agregar Proveedor
           </button>
           <button
             className="bg-green-500 rounded-xl text-white hover:bg-green-600 mt-3 w-48 h-9 ml-2"
-            onClick={() => setShowCityFilter(!showCityFilter)} // Alternar la visibilidad del filtro de ciudad
+            onClick={() => setShowCityFilter(!showCityFilter)}
           >
             Filtrar por Ciudad
           </button>
         </header>
-        {showCityFilter && ( // Mostrar el filtro de ciudad si está activo
+        {showCityFilter && ( 
           <div className="mb-4">
             <select
               className="border border-gray-400 rounded-xl h-9 pl-2"
-              onChange={(e) => setSelectedCity(e.target.value)} // Actualizar la ciudad seleccionada
+              onChange={(e) => setSelectedCity(e.target.value)}
               value={selectedCity}
             >
               <option value="">Seleccionar Ciudad</option>
@@ -114,7 +114,7 @@ export default function SuppliersPage() {
             </select>
             <button
               className="ml-2 bg-blue-500 text-white rounded-xl h-9 px-4"
-              onClick={() => setSelectedCity("")} // Reiniciar el filtro de ciudad
+              onClick={() => setSelectedCity("")}
             >
               Reiniciar Filtro
             </button>
