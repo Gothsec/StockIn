@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar una tabla de productos y gestionar sus acciones
+
 import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalProduct } from "./ModalProduct";

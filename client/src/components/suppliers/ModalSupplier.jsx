@@ -1,3 +1,6 @@
+// proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
+// ver la información de un proveedor	
+
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateSupplier";
 import ButtonUpdate from "./ButtonUpdateSupplier";

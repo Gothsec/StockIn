@@ -1,3 +1,5 @@
+// Proposito: Nos permite crear un producto nuevo
+
 import supabase from "../../utils/supabase";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";

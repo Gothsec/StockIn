@@ -1,3 +1,4 @@
+// proposito: Nos permite mostrar una ventana modal que se puede utilizar para confirmar la eliminación de un proveedor
 
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, supplierName }) => {
   if (!isOpen) return null;

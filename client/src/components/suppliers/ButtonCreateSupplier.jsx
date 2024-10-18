@@ -1,3 +1,5 @@
+// Proposito: Nos permite crear un proveedor nuevo
+
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";

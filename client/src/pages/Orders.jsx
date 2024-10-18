@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar y gestionar los pedidos
+
 import { useEffect, useState } from "react";
 import OrderRow from "../components/orders/OrderRow";
 import { ModalOrder } from "../components/orders/ModalOrder";

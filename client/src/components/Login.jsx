@@ -1,3 +1,5 @@
+// Proposito: Nos permite manejar la autenticación de usuarios
+
 import { useState, useEffect } from "react";
 import supabase from "../utils/supabase";
 import Home from "../pages/Home";

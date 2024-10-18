@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar una tabla de pedidos y gestionar sus acciones
+
 import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalOrder } from "./ModalOrder";
