@@ -41,7 +41,7 @@ export default function SuppliersPage() {
     const { data, error } = await supabase
       .from("supplier")
       .select(`id, name, email, phone_number, city, address`)
-      .eq("state", true); 
+      .eq("state", true);
 
     if (error) {
       console.error("Error fetching suppliers: ", error);
@@ -50,7 +50,7 @@ export default function SuppliersPage() {
     } else {
       setSuppliers(data || []);
       setError(null);
-      setCities([...new Set(data.map(supplier => supplier.city))]); // Obtener las ciudades únicas
+      setCities([...new Set(data.map((supplier) => supplier.city))]); // Obtener las ciudades únicas
     }
   };
 
@@ -67,7 +67,8 @@ export default function SuppliersPage() {
     if (!supplier.name) return false;
     return (
       (selectedCity === "" || supplier.city === selectedCity) && // Filtrar por ciudad
-      (searchSupplier === "" || supplier.name.toLowerCase().includes(searchSupplier.toLowerCase()))
+      (searchSupplier === "" ||
+        supplier.name.toLowerCase().includes(searchSupplier.toLowerCase()))
     );
   });
 
