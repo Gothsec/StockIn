@@ -1,16 +1,17 @@
-![StockIn Github](https://github.com/user-attachments/assets/eb0b0fc0-c085-4837-8b3c-9d4209060954)
-
-
-
-
+![StockIn Github](https://github.com/user-attachments/assets/2b0ec6c5-3e5d-4124-b59d-fbb0e2e5fbf4)
 
 ---
 
-SigIn Page - 27/09/2024 (v2)
-![Captura de pantalla 2024-09-27 174003](https://github.com/user-attachments/assets/ad2a9fcd-e0ab-4ecd-a3e9-300d46c86221)
+Login page
+![Login](https://github.com/user-attachments/assets/1da0115d-e168-405e-89f6-53d661ea48a9)
 
-Nav bar (v2) + Products page CRUD (v2) - 27/09/2024
-![Captura de pantalla 2024-09-27 174112](https://github.com/user-attachments/assets/f9c78c73-64a0-405e-ad47-80be9150bb2a)
+Products page
+![Products](https://github.com/user-attachments/assets/e6490589-8ff9-49f9-b73e-c00d2d887d82)
 
+Orders page
+![Orders](https://github.com/user-attachments/assets/cb590791-34f5-43fb-8dcc-cb80a42322a1)
+
+Suppliers page
+![Suppliers](https://github.com/user-attachments/assets/5ef54cb8-0381-4908-8d09-d368e1e8a420)
 
 
