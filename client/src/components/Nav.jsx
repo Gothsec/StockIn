@@ -1,3 +1,5 @@
+// Proposito: Nos permite generar un menu para los diferentes tipos de usuarios
+
 import { StockInLogo } from "../assets/StokinLogo";
 import { SalesIcon } from "../assets/SalesIcon";
 import { EmployeeIcon } from "../assets/EmployeeIcon";
@@ -11,7 +13,7 @@ import supabase from "../utils/supabase";
 
 
 const navAdminItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
@@ -21,9 +23,10 @@ const navAdminItems = [
 ];
 
 const navItems = [
-  { text: "Dashboard", icon: <DashboardIcon /> },
+  { text: "Dashboard", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
+  { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Ventas", icon: <SalesIcon /> },
 ];
 
@@ -32,14 +35,19 @@ const handleLogout = async () => {
   if (error) {
     console.error("Error al cerrar sesión:", error);
   } else {
-    localStorage.removeItem("token");
     localStorage.removeItem("role");
+    localStorage.removeItem("name");
+
+    if (!localStorage.getItem("email")){
+      sessionStorage.removeItem("email")
+    }
     window.location.href = "/signin";
   }
 };
 
 export default function Nav() {
   const role = localStorage.getItem("role");
+  const name = localStorage.getItem("name");
 
   return (
     <nav className="bg-blue-600 w-min h-screen pt-6 px-1 flex flex-col transition-all duration-300 md:w-60">
@@ -52,7 +60,7 @@ export default function Nav() {
         </div>
         <hr className="mb-4 w-[90%] mx-auto border-blue-200" />
         <span className="font-bold text-xs uppercase inline-block ml-4 mb-2 text-blue-200 md:block">
-          {role === "admin" ? "Admin" : "Empleado"}
+          {name}
         </span>
       </div>
       <ul className="flex flex-col justify-between h-full flex-1">

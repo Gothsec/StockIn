@@ -1,3 +1,5 @@
+// Proposito: Nos permite actualizar un pedido existente
+
 import supabase from "../../utils/supabase";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";

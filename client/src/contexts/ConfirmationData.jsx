@@ -1,3 +1,5 @@
+// Proposito: Nos permite crear un contexto para gestionar las notificaciones de confirmación en cualquier componente
+
 import { createContext, useState } from "react";
 
 export const ConfirmationDataContext = createContext();

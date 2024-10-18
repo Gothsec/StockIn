@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar y gestionar los pedidos
+
 import { useEffect, useState } from "react";
 import OrderRow from "../components/orders/OrderRow";
 import { ModalOrder } from "../components/orders/ModalOrder";
@@ -82,7 +84,7 @@ export default function OrdersPage() {
             onChange={(e) => setSearchOrder(e.target.value)}
           />
           <button
-            className="bg-blue-500 rounded-xl text-white hover:bg-blue-600 mt-3 w-48 h-9 ml-9"
+            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
             onClick={() => abrirCerrarModal("Nuevo Pedido", "", "create")}
           >
             Agregar Pedido

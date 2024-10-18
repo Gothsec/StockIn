@@ -1,3 +1,5 @@
+// Proposito: Nos permite mostrar una tabla de proveedores y gestionar sus acciones
+
 import supabase from "../../utils/supabase";
 import { useState } from "react";
 import { ModalSupplier } from "./ModalSupplier";

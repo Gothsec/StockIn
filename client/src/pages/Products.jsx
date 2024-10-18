@@ -1,3 +1,5 @@
+// Proposito: Nos permite mostrar y gestionar los productos
+
 import { useEffect, useState } from "react";
 import ProductRow from "../components/products/ProductRow";
 import { ModalProduct } from "../components/products/ModalProduct";

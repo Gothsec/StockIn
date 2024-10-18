@@ -1,3 +1,5 @@
+// Proposito: Nos permite manejar la autenticación de usuarios
+
 import { useState, useEffect } from "react";
 import supabase from "../utils/supabase";
 import Home from "../pages/Home";
@@ -22,29 +24,47 @@ export default function Login() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
-    const { data, error } = await supabase
-      .from("user")
-      .select("user_type")
-      .eq("email", email)
-      .eq("password", password)
-      .single();
-
-    if (error || !data) {
+  
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+  
+    if (error) {
       setErrorMessage("Email o contraseña incorrectos.");
       setLoginSuccessful(false);
     } else {
-      if (rememberMe) {
-        localStorage.setItem("role", data.user_type);
-        localStorage.setItem("email", email);
+      const userId = data.user.id;
+
+      const { data: userData, error: userError } = await supabase
+        .from("user")
+        .select("name, user_type")
+        .eq("id", userId)
+        .single();
+  
+      if (userError) {
+        console.error("Error obteniendo información del usuario:", userError);
       } else {
-        sessionStorage.setItem("role", data.user_type);
-        localStorage.removeItem("email");
+        const userRole = userData.user_type;
+        const userName = userData.name;
+
+        if (rememberMe) {
+          localStorage.setItem("role", userRole);
+          localStorage.setItem("name", userName);
+          localStorage.setItem("email", email);
+        } else {
+          localStorage.setItem("role", userRole);
+          localStorage.setItem("name", userName);
+          sessionStorage.setItem("email", email);
+        }
+  
+        setLoginSuccessful(true);
+        setErrorMessage("");
       }
-      setLoginSuccessful(true);
-      setErrorMessage("");
     }
   };
+  
+  
 
   return (
     <>

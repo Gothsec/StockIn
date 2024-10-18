@@ -1,13 +1,18 @@
+// Proposito: Nos permite manejar la navegación entre las diferentes páginas del sitio web
+
 import Nav from "../components/Nav";
 import ProductsPage from "../pages/Products";
 import OrdersPage from "../pages/Orders";
 import SuppliersPage from "./Supplier";
+import Dashboard from "./Dashboard";
 
 export default function Home() {
   const currentPath = window.location.pathname;
 
   const Page = () => {
     switch (currentPath) {
+      case "/dashboard":
+        return <Dashboard />;
       case "/productos":
         return <ProductsPage />;
       case "/pedidos":
@@ -15,7 +20,7 @@ export default function Home() {
       case "/proveedores":
         return <SuppliersPage />;
       default:
-        return <ProductsPage />;
+        return <Dashboard />;
     }
   };
 
