@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar una ventana modal que se puede utilizar para confirmar la eliminación de un pedido
+
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, orderName }) => {
   if (!isOpen) return null;
 

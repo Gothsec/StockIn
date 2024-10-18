@@ -1,3 +1,5 @@
+// proposito: Nos permite cambiar la contraseña de un usuario
+
 import { useState, useEffect } from 'react';
 
 export default function ResetPassword() {

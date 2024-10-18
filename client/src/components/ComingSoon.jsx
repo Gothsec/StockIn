@@ -1,3 +1,4 @@
+// proposito: Nos permite mostrar un mensaje de próximamente
 
 const ComingSoon = () => {
   return (

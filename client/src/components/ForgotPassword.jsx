@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar el componente de recuperación de contraseña
+
 import { useState } from 'react';
 
 export default function PasswordRecoveryDialog({ onClose }) {

@@ -1,3 +1,5 @@
+// Proposito: Nos permite mostrar y gestionar las notificaciones de confirmación de cada acción del usuario
+
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../contexts/ConfirmationData";
 

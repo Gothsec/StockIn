@@ -1,3 +1,5 @@
+// Proposito: Nos permite generar un menu para los diferentes tipos de usuarios
+
 import { StockInLogo } from "../assets/StokinLogo";
 import { SalesIcon } from "../assets/SalesIcon";
 import { EmployeeIcon } from "../assets/EmployeeIcon";
@@ -21,8 +23,10 @@ const navAdminItems = [
 ];
 
 const navItems = [
+  { text: "Dashboard", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
+  { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Ventas", icon: <SalesIcon /> },
 ];
 

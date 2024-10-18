@@ -1,3 +1,5 @@
+// función: Nos permite mostrar y gestionar los proveedores
+
 import { useEffect, useState } from "react";
 import SupplierRow from "../components/suppliers/SupplierRow";
 import { ModalSupplier } from "../components/suppliers/ModalSupplier";

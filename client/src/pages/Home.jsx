@@ -1,3 +1,5 @@
+// Proposito: Nos permite manejar la navegación entre las diferentes páginas del sitio web
+
 import Nav from "../components/Nav";
 import ProductsPage from "../pages/Products";
 import OrdersPage from "../pages/Orders";
