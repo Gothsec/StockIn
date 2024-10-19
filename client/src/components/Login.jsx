@@ -1,5 +1,3 @@
-// Proposito: Nos permite manejar la autenticación de usuarios
-
 import { useState, useEffect } from "react";
 import supabase from "../utils/supabase";
 import Home from "../pages/Home";
@@ -24,12 +22,12 @@ export default function Login() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-  
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-  
+
     if (error) {
       setErrorMessage("Email o contraseña incorrectos.");
       setLoginSuccessful(false);
@@ -38,12 +36,15 @@ export default function Login() {
 
       const { data: userData, error: userError } = await supabase
         .from("user")
-        .select("name, user_type")
+        .select("name, user_type, state")
         .eq("id", userId)
         .single();
-  
+
       if (userError) {
         console.error("Error obteniendo información del usuario:", userError);
+      } else if (!userData.state) {
+        setErrorMessage("El usuario no existe o no tiene permiso para ingresar.");
+        setLoginSuccessful(false);
       } else {
         const userRole = userData.user_type;
         const userName = userData.name;
@@ -57,14 +58,12 @@ export default function Login() {
           localStorage.setItem("name", userName);
           sessionStorage.setItem("email", email);
         }
-  
+
         setLoginSuccessful(true);
         setErrorMessage("");
       }
     }
   };
-  
-  
 
   return (
     <>
