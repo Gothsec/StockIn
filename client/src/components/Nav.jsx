@@ -13,7 +13,7 @@ import supabase from "../utils/supabase";
 
 
 const navAdminItems = [
-  { text: "Dashboard", icon: <DashboardIcon />, href: "/dashboard" },
+  { text: "Vista general", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
@@ -83,7 +83,7 @@ export default function Nav() {
           className="px-6 py-3 mb-1 rounded-lg text-white font-medium flex items-center gap-3 text-base transition-colors hover:bg-red-500 hover:text-white cursor-pointer"
         >
           <LogoutIcon />
-          <span className="hidden md:inline">Logout</span>
+          <span className="hidden md:inline">Cerrar sesión</span>
         </li>
       </ul>
     </nav>
