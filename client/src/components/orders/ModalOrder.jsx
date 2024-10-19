@@ -133,7 +133,7 @@ export function ModalOrder({ title, option, onClose, orderId, onUpdate }) {
                 htmlFor="quantity"
                 className="text-sm font-medium text-gray-700"
               >
-                Quantity
+                Cantidad
               </label>
               <input
                 name="quantity"
@@ -154,7 +154,7 @@ export function ModalOrder({ title, option, onClose, orderId, onUpdate }) {
                 htmlFor="content"
                 className="text-sm font-medium text-gray-700"
               >
-                Content
+                Contenido
               </label>
               <input
                 name="content"
@@ -177,7 +177,7 @@ export function ModalOrder({ title, option, onClose, orderId, onUpdate }) {
                 htmlFor="supplier"
                 className="text-sm font-medium text-gray-700"
               >
-                Supplier
+                Proveedor
               </label>
               <select
                 name="supplier_id"
@@ -204,7 +204,7 @@ export function ModalOrder({ title, option, onClose, orderId, onUpdate }) {
                 htmlFor="date"
                 className="text-sm font-medium text-gray-700"
               >
-                Date
+                Fecha
               </label>
               <input
                 name="date"
@@ -226,7 +226,7 @@ export function ModalOrder({ title, option, onClose, orderId, onUpdate }) {
               htmlFor="description"
               className="text-sm font-medium text-gray-700"
             >
-              Description
+              Descripción
             </label>
             <textarea
               name="description"
