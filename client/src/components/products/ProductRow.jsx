@@ -6,6 +6,9 @@ import { ModalProduct } from "./ModalProduct";
 import ConfirmationModal from "./ConfirmationModal";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
+import DeleteIcon from "../../assets/DeleteIcon";
+import EditIcon from "../../assets/EditIcon";
+import InfoIcon from "../../assets/InfoIcon";
 
 export default function ProductRow({
   name,
@@ -67,24 +70,24 @@ export default function ProductRow({
         <td className="p-3">{name}</td>
         <td className="p-3 text-center">{quantity}</td>
         <td className="p-3 text-center">{brand}</td>
-        <td className="p-3 justify-end flex gap-2 text-center">
-          <button
-            className="py-1 px-2 bg-red-500 text-white rounded-md"
-            onClick={() => setConfirmModalOpen(true)}
-          >
-            Eliminar
-          </button>
-          <button
-            className="py-1 px-2 bg-green-500 text-white rounded-md"
-            onClick={() => abrirCerrarModal("Modificar Producto", id, "update")}
-          >
-            Editar
-          </button>
-          <button
-            className="py-1 px-2 bg-blue-500 text-white rounded-md"
+        <td className="p-3 justify-end flex text-center">
+        <button
+            className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Información Producto", id, "info")}
           >
-            Info
+            <InfoIcon />
+          </button>
+          <button
+            className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
+            onClick={() => abrirCerrarModal("Modificar Producto", id, "update")}
+          >
+            <EditIcon />
+          </button>
+          <button
+            className="text-red-400 px-3 rounded-lg flex items-center hover:text-red-600 transition-all duration-300 ease"
+            onClick={() => setConfirmModalOpen(true)}
+          >
+            <DeleteIcon />
           </button>
         </td>
       </tr>

@@ -5,6 +5,7 @@ import ProductRow from "../components/products/ProductRow";
 import { ModalProduct } from "../components/products/ModalProduct";
 import supabase from "../utils/supabase";
 import MessageConfirmation from "../components/MessageConfirmation";
+import AddIcon from "../assets/AddIcon";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState([]);
@@ -74,10 +75,10 @@ export default function ProductsPage() {
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
-        <div className="pb-4">
+        <div className="flex justify-between items-center pb-4">
           <h1 className="font-bold text-4xl">Productos</h1>
           {lowStockProducts.length > 0 && (
-            <div className="text-sm text-red-600 font-semibold pt-2">
+            <div className="text-sm text-red-600 font-semibold">
               Tienes {lowStockProducts.length} producto(s) bajo en stock.
             </div>
           )}
@@ -86,20 +87,20 @@ export default function ProductsPage() {
         <div className="flex justify-between items-center pb-4">
           <div className="space-x-4">
             <button
-              className={`py-1 px-3 rounded border transition-colors duration-300 ${
+              className={`py-1 px-3 rounded-lg border transition-colors duration-300 ${
                 showLowStock
-                  ? "bg-blue-500 text-white"
-                  : "bg-white text-blue-500 border-blue-500"
+                  ? "bg-white text-blue-500 border-blue-500"
+                  : "bg-blue-500 text-white"
               }`}
               onClick={() => setShowLowStock(false)}
             >
               Stock completo
             </button>
             <button
-              className={`py-1 px-3 rounded border transition-colors duration-300 ${
+              className={`py-1 px-3 rounded-lg border transition-colors duration-300 ${
                 showLowStock
-                  ? "bg-red-500 text-white"
-                  : "bg-white text-red-500 border-red-500"
+                  ? "bg-blue-500 text-white"
+                  : "bg-white text-blue-500 border-blue-500"
               }`}
               onClick={() => setShowLowStock(true)}
             >
@@ -108,16 +109,16 @@ export default function ProductsPage() {
           </div>
 
           <input
-            className="flex-auto border border-gray-400 h-9 rounded-xl pl-2 ml-9"
+            className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-9"
             type="search"
             placeholder="Buscar producto"
             onChange={(e) => setSearchProduct(e.target.value)}
           />
           <button
-            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
+            className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-9 hover:bg-blue-700 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Nuevo Producto", "", "create")}
           >
-            Agregar Producto
+            <AddIcon />
           </button>
         </div>
         <MessageConfirmation />
@@ -130,7 +131,7 @@ export default function ProductsPage() {
         <div className="flex-grow overflow-y-auto border rounded-lg">
           <table className="w-full border-collapse relative">
             <thead>
-              <tr className="bg-gray-200 sticky top-0 left-0">
+              <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre</th>
                 <th className="py-2 text-center px-40">Stock Actual</th>
                 <th className="py-2 text-center px-2">Marca</th>
@@ -146,6 +147,7 @@ export default function ProductsPage() {
                   quantity={product.quantity}
                   brand={product.brand}
                   isLowStock={product.isLowStock}
+                  className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                   onUpdate={fetchProducts}
                 />
               ))}
