@@ -2,14 +2,20 @@ export default function EditIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="1.3em"
-      height="1.3em"
-      viewBox="0 0 12 12"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="icon icon-tabler icons-tabler-outline icon-tabler-edit"
     >
-      <path
-        fill="currentColor"
-        d="M10.443 1.56a1.914 1.914 0 0 0-2.707 0l-.55.551a.5.5 0 0 0-.075.074l-5.46 5.461a.5.5 0 0 0-.137.255l-.504 2.5a.5.5 0 0 0 .588.59l2.504-.5a.5.5 0 0 0 .255-.137l6.086-6.086a1.914 1.914 0 0 0 0-2.707M7.502 3.21l1.293 1.293L3.757 9.54l-1.618.324l.325-1.616zm2 .586L8.209 2.502l.234-.234A.914.914 0 1 1 9.736 3.56z"
-      />
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" />
+      <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" />
+      <path d="M16 5l3 3" />
     </svg>
   );
 }
