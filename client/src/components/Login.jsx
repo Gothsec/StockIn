@@ -1,5 +1,3 @@
-// Proposito: Nos permite manejar la autenticación de usuarios
-
 import { useState, useEffect } from "react";
 import supabase from "../utils/supabase";
 import Home from "../pages/Home";
@@ -24,12 +22,12 @@ export default function Login() {
 
   const handleLogin = async (event) => {
     event.preventDefault();
-  
+
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-  
+
     if (error) {
       setErrorMessage("Email o contraseña incorrectos.");
       setLoginSuccessful(false);
@@ -38,12 +36,15 @@ export default function Login() {
 
       const { data: userData, error: userError } = await supabase
         .from("user")
-        .select("name, user_type")
+        .select("name, user_type, state")
         .eq("id", userId)
         .single();
-  
+
       if (userError) {
         console.error("Error obteniendo información del usuario:", userError);
+      } else if (!userData.state) {
+        setErrorMessage("El usuario no existe o no tiene permiso para ingresar.");
+        setLoginSuccessful(false);
       } else {
         const userRole = userData.user_type;
         const userName = userData.name;
@@ -57,14 +58,12 @@ export default function Login() {
           localStorage.setItem("name", userName);
           sessionStorage.setItem("email", email);
         }
-  
+
         setLoginSuccessful(true);
         setErrorMessage("");
       }
     }
   };
-  
-  
 
   return (
     <>
@@ -85,9 +84,9 @@ export default function Login() {
               <div className="p-11 flex flex-col justify-center">
                 <div className="text-center mb-10">
                   <h1 className="text-3xl font-bold text-gray-800">
-                    Welcome to StockIn
+                    Bienvenido a StockIn
                   </h1>
-                  <p className="text-gray-600">Sign in to your account</p>
+                  <p className="text-gray-600">Ingresa con tu cuenta</p>
                 </div>
                 <form method="post" className="space-y-6">
                   <div>
@@ -95,7 +94,7 @@ export default function Login() {
                       htmlFor="email"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Email
+                      Correo
                     </label>
                     <div className="relative">
                       <svg
@@ -115,7 +114,7 @@ export default function Login() {
                       <input
                         id="email"
                         type="email"
-                        placeholder="example@email.com"
+                        placeholder="ejemplo@correo.com"
                         required
                         value={email}
                         onChange={(event) => setEmail(event.target.value)}
@@ -128,7 +127,7 @@ export default function Login() {
                       htmlFor="password"
                       className="block text-sm font-medium text-gray-700"
                     >
-                      Password
+                      Contraseña
                     </label>
                     <div className="relative">
                       <svg
@@ -169,7 +168,7 @@ export default function Login() {
                           htmlFor="remember-me"
                           className="ml-2 block text-sm text-gray-900 cursor-pointer"
                         >
-                          Remember Me
+                          Recuerdame
                         </label>
                       </div>
                       <button
@@ -177,7 +176,7 @@ export default function Login() {
                         onClick={() => setIsDialogOpen(true)}
                         className="inline-block text-sm text-blue-600 ml-2 mr-3 cursor-pointer hover:underline"
                       >
-                        Forgot password?
+                        ¿Olvidaste tu contraseña?
                       </button>
                     </div>
                   </div>
@@ -191,7 +190,7 @@ export default function Login() {
                     type="submit"
                     className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                   >
-                    Sign In
+                    Ingresar
                   </button>
                 </form>
               </div>
