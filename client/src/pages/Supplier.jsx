@@ -5,6 +5,7 @@ import SupplierRow from "../components/suppliers/SupplierRow";
 import { ModalSupplier } from "../components/suppliers/ModalSupplier";
 import supabase from "../utils/supabase";
 import MessageConfirmation from "../components/MessageConfirmation";
+import AddIcon from "../assets/AddIcon";
 
 export default function SuppliersPage() {
   const [suppliers, setSuppliers] = useState([]);
@@ -20,7 +21,6 @@ export default function SuppliersPage() {
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
   const [cities, setCities] = useState([]);
-  const [showCityFilter, setShowCityFilter] = useState(false);
 
   const abrirCerrarModal = (
     titleModal,
@@ -43,7 +43,7 @@ export default function SuppliersPage() {
     const { data, error } = await supabase
       .from("supplier")
       .select(`id, name, email, phone_number, city, address`)
-      .eq("state", true); 
+      .eq("state", true);
 
     if (error) {
       console.error("Error fetching suppliers: ", error);
@@ -52,7 +52,7 @@ export default function SuppliersPage() {
     } else {
       setSuppliers(data || []);
       setError(null);
-      setCities([...new Set(data.map(supplier => supplier.city))]);
+      setCities([...new Set(data.map((supplier) => supplier.city))]);
     }
   };
 
@@ -60,69 +60,48 @@ export default function SuppliersPage() {
     fetchSuppliers();
   }, []);
 
-  const onUpdate = (e) => {
-    if (e) e.preventDefault();
-    fetchSuppliers();
-  };
-
   const filteredSuppliers = suppliers.filter((supplier) => {
     if (!supplier.name) return false;
     return (
-      (selectedCity === "" || supplier.city === selectedCity) && 
-      (searchSupplier === "" || supplier.name.toLowerCase().includes(searchSupplier.toLowerCase()))
+      (selectedCity === "" || supplier.city === selectedCity) &&
+      (searchSupplier === "" ||
+        supplier.name.toLowerCase().includes(searchSupplier.toLowerCase()))
     );
   });
-
-  console.log("Proveedores: ", suppliers);
-  console.log("Proveedores filtrados: ", filteredSuppliers);
 
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="flex justify-between items-baseline pb-8">
+        <header className="pb-8">
           <h1 className="font-bold text-4xl">Proveedores</h1>
-          <input
-            className="flex-auto border border-gray-400 h-9 rounded-xl pl-2 ml-9"
-            type="search"
-            placeholder="Buscar proveedor"
-            onChange={(e) => setSearchSupplier(e.target.value)}
-          />
-          <button
-            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
-            onClick={() => abrirCerrarModal("Nuevo Proveedor", "", "create")}
-          >
-            Agregar Proveedor
-          </button>
-          <button
-            className="bg-green-500 rounded-xl text-white hover:bg-green-600 mt-3 w-48 h-9 ml-2"
-            onClick={() => setShowCityFilter(!showCityFilter)}
-          >
-            Filtrar por Ciudad
-          </button>
-        </header>
-        {showCityFilter && ( 
-          <div className="mb-4">
+          <div className="flex items-center mt-4">
             <select
-              className="border border-gray-400 rounded-xl h-9 pl-2"
+              className="w-52 border border-gray-400 rounded-lg h-9 px-2 mr-4"
               onChange={(e) => setSelectedCity(e.target.value)}
               value={selectedCity}
             >
-              <option value="">Seleccionar Ciudad</option>
+              <option value="">Todas las ciudades</option>
               {cities.map((city) => (
                 <option key={city} value={city}>
                   {city}
                 </option>
               ))}
             </select>
+            <input
+              className="flex-grow border border-gray-400 h-9 rounded-lg pl-3"
+              type="search"
+              placeholder="Buscar proveedor"
+              onChange={(e) => setSearchSupplier(e.target.value)}
+            />
             <button
-              className="ml-2 bg-blue-500 text-white rounded-xl h-9 px-4"
-              onClick={() => setSelectedCity("")}
+              className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-4 hover:bg-blue-700 transition-all duration-300 ease"
+              onClick={() => abrirCerrarModal("Nuevo Proveedor", "", "create")}
             >
-              Reiniciar Filtro
+              <AddIcon />
             </button>
           </div>
-        )}
-        <MessageConfirmation />
+        </header>
+
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -132,7 +111,7 @@ export default function SuppliersPage() {
         <div className="flex-grow overflow-y-auto border rounded-lg">
           <table className="w-full border-collapse relative">
             <thead>
-              <tr className="bg-gray-200 sticky top-0 left-0">
+              <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre del Proveedor</th>
                 <th className="py-2 text-left px-2">Dirección</th>
                 <th className="py-2 text-center px-4">Teléfono</th>
@@ -169,3 +148,4 @@ export default function SuppliersPage() {
     </div>
   );
 }
+
