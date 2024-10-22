@@ -5,6 +5,7 @@ import OrderRow from "../components/orders/OrderRow";
 import { ModalOrder } from "../components/orders/ModalOrder";
 import supabase from "../utils/supabase";
 import MessageConfirmation from "../components/MessageConfirmation";
+import AddIcon from "../assets/AddIcon";
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState([]);
@@ -78,16 +79,16 @@ export default function OrdersPage() {
         <header className="flex justify-between items-baseline pb-8">
           <h1 className="font-bold text-4xl">Pedidos</h1>
           <input
-            className="flex-auto border border-gray-400 h-9 rounded-xl pl-2 ml-9"
+            className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-9"
             type="search"
             placeholder="Buscar pedido"
             onChange={(e) => setSearchOrder(e.target.value)}
           />
           <button
-            className="bg-indigo-600 text-white py-2 px-4 rounded-2xl transition-all duration-300 ease-in-out hover:bg-white hover:text-indigo-900 border-2 border-indigo-600 mt-3 w-48 h-11 ml-9"
+            className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-9 hover:bg-blue-700 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Nuevo Pedido", "", "create")}
           >
-            Agregar Pedido
+            <AddIcon />
           </button>
         </header>
         <MessageConfirmation />
@@ -100,7 +101,7 @@ export default function OrdersPage() {
         <div className="flex-grow overflow-y-auto border rounded-lg">
           <table className="w-full border-collapse relative">
             <thead>
-              <tr className="bg-gray-200 sticky top-0 left-0">
+              <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre del Producto</th>
                 <th className="py-2 text-center px-4">Cantidad</th>
                 <th className="py-2 text-left px-4"></th>
