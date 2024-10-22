@@ -5,6 +5,7 @@ import ProductsPage from "../pages/Products";
 import OrdersPage from "../pages/Orders";
 import SuppliersPage from "./Supplier";
 import Dashboard from "./Dashboard";
+import WarehousePage from "../pages/Warehouse";
 
 export default function Home() {
   const currentPath = window.location.pathname;
@@ -19,6 +20,8 @@ export default function Home() {
         return <OrdersPage />;
       case "/proveedores":
         return <SuppliersPage />;
+      case "/bodegas": 
+        return <WarehousePage />;
       default:
         return <Dashboard />;
     }
