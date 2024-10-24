@@ -1,5 +1,3 @@
-// Propósito: Crear una nueva bodega
-
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
@@ -9,30 +7,22 @@ export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate 
 
   // Validación de los campos antes de enviar el formulario
   const validateWarehouse = () => {
-    const {
-      name,
-      address,
-      state,
-      id_user,
-      cant_max_product,
-      cant_actual,
-    } = newWarehouse;
-
-    // Verificar si los campos requeridos están llenos
-    if (!name || !address || !state || !id_user || !cant_max_product || !cant_actual) {
+    // Verificar si los campos necesarios están llenos
+    if (
+      !newWarehouse.name ||
+      !newWarehouse.address ||
+      !newWarehouse.state ||
+      !newWarehouse.id_user ||
+      newWarehouse.cant_max_product < 0 ||
+      newWarehouse.cant_actual < 0
+    ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
-    // Validar que las cantidades sean números
-    if (isNaN(cant_max_product) || isNaN(cant_actual)) {
-      showNotification("Las cantidades deben ser números.", "error");
-      return false;
-    }
-
-    // Validar que `cant_actual` no supere `cant_max_product`
-    if (parseInt(cant_actual) > parseInt(cant_max_product)) {
-      showNotification("La cantidad actual no puede exceder la cantidad máxima.", "error");
+    // Validar que las cantidades sean números no negativos
+    if (newWarehouse.cant_max_product < 0 || newWarehouse.cant_actual < 0) {
+      showNotification("Las cantidades deben ser mayores o iguales a cero.", "error");
       return false;
     }
 
@@ -41,6 +31,7 @@ export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate 
 
   // Función para crear la bodega
   const handleCreateWarehouse = async () => {
+    // Validamos los datos antes de enviarlos a la base de datos
     if (!validateWarehouse()) return;
 
     try {
@@ -54,8 +45,8 @@ export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate 
         showNotification("Error al crear la bodega", "error");
       } else {
         showNotification("La bodega fue creada correctamente", "success");
-        onClose(); // Cerrar el modal
-        onUpdate(); // Actualizar la vista o el listado
+        onClose(); // Cerramos el modal
+        onUpdate(); // Actualizamos el listado o la vista donde se necesita
       }
     } catch (error) {
       console.error("Error al crear la bodega: ", error);
@@ -65,10 +56,10 @@ export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate 
 
   return (
     <button
-      className="bg-green-500 text-white py-1 px-3 rounded-md"
+      className="bg-blue-500 text-white py-1 px-3 rounded-md"
       onClick={handleCreateWarehouse}
     >
-      Crear Bodega
+      Crear
     </button>
   );
 }
