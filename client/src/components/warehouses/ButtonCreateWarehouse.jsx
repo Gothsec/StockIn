@@ -1,57 +1,51 @@
-// Propósito: Nos permite crear una nueva bodega
+// Propósito: Crear una nueva bodega
 
-import supabase from "../../utils/supabase";
 import { useContext } from "react";
+import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
 export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
-  // Función para validar los campos
-  const validateFields = () => {
-    // Verificar que todos los campos obligatorios estén completos
-    if (
-      !newWarehouse.name ||
-      !newWarehouse.address ||
-      !newWarehouse.state ||
-      !newWarehouse.id_user ||
-      !newWarehouse.cant_max_product ||
-      !newWarehouse.cant_actual
-    ) {
-      showNotification("Todos los campos son obligatorios", "error");
+  // Validación de los campos antes de enviar el formulario
+  const validateWarehouse = () => {
+    const {
+      name,
+      address,
+      state,
+      id_user,
+      cant_max_product,
+      cant_actual,
+    } = newWarehouse;
+
+    // Verificar si los campos requeridos están llenos
+    if (!name || !address || !state || !id_user || !cant_max_product || !cant_actual) {
+      showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
-    // Verificar que los campos numéricos tengan valores válidos
-    if (
-      isNaN(newWarehouse.cant_max_product) ||
-      isNaN(newWarehouse.cant_actual)
-    ) {
-      showNotification("Por favor, ingrese valores numéricos válidos", "error");
+    // Validar que las cantidades sean números
+    if (isNaN(cant_max_product) || isNaN(cant_actual)) {
+      showNotification("Las cantidades deben ser números.", "error");
       return false;
     }
 
-    // Verificar que los valores numéricos sean mayores que 0
-    if (
-      newWarehouse.cant_max_product <= 0 ||
-      newWarehouse.cant_actual < 0 // puede ser 0, ya que puede no haber productos
-    ) {
-      showNotification("La capacidad máxima debe ser mayor que 0 y la capacidad actual no puede ser negativa", "error");
+    // Validar que `cant_actual` no supere `cant_max_product`
+    if (parseInt(cant_actual) > parseInt(cant_max_product)) {
+      showNotification("La cantidad actual no puede exceder la cantidad máxima.", "error");
       return false;
     }
 
     return true;
   };
 
+  // Función para crear la bodega
   const handleCreateWarehouse = async () => {
-    // Validar antes de intentar crear la bodega
-    if (!validateFields()) {
-      return; // No continuar si la validación falla
-    }
+    if (!validateWarehouse()) return;
 
     try {
       const { error } = await supabase
-        .from("warehouse") // Asegúrate de que este sea el nombre correcto de tu tabla
+        .from("warehouse")
         .insert([newWarehouse])
         .single();
 
@@ -60,20 +54,21 @@ export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate 
         showNotification("Error al crear la bodega", "error");
       } else {
         showNotification("La bodega fue creada correctamente", "success");
-        onClose();
-        onUpdate();
+        onClose(); // Cerrar el modal
+        onUpdate(); // Actualizar la vista o el listado
       }
     } catch (error) {
       console.error("Error al crear la bodega: ", error);
+      showNotification("Hubo un error al crear la bodega", "error");
     }
   };
 
   return (
     <button
-      className="bg-blue-500 text-white py-1 px-3 rounded-md"
+      className="bg-green-500 text-white py-1 px-3 rounded-md"
       onClick={handleCreateWarehouse}
     >
-      Crear
+      Crear Bodega
     </button>
   );
 }

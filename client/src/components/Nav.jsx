@@ -9,7 +9,7 @@ import { DashboardIcon } from "../assets/DashboardIcon";
 import { LogoutIcon } from "../assets/LogoutIcon";
 import { OrdersIcon } from "../assets/OrdersIcon";
 import SupplierIcon from "../assets/SupplierIcon";
-import WarehouseIcon from "../assets/WarehouseIcon";
+import { WarehouseIcon } from "../assets/WarehouseIcon";
 import supabase from "../utils/supabase";
 
 

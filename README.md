@@ -6,12 +6,13 @@ Login page
 ![Login](https://github.com/user-attachments/assets/1da0115d-e168-405e-89f6-53d661ea48a9)
 
 Products page
-![Products](https://github.com/user-attachments/assets/e6490589-8ff9-49f9-b73e-c00d2d887d82)
+![Products](https://github.com/user-attachments/assets/4ca9805b-6172-4b34-849c-e2ae80417d29)
 
 Orders page
-![Orders](https://github.com/user-attachments/assets/cb590791-34f5-43fb-8dcc-cb80a42322a1)
+![Orders](https://github.com/user-attachments/assets/752211ae-25bd-47e2-a569-db4d85128d2f)
 
 Suppliers page
-![Suppliers](https://github.com/user-attachments/assets/5ef54cb8-0381-4908-8d09-d368e1e8a420)
+![Suppliers](https://github.com/user-attachments/assets/2e67d690-5056-4589-83e3-88a697e8c79a)
+
 
 

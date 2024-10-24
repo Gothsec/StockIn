@@ -1,17 +1,17 @@
+// Propósito: Nos permite mostrar una tabla de bodegas y gestionar sus acciones
+
 import supabase from "../../utils/supabase";
 import { useState, useContext } from "react";
-import { ModalWarehouse } from "./ModalWarehouse"; // Adaptado para bodegas
+import { ModalWarehouse } from "./ModalWarehouse"; // Modal adaptado para bodega
 import ConfirmationModal from "./ConfirmationModal";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
-import DeleteIcon from "../../assets/DeleteIcon";
-import EditIcon from "../../assets/EditIcon";
-import InfoIcon from "../../assets/InfoIcon";
 
 export default function WarehouseRow({
   id,
   name,
   address,
   cant_actual,
+  cant_max_product,
   className,
   onUpdate,
 }) {
@@ -26,7 +26,11 @@ export default function WarehouseRow({
   });
 
   const abrirCerrarModal = (titleModal, warehouseId, option) => {
-    setModalProps({ titleModal, warehouseId, option });
+    setModalProps({
+      titleModal,
+      warehouseId,
+      option,
+    });
     setWindowsModal(!windowsModal);
   };
 
@@ -34,14 +38,17 @@ export default function WarehouseRow({
     try {
       const { error } = await supabase
         .from("warehouse")
-        .update({ state: false }) // Cambio para actualizar el estado de la bodega
+        .update({ state: false })
         .eq("id", id);
 
       if (error) {
-        console.error("Error eliminando la bodega:", error.message);
         showNotification("Error al eliminar la bodega", "error");
+        console.error("Error eliminando la bodega:", error.message);
       } else {
-        showNotification("La bodega ha sido eliminada correctamente", "success");
+        showNotification(
+          "La bodega ha sido eliminada correctamente",
+          "success"
+        );
         onUpdate();
       }
     } catch (error) {
@@ -56,28 +63,33 @@ export default function WarehouseRow({
 
   return (
     <>
-      <tr id={id} className={className}>
+      <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3 text-center">{address}</td>
+        <td className="p-3">{address}</td>
         <td className="p-3 text-center">{cant_actual}</td>
-        <td className="p-3 justify-end flex text-center">
+        <td className="p-3 text-center">{cant_max_product}</td>
+        <td className="p-3 flex gap-2 justify-end">
           <button
-            className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Información Bodega", id, "info")}
-          >
-            <InfoIcon />
-          </button>
-          <button
-            className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Modificar Bodega", id, "update")}
-          >
-            <EditIcon />
-          </button>
-          <button
-            className="text-red-400 px-3 rounded-lg flex items-center hover:text-red-600 transition-all duration-300 ease"
+            className="py-1 px-2 bg-red-500 text-white rounded-md"
             onClick={() => setConfirmModalOpen(true)}
           >
-            <DeleteIcon />
+            Eliminar
+          </button>
+          <button
+            className="py-1 px-2 bg-green-500 text-white rounded-md"
+            onClick={() =>
+              abrirCerrarModal("Modificar Bodega", id, "update")
+            }
+          >
+            Editar
+          </button>
+          <button
+            className="py-1 px-2 bg-blue-500 text-white rounded-md"
+            onClick={() =>
+              abrirCerrarModal("Información Bodega", id, "info")
+            }
+          >
+            Info
           </button>
         </td>
       </tr>
@@ -97,7 +109,7 @@ export default function WarehouseRow({
         isOpen={confirmModalOpen}
         onClose={() => setConfirmModalOpen(false)}
         onConfirm={confirmDelete}
-        itemName={name} // Ajuste en el nombre del ítem a confirmar
+        itemName={name}
       />
     </>
   );
