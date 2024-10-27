@@ -1,15 +1,23 @@
 import { useEffect, useState } from "react";
-import ButtonCreate from "./ButtonCreate"; // Asegúrate de que este botón esté adaptado para bodegas
-import ButtonUpdate from "./ButtonUpdate"; // Asegúrate de que este botón esté adaptado para bodegas
+import ButtonCreate from "./ButtonCreateWarehouse";
+import ButtonUpdate from "./ButtonUpdateWarehouse";
 import supabase from "../../utils/supabase";
 
-export function ModalWarehouse({ title, option, onClose, warehouseId, onUpdate }) {
+export function ModalWarehouse({
+  title,
+  option,
+  onClose,
+  warehouseId,
+  onUpdate,
+}) {
   const [warehouseInfo, setWarehouseInfo] = useState({
     name: "",
     address: "",
-    state: "",
     cant_max_product: "",
     cant_actual: "",
+    responsible: "",
+    email: "", // Agregado para el email
+    phone_number: "", // Agregado para el teléfono
   });
 
   const handleGetWarehouseInfo = async () => {
@@ -40,9 +48,11 @@ export function ModalWarehouse({ title, option, onClose, warehouseId, onUpdate }
   const newWarehouse = {
     name: warehouseInfo.name,
     address: warehouseInfo.address,
-    state: warehouseInfo.state,
     cant_max_product: warehouseInfo.cant_max_product,
     cant_actual: warehouseInfo.cant_actual,
+    responsible: warehouseInfo.responsible,
+    email: warehouseInfo.email,
+    phone_number: warehouseInfo.phone_number,
   };
 
   return (
@@ -70,7 +80,10 @@ export function ModalWarehouse({ title, option, onClose, warehouseId, onUpdate }
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="address" className="text-sm font-medium text-gray-700">
+            <label
+              htmlFor="address"
+              className="text-sm font-medium text-gray-700"
+            >
               Dirección
             </label>
             <input
@@ -88,18 +101,69 @@ export function ModalWarehouse({ title, option, onClose, warehouseId, onUpdate }
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="state" className="text-sm font-medium text-gray-700">
-              Estado
+            <label
+              htmlFor="responsible"
+              className="text-sm font-medium text-gray-700"
+            >
+              Responsable de la Bodega
             </label>
             <input
-              name="state"
-              id="state"
+              name="responsible"
+              id="responsible"
               type="text"
               className="mt-1 p-2 border rounded-md"
               readOnly={option === "info"}
-              value={warehouseInfo.state}
+              value={warehouseInfo.responsible}
               onChange={(e) =>
-                setWarehouseInfo({ ...warehouseInfo, state: e.target.value })
+                setWarehouseInfo({
+                  ...warehouseInfo,
+                  responsible: e.target.value,
+                })
+              }
+              required={option === "create" || option === "update"}
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label
+              htmlFor="email"
+              className="text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              name="email"
+              id="email"
+              type="email"
+              className="mt-1 p-2 border rounded-md"
+              readOnly={option === "info"}
+              value={warehouseInfo.email}
+              onChange={(e) =>
+                setWarehouseInfo({ ...warehouseInfo, email: e.target.value })
+              }
+              required={option === "create" || option === "update"}
+            />
+          </div>
+
+          <div className="flex flex-col">
+            <label
+              htmlFor="phone_number"
+              className="text-sm font-medium text-gray-700"
+            >
+              Teléfono
+            </label>
+            <input
+              name="phone_number"
+              id="phone_number"
+              type="tel"
+              className="mt-1 p-2 border rounded-md"
+              readOnly={option === "info"}
+              value={warehouseInfo.phone_number}
+              onChange={(e) =>
+                setWarehouseInfo({
+                  ...warehouseInfo,
+                  phone_number: e.target.value,
+                })
               }
               required={option === "create" || option === "update"}
             />
@@ -107,7 +171,10 @@ export function ModalWarehouse({ title, option, onClose, warehouseId, onUpdate }
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex flex-col">
-              <label htmlFor="cant_max_product" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="cant_max_product"
+                className="text-sm font-medium text-gray-700"
+              >
                 Cantidad Máxima de Productos
               </label>
               <input
@@ -118,15 +185,21 @@ export function ModalWarehouse({ title, option, onClose, warehouseId, onUpdate }
                 readOnly={option === "info"}
                 value={warehouseInfo.cant_max_product}
                 onChange={(e) =>
-                  setWarehouseInfo({ ...warehouseInfo, cant_max_product: e.target.value })
+                  setWarehouseInfo({
+                    ...warehouseInfo,
+                    cant_max_product: e.target.value,
+                  })
                 }
                 required={option === "create" || option === "update"}
               />
             </div>
 
             <div className="flex flex-col">
-              <label htmlFor="cant_actual" className="text-sm font-medium text-gray-700">
-                Cantidad Actual
+              <label
+                htmlFor="cant_actual"
+                className="text-sm font-medium text-gray-700"
+              >
+                Cantidad Actual de Productos
               </label>
               <input
                 name="cant_actual"
@@ -136,7 +209,10 @@ export function ModalWarehouse({ title, option, onClose, warehouseId, onUpdate }
                 readOnly={option === "info"}
                 value={warehouseInfo.cant_actual}
                 onChange={(e) =>
-                  setWarehouseInfo({ ...warehouseInfo, cant_actual: e.target.value })
+                  setWarehouseInfo({
+                    ...warehouseInfo,
+                    cant_actual: e.target.value,
+                  })
                 }
                 required={option === "create" || option === "update"}
               />

@@ -10,7 +10,14 @@ import InfoIcon from "../../assets/InfoIcon";
 import EditIcon from "../../assets/EditIcon";
 import DeleteIcon from "../../assets/DeleteIcon";
 
-export default function WarehouseRow({ name, quantity, id, className, onUpdate }) {
+export default function WarehouseRow({
+  name,
+  responsible,
+  cant_actual,
+  id,
+  className,
+  onUpdate,
+}) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -41,7 +48,10 @@ export default function WarehouseRow({ name, quantity, id, className, onUpdate }
         showNotification("Error al eliminar la bodega", "error");
         console.error("Error eliminando la bodega:", error.message);
       } else {
-        showNotification("La bodega ha sido eliminada correctamente", "success");
+        showNotification(
+          "La bodega ha sido eliminada correctamente",
+          "success"
+        );
         onUpdate();
       }
     } catch (error) {
@@ -58,7 +68,8 @@ export default function WarehouseRow({ name, quantity, id, className, onUpdate }
     <>
       <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3 text-center">{quantity}</td>
+        <td className="p-3">{responsible}</td>
+        <td className="p-3">{cant_actual}</td>
         <td className="p-3 flex gap-2 justify-end">
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"

@@ -2,17 +2,21 @@ import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate }) {
+export default function ButtonCreateWarehouse({
+  newWarehouse,
+  onClose,
+  onUpdate,
+}) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
-  // Validación de los campos antes de enviar el formulario
-  const validateWarehouse = () => {
+  const validateWarehouse = async () => {
     // Verificar si los campos necesarios están llenos
     if (
       !newWarehouse.name ||
       !newWarehouse.address ||
-      !newWarehouse.state ||
-      !newWarehouse.id_user ||
+      !newWarehouse.responsible ||
+      !newWarehouse.email ||
+      !newWarehouse.phone_number ||
       newWarehouse.cant_max_product < 0 ||
       newWarehouse.cant_actual < 0
     ) {
@@ -22,17 +26,39 @@ export default function ButtonCreateWarehouse({ newWarehouse, onClose, onUpdate 
 
     // Validar que las cantidades sean números no negativos
     if (newWarehouse.cant_max_product < 0 || newWarehouse.cant_actual < 0) {
-      showNotification("Las cantidades deben ser mayores o iguales a cero.", "error");
+      showNotification(
+        "Las cantidades deben ser mayores o iguales a cero.",
+        "error"
+      );
+      return false;
+    }
+
+    // Validar que el nombre de la bodega sea único (sin considerar mayúsculas/minúsculas)
+    const { data: existingWarehouses, error } = await supabase
+      .from("warehouse")
+      .select("name");
+
+    if (error) {
+      console.error("Error al verificar nombres de bodega: ", error);
+      return false;
+    }
+
+    const lowerCaseName = newWarehouse.name.toLowerCase();
+    const isNameTaken = existingWarehouses.some(
+      (warehouse) => warehouse.name.toLowerCase() === lowerCaseName
+    );
+
+    if (isNameTaken) {
+      showNotification("El nombre de la bodega ya existe.", "error");
       return false;
     }
 
     return true;
   };
 
-  // Función para crear la bodega
   const handleCreateWarehouse = async () => {
     // Validamos los datos antes de enviarlos a la base de datos
-    if (!validateWarehouse()) return;
+    if (!(await validateWarehouse())) return;
 
     try {
       const { error } = await supabase
