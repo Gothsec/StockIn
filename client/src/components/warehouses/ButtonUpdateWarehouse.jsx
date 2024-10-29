@@ -1,4 +1,4 @@
-// Proposito: Nos permite actualizar una Bodega existente
+// Propósito: Nos permite actualizar una Bodega existente
 import supabase from "../../utils/supabase";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
@@ -17,22 +17,16 @@ export default function ButtonUpdateWarehouse({
       !warehouseUpdated.name ||
       !warehouseUpdated.address ||
       !warehouseUpdated.responsible ||
-      !warehouseUpdated.email ||
-      !warehouseUpdated.phone_number ||
-      warehouseUpdated.cant_max_product < 0 ||
-      warehouseUpdated.cant_actual < 0
+      warehouseUpdated.cant_max_product < 0
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
     // Validar que las cantidades sean números no negativos
-    if (
-      warehouseUpdated.cant_max_product < 0 ||
-      warehouseUpdated.cant_actual < 0
-    ) {
+    if (warehouseUpdated.cant_max_product < 0) {
       showNotification(
-        "Las cantidades deben ser mayores o iguales a cero.",
+        "La cantidad máxima debe ser mayor o igual a cero.",
         "error"
       );
       return false;

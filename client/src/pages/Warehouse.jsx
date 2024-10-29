@@ -7,8 +7,8 @@ import MessageConfirmation from "../components/MessageConfirmation";
 import AddIcon from "../assets/AddIcon";
 
 export default function WarehousesPage() {
-  const [warehouses, setWarehouses] = useState([]);
-  const [searchResponsible, setSearchResponsible] = useState(""); // Cambiado el estado del filtro
+  const [warehouses, setWarehouses] = useState([]); // Estado para las bodegas
+  const [searchResponsible, setSearchResponsible] = useState(""); // Filtro por responsable
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     buttonText: "",
@@ -16,9 +16,10 @@ export default function WarehousesPage() {
     warehouseId: "",
     option: "",
   });
-  const [windowsModal, setWindowsModal] = useState(false);
-  const [error, setError] = useState(null);
+  const [windowsModal, setWindowsModal] = useState(false); // Controla la visibilidad del modal
+  const [error, setError] = useState(null); // Estado para errores
 
+  // Función para abrir o cerrar el modal
   const abrirCerrarModal = (
     titleModal,
     buttonText,
@@ -36,19 +37,20 @@ export default function WarehousesPage() {
     setWindowsModal((prev) => !prev);
   };
 
+  // Función para traer las bodegas desde Supabase
   const fetchWarehouses = async () => {
     const { data, error } = await supabase
       .from("warehouse")
-      .select(
-        `
+      .select(`
         id, 
         name,
-        responsible, 
-        cant_actual, 
-        cant_max_product
-      `
-      )
-      .eq("state", true); // Filtrar por estado activo
+        cant_actual,
+        cant_max_product,
+        responsible (
+          name
+        )
+      `)
+      .eq("state", true); // Filtrar solo bodegas activas
 
     if (error) {
       console.error("Error fetching warehouses: ", error);
@@ -60,15 +62,16 @@ export default function WarehousesPage() {
     }
   };
 
+  // Ejecuta fetchWarehouses al montar el componente
   useEffect(() => {
     fetchWarehouses();
   }, []);
 
-  // Filtrar por responsable
+  // Filtrar bodegas por responsable
   const filteredWarehouses = Array.isArray(warehouses)
     ? warehouses.filter((warehouse) => {
-        if (searchResponsible === "") return true;
-        return warehouse.responsible
+        if (searchResponsible === "") return true; // No filtrar si el campo está vacío
+        return warehouse.responsible?.name
           ?.toLowerCase()
           .includes(searchResponsible.toLowerCase());
       })
@@ -82,17 +85,21 @@ export default function WarehousesPage() {
           <input
             className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-9"
             type="search"
-            placeholder="Buscar por responsable" // Cambiado el placeholder
-            onChange={(e) => setSearchResponsible(e.target.value)} // Cambiado el evento
+            placeholder="Buscar por responsable"
+            onChange={(e) => setSearchResponsible(e.target.value)}
           />
           <button
             className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-9 hover:bg-blue-700 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Nueva Bodega", "", "create")}
+            onClick={() =>
+              abrirCerrarModal("Nueva Bodega", "Crear", () => {/* lógica de creación aquí */}, "", "create")
+            }
           >
             <AddIcon />
           </button>
         </header>
+
         <MessageConfirmation />
+
         {error && (
           <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
@@ -115,10 +122,10 @@ export default function WarehousesPage() {
                   key={warehouse.id}
                   id={warehouse.id}
                   name={warehouse.name}
-                  responsible={warehouse.responsible}
+                  responsible={warehouse.responsible?.name} // Mostrar el nombre del responsable
                   cant_actual={warehouse.cant_actual}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
-                  onUpdate={fetchWarehouses}
+                  onUpdate={fetchWarehouses} // Refrescar lista tras actualizar
                 />
               ))}
             </tbody>

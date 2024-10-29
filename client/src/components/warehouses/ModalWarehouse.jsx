@@ -1,5 +1,3 @@
-// proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
-// ver la información de una Bodega
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateWarehouse";
 import ButtonUpdate from "./ButtonUpdateWarehouse";
@@ -16,11 +14,10 @@ export function ModalWarehouse({
     name: "",
     address: "",
     cant_max_product: "",
-    cant_actual: "",
-    responsible: "",
-    email: "", // Agregado para el email
-    phone_number: "", // Agregado para el teléfono
+    responsible: "", // Cambiado para almacenar el ID
+    phone_number: "",
   });
+  const [users, setUsers] = useState([]); // Estado para almacenar los usuarios
 
   const handleGetWarehouseInfo = async () => {
     try {
@@ -41,19 +38,32 @@ export function ModalWarehouse({
     }
   };
 
+  const handleGetUsers = async () => {
+    try {
+      const { data, error } = await supabase.from("user").select("*"); // Obtenemos todos los usuarios
+
+      if (error) {
+        console.error("Error al obtener usuarios: ", error);
+        return;
+      }
+      setUsers(data); // Guardamos los usuarios en el estado
+    } catch (error) {
+      console.error("Error al obtener usuarios: ", error);
+    }
+  };
+
   useEffect(() => {
     if (warehouseId) {
       handleGetWarehouseInfo();
     }
+    handleGetUsers(); // Cargar usuarios al abrir el modal
   }, [warehouseId]);
 
   const newWarehouse = {
     name: warehouseInfo.name,
     address: warehouseInfo.address,
     cant_max_product: warehouseInfo.cant_max_product,
-    cant_actual: warehouseInfo.cant_actual,
-    responsible: warehouseInfo.responsible,
-    email: warehouseInfo.email,
+    responsible: warehouseInfo.responsible, // Ahora se espera que sea el ID del responsable
     phone_number: warehouseInfo.phone_number,
   };
 
@@ -109,42 +119,27 @@ export function ModalWarehouse({
             >
               Responsable de la Bodega
             </label>
-            <input
+            <select
               name="responsible"
               id="responsible"
-              type="text"
               className="mt-1 p-2 border rounded-md"
-              readOnly={option === "info"}
               value={warehouseInfo.responsible}
               onChange={(e) =>
                 setWarehouseInfo({
                   ...warehouseInfo,
-                  responsible: e.target.value,
+                  responsible: e.target.value, // Guardamos el ID seleccionado
                 })
               }
               required={option === "create" || option === "update"}
-            />
-          </div>
-
-          <div className="flex flex-col">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-gray-700"
+              disabled={option === "info"}
             >
-              Email
-            </label>
-            <input
-              name="email"
-              id="email"
-              type="email"
-              className="mt-1 p-2 border rounded-md"
-              readOnly={option === "info"}
-              value={warehouseInfo.email}
-              onChange={(e) =>
-                setWarehouseInfo({ ...warehouseInfo, email: e.target.value })
-              }
-              required={option === "create" || option === "update"}
-            />
+              <option value="">Seleccione un responsable</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="flex flex-col">
@@ -171,54 +166,28 @@ export function ModalWarehouse({
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="flex flex-col">
-              <label
-                htmlFor="cant_max_product"
-                className="text-sm font-medium text-gray-700"
-              >
-                Cantidad Máxima de Productos
-              </label>
-              <input
-                name="cant_max_product"
-                id="cant_max_product"
-                type="number"
-                className="mt-1 p-2 border rounded-md"
-                readOnly={option === "info"}
-                value={warehouseInfo.cant_max_product}
-                onChange={(e) =>
-                  setWarehouseInfo({
-                    ...warehouseInfo,
-                    cant_max_product: e.target.value,
-                  })
-                }
-                required={option === "create" || option === "update"}
-              />
-            </div>
-
-            <div className="flex flex-col">
-              <label
-                htmlFor="cant_actual"
-                className="text-sm font-medium text-gray-700"
-              >
-                Cantidad Actual de Productos
-              </label>
-              <input
-                name="cant_actual"
-                id="cant_actual"
-                type="number"
-                className="mt-1 p-2 border rounded-md"
-                readOnly={option === "info"}
-                value={warehouseInfo.cant_actual}
-                onChange={(e) =>
-                  setWarehouseInfo({
-                    ...warehouseInfo,
-                    cant_actual: e.target.value,
-                  })
-                }
-                required={option === "create" || option === "update"}
-              />
-            </div>
+          <div className="flex flex-col">
+            <label
+              htmlFor="cant_max_product"
+              className="text-sm font-medium text-gray-700"
+            >
+              Cantidad Máxima de Productos
+            </label>
+            <input
+              name="cant_max_product"
+              id="cant_max_product"
+              type="number"
+              className="mt-1 p-2 border rounded-md"
+              readOnly={option === "info"}
+              value={warehouseInfo.cant_max_product}
+              onChange={(e) =>
+                setWarehouseInfo({
+                  ...warehouseInfo,
+                  cant_max_product: parseInt(e.target.value) || 0,
+                })
+              }
+              required={option === "create" || option === "update"}
+            />
           </div>
         </div>
 

@@ -1,4 +1,4 @@
-// Proposito: Nos permite crear una Bodega  nueva
+// Propósito: Nos permite crear una Bodega nueva
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
@@ -16,19 +16,16 @@ export default function ButtonCreateWarehouse({
       !newWarehouse.name ||
       !newWarehouse.address ||
       !newWarehouse.responsible ||
-      !newWarehouse.email ||
-      !newWarehouse.phone_number ||
-      newWarehouse.cant_max_product < 0 ||
-      newWarehouse.cant_actual < 0
+      newWarehouse.cant_max_product < 0
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
     // Validar que las cantidades sean números no negativos
-    if (newWarehouse.cant_max_product < 0 || newWarehouse.cant_actual < 0) {
+    if (newWarehouse.cant_max_product < 0) {
       showNotification(
-        "Las cantidades deben ser mayores o iguales a cero.",
+        "La cantidad máxima debe ser mayor o igual a cero.",
         "error"
       );
       return false;
