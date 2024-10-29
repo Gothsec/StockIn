@@ -1,12 +1,12 @@
 // proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
-// ver la información de un pedido	
+// ver la información de un pedido
 
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreate";
 import ButtonUpdate from "./ButtonUpdate";
 import supabase from "../../utils/supabase";
 
-export function ModalOrder({ title, option, onClose, orderId, onUpdate }) {
+export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
   const [productsList, setProductsList] = useState([]);
   const [suppliersList, setSuppliersList] = useState([]);
   const [orderInfo, setOrderInfo] = useState({
