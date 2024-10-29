@@ -2,7 +2,7 @@
 
 import supabase from "../../utils/supabase";
 import { useState } from "react";
-import { ModalOrder } from "./ModalOrder";
+import { ModalMove } from "./ModalMove";
 import ConfirmationModal from "./ConfirmationModal";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
@@ -10,7 +10,7 @@ import InfoIcon from "../../assets/InfoIcon";
 import EditIcon from "../../assets/EditIcon";
 import DeleteIcon from "../../assets/DeleteIcon";
 
-export default function OrderRow({ name, quantity, id, className, onUpdate }) {
+export default function MoveRow({ name, quantity, id, type, className, onUpdate }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
@@ -61,9 +61,10 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
     <>
       <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3 text-center">{quantity}</td>
+        <td className="p-3">{quantity}</td>
+        <td className="p-3 text-center">{type}</td>
         <td className="p-3 flex gap-2 justify-end">
-        <button
+          <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Información Producto", id, "info")}
           >
@@ -85,7 +86,7 @@ export default function OrderRow({ name, quantity, id, className, onUpdate }) {
       </tr>
 
       {windowsModal && (
-        <ModalOrder
+        <ModalMove
           open={windowsModal}
           onClose={() => setWindowsModal(false)}
           title={modalProps.titleModal}
