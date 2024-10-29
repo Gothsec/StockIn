@@ -89,15 +89,15 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
 
   const newProduct = {
     name: productInfo.name,
-    quantity: 0,
+    quantity: 0, // cantidad de productos
     cost_price: productInfo.cost_price,
     public_price: productInfo.public_price,
     gain: productInfo.gain,
     category: productInfo.category,
     minimum_quantity: productInfo.minimum_quantity,
     brand: productInfo.brand,
-    content: productInfo.content,
-    id_supplier: productInfo.id_supplier,
+    content: productInfo.content, // contenido del producto
+    id_supplier: productInfo.id_supplier, // id del proveedor
   };
 
   return (
