@@ -1,3 +1,4 @@
+// Proposito: Nos permite crear una Bodega  nueva
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";

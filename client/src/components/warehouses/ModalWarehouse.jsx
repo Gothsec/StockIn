@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
+// ver la información de una Bodega
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateWarehouse";
 import ButtonUpdate from "./ButtonUpdateWarehouse";

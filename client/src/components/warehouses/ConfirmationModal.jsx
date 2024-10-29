@@ -1,3 +1,4 @@
+// proposito: Nos permite mostrar una ventana modal que se puede utilizar para confirmar la eliminación de una Bodega
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, warehouseName }) => {
   if (!isOpen) return null;
 

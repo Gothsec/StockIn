@@ -1,3 +1,4 @@
+// función: Nos permite mostrar y gestionar las Bodegas
 import { useEffect, useState } from "react";
 import WarehouseRow from "../components/warehouses/WarehouseRow";
 import { ModalWarehouse } from "../components/warehouses/ModalWarehouse";

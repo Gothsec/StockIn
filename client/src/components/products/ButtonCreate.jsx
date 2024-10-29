@@ -12,12 +12,13 @@ export default function ButtonCreate({ newProduct, onClose, onUpdate }) {
     // Verificar que todos los campos obligatorios estén completos
     if (
       !newProduct.name ||
-      !newProduct.quantity ||
       !newProduct.cost_price ||
       !newProduct.public_price ||
       !newProduct.category ||
       !newProduct.minimum_quantity ||
-      !newProduct.brand
+      !newProduct.brand ||
+      !newProduct.content ||
+      !newProduct.id_supplier
     ) {
       showNotification("Todos los campos son obligatorios", "error");
       return false;
@@ -25,7 +26,6 @@ export default function ButtonCreate({ newProduct, onClose, onUpdate }) {
 
     // Verificar que los campos numéricos tengan valores válidos
     if (
-      isNaN(newProduct.quantity) ||
       isNaN(newProduct.cost_price) ||
       isNaN(newProduct.public_price) ||
       isNaN(newProduct.minimum_quantity)
@@ -36,7 +36,6 @@ export default function ButtonCreate({ newProduct, onClose, onUpdate }) {
 
     // Verificar que los valores numéricos sean mayores que 0
     if (
-      newProduct.quantity <= 0 ||
       newProduct.cost_price <= 0 ||
       newProduct.public_price <= 0 ||
       newProduct.minimum_quantity <= 0

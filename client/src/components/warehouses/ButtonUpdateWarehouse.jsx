@@ -1,3 +1,4 @@
+// Proposito: Nos permite actualizar una Bodega existente
 import supabase from "../../utils/supabase";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";

@@ -1,5 +1,5 @@
 // proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
-// ver la información de un producto	
+// ver la información de un producto
 
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreate";
@@ -9,13 +9,15 @@ import supabase from "../../utils/supabase";
 export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
   const [productInfo, setProductInfo] = useState({
     name: "",
-    quantity: "",
+    quantity: 0,
     cost_price: "",
     public_price: "",
     gain: "",
     category: "",
     minimum_quantity: "",
     brand: "",
+    content: "",
+    id_supplier: "",
   });
 
   const categories = [
@@ -28,6 +30,31 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
     "Fragancias y colonias",
     "Accesorios",
   ];
+
+  const [supplier, setSupplier] = useState([]);
+
+  const fetchSupplierNames = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("supplier")
+        .select("*")
+        .eq("state", "TRUE");
+
+      if (error) {
+        console.error("Error: ", error);
+      } else {
+        if (data) {
+          setSupplier(data);
+        }
+      }
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSupplierNames();
+  }, []);
 
   const handleGetProductInfo = async () => {
     try {
@@ -56,19 +83,21 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
     const gain =
       parseFloat(productInfo.public_price) - parseFloat(productInfo.cost_price);
     if (!isNaN(gain)) {
-      setProductInfo({ ...productInfo, gain: gain.toFixed(2) });
+      setProductInfo({ ...productInfo, gain: gain.toFixed(0) });
     }
   }, [productInfo.cost_price, productInfo.public_price]);
 
   const newProduct = {
     name: productInfo.name,
-    quantity: productInfo.quantity,
+    quantity: 0, // cantidad de productos
     cost_price: productInfo.cost_price,
     public_price: productInfo.public_price,
     gain: productInfo.gain,
     category: productInfo.category,
     minimum_quantity: productInfo.minimum_quantity,
     brand: productInfo.brand,
+    content: productInfo.content, // contenido del producto
+    id_supplier: productInfo.id_supplier, // id del proveedor
   };
 
   return (
@@ -89,24 +118,6 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
               value={productInfo.name}
               onChange={(e) =>
                 setProductInfo({ ...productInfo, name: e.target.value })
-              }
-              readOnly={option === "info"}
-              required={option === "create" || option === "update"}
-            />
-          </div>
-
-          <div className="my-4 col-span-1">
-            <label className="block text-sm font-medium text-gray-700">
-              Cantidad inicial
-            </label>
-            <input
-              name="quantity"
-              id="quantity"
-              type="number"
-              className="w-full mt-1 p-2 border border-gray-300 rounded"
-              value={productInfo.quantity}
-              onChange={(e) =>
-                setProductInfo({ ...productInfo, quantity: e.target.value })
               }
               readOnly={option === "info"}
               required={option === "create" || option === "update"}
@@ -225,6 +236,64 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
               readOnly={option === "info"}
             />
           </div>
+
+          <div className="my-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Contenido
+            </label>
+            <input
+              name="content"
+              id="content"
+              type="text"
+              className="w-full mt-1 p-2 border border-gray-300 rounded"
+              value={productInfo.content}
+              onChange={(e) =>
+                setProductInfo({ ...productInfo, content: e.target.value })
+              }
+              required={option === "create" || option === "update"}
+              readOnly={option === "info"}
+            />
+          </div>
+
+          <div className="my-4 col-span-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Proveedor
+            </label>
+            <select
+              name="id_supplier"
+              id="supplier"
+              className="w-full mt-1 p-2 border border-gray-300 rounded"
+              value={productInfo.id_supplier}
+              onChange={(e) =>
+                setProductInfo({ ...productInfo, id_supplier: e.target.value })
+              }
+              required={option === "create" || option === "update"}
+              disabled={option === "info"}
+            >
+              <option value="">Seleccione un proveedor</option>
+              {supplier.map((supplier) => (
+                <option key={supplier.id} value={supplier.id}>
+                  {supplier.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          {/* Se muestra la cantidad del producto solo en la vista de información */}
+          {option === "info" && (
+            <div className="my-4 col-span-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Cantidad
+              </label>
+              <input
+                name="quantity"
+                id="quantity"
+                type="number"
+                className="w-full mt-1 p-2 border border-gray-300 rounded"
+                value={productInfo.quantity}
+                readOnly
+              />
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-4 mt-8">
