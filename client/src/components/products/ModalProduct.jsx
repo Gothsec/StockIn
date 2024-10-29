@@ -278,7 +278,7 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
               ))}
             </select>
           </div>
-
+          {/* Se muestra la cantidad del producto solo en la vista de información */}
           {option === "info" && (
             <div className="my-4 col-span-2">
               <label className="block text-sm font-medium text-gray-700">
