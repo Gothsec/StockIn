@@ -1,21 +1,24 @@
 // proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
-// ver la información de un pedido
+// ver la información de un movimiento
 
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreate";
 import ButtonUpdate from "./ButtonUpdate";
 import supabase from "../../utils/supabase";
 
-export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
+export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   const [productsList, setProductsList] = useState([]);
-  const [suppliersList, setSuppliersList] = useState([]);
-  const [orderInfo, setOrderInfo] = useState({
-    product_id: "",
+  const [warehouseList, setWarehouseList] = useState([]);
+  const id_user = localStorage.getItem("id_user");
+  const tipos = ["Entrada", "Salida"];
+  const [MoveInfo, setMoveInfo] = useState({
     quantity: "",
-    content: "",
-    supplier_id: "",
+    type: "",
     date: "",
     description: "",
+    product_id: "",
+    warehouse_id: "",
+    user_id: id_user,
   });
 
   const handleGetProducts = async () => {
@@ -38,10 +41,10 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
     handleGetProducts();
   }, []);
 
-  const handleGetSuppliers = async () => {
+  const handleGetWarehouses = async () => {
     try {
       const { data, error } = await supabase
-        .from("supplier")
+        .from("warehouse")
         .select("*")
         .eq("state", true);
 
@@ -49,7 +52,7 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
         console.error("Error: ", error);
       } else {
         if (data) {
-          setSuppliersList(data);
+          setWarehouseList(data);
         }
       }
     } catch (error) {
@@ -58,39 +61,40 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
   };
 
   useEffect(() => {
-    handleGetSuppliers();
+    handleGetWarehouses();
   }, []);
 
-  const handleGetOrderInfo = async () => {
+  const handleGetMoveInfo = async () => {
     try {
       const { data, error } = await supabase
-        .from("order")
+        .from("move")
         .select("*")
-        .eq("id", orderId)
+        .eq("id", moveId)
         .single();
 
       if (error) {
-        console.error("Error al obtener información de la orden: ", error);
+        console.error("Error al obtener información del movimiento: ", error);
         return;
       } else {
-        setOrderInfo(data);
+        setMoveInfo(data);
       }
     } catch (error) {
-      console.error("Error al obtener información de la orden: ", error);
+      console.error("Error al obtener información del movimiento: ", error);
     }
   };
 
   useEffect(() => {
-    handleGetOrderInfo();
-  }, [orderId]);
+    handleGetMoveInfo();
+  }, [moveId]);
 
-  const newOrder = {
-    product_id: orderInfo.product_id,
-    quantity: orderInfo.quantity,
-    content: orderInfo.content,
-    supplier_id: orderInfo.supplier_id,
-    date: orderInfo.date,
-    description: orderInfo.description,
+  const newMove = {
+    quantity: MoveInfo.quantity,
+    type: MoveInfo.type,
+    date: MoveInfo.date,
+    description: MoveInfo.description,
+    product_id: MoveInfo.product_id,
+    warehouse_id: MoveInfo.warehouse_id,
+    user_id: MoveInfo.user_id,
   };
 
   return (
@@ -99,7 +103,7 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
 
         <div className="space-y-6">
-          {/* Product, Quantity, and Content in one row */}
+          {/* Product, Quantity, and type in one row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="flex flex-col">
               <label
@@ -113,9 +117,9 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
                 id="product"
                 className="mt-1 p-2 border rounded-md"
                 disabled={option === "info"}
-                value={orderInfo.product_id}
+                value={MoveInfo.product_id}
                 onChange={(e) =>
-                  setOrderInfo({ ...orderInfo, product_id: e.target.value })
+                  setMoveInfo({ ...MoveInfo, product_id: e.target.value })
                 }
                 required={option === "create" || option === "update"}
               >
@@ -141,9 +145,9 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
                 type="number"
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
-                value={orderInfo.quantity}
+                value={MoveInfo.quantity}
                 onChange={(e) =>
-                  setOrderInfo({ ...orderInfo, quantity: e.target.value })
+                  setMoveInfo({ ...MoveInfo, quantity: e.target.value })
                 }
                 required={option === "create" || option === "update"}
               />
@@ -154,20 +158,26 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
                 htmlFor="content"
                 className="text-sm font-medium text-gray-700"
               >
-                Contenido
+                Tipo
               </label>
-              <input
-                name="content"
-                id="content"
-                type="text"
+              <select
+                name="type"
+                id="type"
                 className="mt-1 p-2 border rounded-md"
-                readOnly={option === "info"}
-                value={orderInfo.content}
+                disabled={option === "info"}
+                value={MoveInfo.type}
                 onChange={(e) =>
-                  setOrderInfo({ ...orderInfo, content: e.target.value })
+                  setMoveInfo({ ...MoveInfo, type: e.target.value })
                 }
                 required={option === "create" || option === "update"}
-              />
+              >
+                <option value="">Selecciona tipo de movimiento</option>
+                {tipos.map((tipo) => (
+                  <option key={tipo} value={tipo}>
+                    {tipo}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -177,23 +187,23 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
                 htmlFor="supplier"
                 className="text-sm font-medium text-gray-700"
               >
-                Proveedor
+                Bodega
               </label>
               <select
-                name="supplier_id"
-                id="supplier"
+                name="bodega"
+                id="bodega"
                 className="mt-1 p-2 border rounded-md"
                 disabled={option === "info"}
-                value={orderInfo.supplier_id}
+                value={MoveInfo.warehouse_id}
                 onChange={(e) =>
-                  setOrderInfo({ ...orderInfo, supplier_id: e.target.value })
+                  setMoveInfo({ ...MoveInfo, warehouse_id: e.target.value })
                 }
                 required={option === "create" || option === "update"}
               >
-                <option value="">Selecciona un proveedor</option>
-                {suppliersList.map((supplier) => (
-                  <option key={supplier.id} value={supplier.id}>
-                    {supplier.name}
+                <option value="">Selecciona una bodega</option>
+                {warehouseList.map((warehouse) => (
+                  <option key={warehouse.id} value={warehouse.id}>
+                    {warehouse.name}
                   </option>
                 ))}
               </select>
@@ -212,9 +222,9 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
                 type="date"
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
-                value={orderInfo.date}
+                value={MoveInfo.date}
                 onChange={(e) =>
-                  setOrderInfo({ ...orderInfo, date: e.target.value })
+                  setMoveInfo({ ...MoveInfo, date: e.target.value })
                 }
                 required={option === "create" || option === "update"}
               />
@@ -233,9 +243,9 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
               id="description"
               className="mt-1 p-2 border rounded-md"
               readOnly={option === "info"}
-              value={orderInfo.description}
+              value={MoveInfo.description}
               onChange={(e) =>
-                setOrderInfo({ ...orderInfo, description: e.target.value })
+                setMoveInfo({ ...MoveInfo, description: e.target.value })
               }
               required={option === "create" || option === "update"}
             ></textarea>
@@ -251,14 +261,14 @@ export function ModalMove({ title, option, onClose, orderId, onUpdate }) {
           </button>
           {option === "info" ? null : option === "update" ? (
             <ButtonUpdate
-              orderUpdated={orderInfo}
-              orderId={orderId}
+              moveUpdated={MoveInfo}
+              MoveId={moveId}
               onClose={onClose}
               onUpdate={onUpdate}
             />
           ) : (
             <ButtonCreate
-              newOrder={newOrder}
+              newMove={newMove}
               onClose={onClose}
               onUpdate={onUpdate}
             />

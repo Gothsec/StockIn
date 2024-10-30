@@ -37,6 +37,7 @@ const handleLogout = async () => {
   } else {
     localStorage.removeItem("role");
     localStorage.removeItem("name");
+    localStorage.removeItem("id_user");
 
     if (!localStorage.getItem("email")){
       sessionStorage.removeItem("email")
