@@ -4,6 +4,7 @@ import Nav from "../components/Nav";
 import ProductsPage from "../pages/Products";
 import SuppliersPage from "./Supplier";
 import Dashboard from "./Dashboard";
+//import WarehousePage from "../pages/Warehouse";
 import MovesPage from "./Moves";
 
 export default function Home() {
@@ -19,6 +20,8 @@ export default function Home() {
         return <MovesPage />;
       case "/proveedores":
         return <SuppliersPage />;
+      //case "/bodegas": 
+       // return <WarehousePage />;
       default:
         return <Dashboard />;
     }
