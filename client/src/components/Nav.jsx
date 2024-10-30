@@ -8,6 +8,7 @@ import { ProductIcon } from "../assets/ProductIcon";
 import { DashboardIcon } from "../assets/DashboardIcon";
 import { LogoutIcon } from "../assets/LogoutIcon";
 import SupplierIcon from "../assets/SupplierIcon";
+import { WarehouseIcon } from "../assets/WarehouseIcon";
 import supabase from "../utils/supabase";
 import { MovesIcon } from "../assets/MovesIcon";
 
@@ -16,6 +17,7 @@ const navAdminItems = [
   { text: "Vista general", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
+  { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Empleados", icon: <EmployeeIcon /> },
   { text: "Reportes", icon: <ReportIcon /> },
@@ -26,6 +28,7 @@ const navItems = [
   { text: "Dashboard", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
+  { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Ventas", icon: <SalesIcon /> },
 ];
