@@ -7,10 +7,10 @@ import { ReportIcon } from "../assets/ReportIcon";
 import { ProductIcon } from "../assets/ProductIcon";
 import { DashboardIcon } from "../assets/DashboardIcon";
 import { LogoutIcon } from "../assets/LogoutIcon";
-import { OrdersIcon } from "../assets/OrdersIcon";
 import SupplierIcon from "../assets/SupplierIcon";
 //import { WarehouseIcon } from "../assets/WarehouseIcon";
 import supabase from "../utils/supabase";
+import { MovesIcon } from "../assets/MovesIcon";
 
 
 const navAdminItems = [
@@ -18,6 +18,7 @@ const navAdminItems = [
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   //{ text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
+  { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Empleados", icon: <EmployeeIcon /> },
   { text: "Reportes", icon: <ReportIcon /> },
@@ -29,6 +30,7 @@ const navItems = [
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
  // { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Pedidos", icon: <OrdersIcon />, href: "/pedidos" },
+  { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Ventas", icon: <SalesIcon /> },
 ];
