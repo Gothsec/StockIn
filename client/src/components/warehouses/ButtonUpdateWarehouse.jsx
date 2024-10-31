@@ -1,29 +1,30 @@
-// Propósito: Nos permite crear una Bodega nueva
-import { useContext } from "react";
+// Propósito: Nos permite actualizar una Bodega existente
 import supabase from "../../utils/supabase";
+import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonCreateWarehouse({
-  newWarehouse,
+export default function ButtonUpdateWarehouse({
+  warehouseUpdated,
+  warehouseId,
   onClose,
   onUpdate,
 }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
-  const validateWarehouse = async () => {
+  const validateWarehouseUpdate = async () => {
     // Verificar si los campos necesarios están llenos
     if (
-      !newWarehouse.name ||
-      !newWarehouse.address ||
-      !newWarehouse.responsible ||
-      newWarehouse.cant_max_product < 0
+      !warehouseUpdated.name ||
+      !warehouseUpdated.address ||
+      !warehouseUpdated.responsible ||
+      warehouseUpdated.cant_max_product < 0
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
     // Validar que las cantidades sean números no negativos
-    if (newWarehouse.cant_max_product < 0) {
+    if (warehouseUpdated.cant_max_product < 0) {
       showNotification(
         "La cantidad máxima debe ser mayor o igual a cero.",
         "error"
@@ -31,17 +32,18 @@ export default function ButtonCreateWarehouse({
       return false;
     }
 
-    // Validar que el nombre de la bodega sea único (sin considerar mayúsculas/minúsculas)
+    // Verificar si ya existe otra bodega con el mismo nombre (ignorando mayúsculas/minúsculas)
     const { data: existingWarehouses, error } = await supabase
       .from("warehouse")
-      .select("name");
+      .select("name")
+      .neq("id", warehouseId); // Asegurarse de que no se compare con la bodega que se está actualizando
 
     if (error) {
       console.error("Error al verificar nombres de bodega: ", error);
       return false;
     }
 
-    const lowerCaseName = newWarehouse.name.toLowerCase();
+    const lowerCaseName = warehouseUpdated.name.toLowerCase();
     const isNameTaken = existingWarehouses.some(
       (warehouse) => warehouse.name.toLowerCase() === lowerCaseName
     );
@@ -54,36 +56,35 @@ export default function ButtonCreateWarehouse({
     return true;
   };
 
-  const handleCreateWarehouse = async () => {
+  const handleUpdateWarehouse = async () => {
     // Validamos los datos antes de enviarlos a la base de datos
-    if (!(await validateWarehouse())) return;
+    if (!(await validateWarehouseUpdate())) return;
 
     try {
       const { error } = await supabase
         .from("warehouse")
-        .insert([newWarehouse])
-        .single();
+        .update(warehouseUpdated)
+        .eq("id", warehouseId);
 
       if (error) {
-        console.error("Error al crear la bodega: ", error);
-        showNotification("Error al crear la bodega", "error");
+        console.error("Error: ", error);
+        showNotification("Error al actualizar la bodega", "error");
       } else {
-        showNotification("La bodega fue creada correctamente", "success");
-        onClose(); // Cerramos el modal
-        onUpdate(); // Actualizamos el listado o la vista donde se necesita
+        showNotification("Bodega actualizada correctamente", "success");
+        onClose();
+        onUpdate();
       }
     } catch (error) {
-      console.error("Error al crear la bodega: ", error);
-      showNotification("Hubo un error al crear la bodega", "error");
+      console.error("Error: ", error);
     }
   };
 
   return (
     <button
-      className="bg-blue-500 text-white py-1 px-3 rounded-md"
-      onClick={handleCreateWarehouse}
+      className="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 focus:outline-none"
+      onClick={handleUpdateWarehouse}
     >
-      Crear
+      Modificar
     </button>
   );
 }

@@ -8,7 +8,7 @@ import { ProductIcon } from "../assets/ProductIcon";
 import { DashboardIcon } from "../assets/DashboardIcon";
 import { LogoutIcon } from "../assets/LogoutIcon";
 import SupplierIcon from "../assets/SupplierIcon";
-//import { WarehouseIcon } from "../assets/WarehouseIcon";
+import { WarehouseIcon } from "../assets/WarehouseIcon";
 import supabase from "../utils/supabase";
 import { MovesIcon } from "../assets/MovesIcon";
 
@@ -16,8 +16,8 @@ import { MovesIcon } from "../assets/MovesIcon";
 const navAdminItems = [
   { text: "Vista general", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
-  //{ text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
+  { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Empleados", icon: <EmployeeIcon /> },
   { text: "Reportes", icon: <ReportIcon /> },
@@ -27,8 +27,8 @@ const navAdminItems = [
 const navItems = [
   { text: "Dashboard", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
- // { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
+  { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Ventas", icon: <SalesIcon /> },
 ];
@@ -40,6 +40,7 @@ const handleLogout = async () => {
   } else {
     localStorage.removeItem("role");
     localStorage.removeItem("name");
+    localStorage.removeItem("id_user");
 
     if (!localStorage.getItem("email")){
       sessionStorage.removeItem("email")
