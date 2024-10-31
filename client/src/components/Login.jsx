@@ -36,7 +36,7 @@ export default function Login() {
 
       const { data: userData, error: userError } = await supabase
         .from("user")
-        .select("name, user_type, state")
+        .select("id, name, user_type, state")
         .eq("id", userId)
         .single();
 
@@ -48,15 +48,18 @@ export default function Login() {
       } else {
         const userRole = userData.user_type;
         const userName = userData.name;
+        const id_user = userData.id;
 
         if (rememberMe) {
           localStorage.setItem("role", userRole);
           localStorage.setItem("name", userName);
           localStorage.setItem("email", email);
+          localStorage.setItem("id_user", id_user);
         } else {
           localStorage.setItem("role", userRole);
           localStorage.setItem("name", userName);
           sessionStorage.setItem("email", email);
+          localStorage.setItem("id_user", id_user);
         }
 
         setLoginSuccessful(true);
