@@ -21,71 +21,103 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     user_id: id_user,
   });
 
+  // Función para obtener la lista de productos
   const handleGetProducts = async () => {
     try {
-      const { data, error } = await supabase.from("product").select("*");
-
-      if (error) {
-        console.error("Error: ", error);
-      } else {
-        if (data) {
-          setProductsList(data);
-        }
-      }
-    } catch (error) {
-      console.error("Error: ", error);
-    }
-  };
-
-  useEffect(() => {
-    handleGetProducts();
-  }, []);
-
-  const handleGetWarehouses = async () => {
-    try {
       const { data, error } = await supabase
-        .from("warehouse")
+        .from("product")
         .select("*")
         .eq("state", true);
 
       if (error) {
         console.error("Error: ", error);
       } else {
-        if (data) {
-          setWarehouseList(data);
-        }
+        setProductsList(data || []);
       }
     } catch (error) {
       console.error("Error: ", error);
     }
   };
 
-  useEffect(() => {
-    handleGetWarehouses();
-  }, []);
-
-  const handleGetMoveInfo = async () => {
+  // Función para obtener bodegas con capacidad disponible
+  const getWarehousesWithCapacity = async () => {
     try {
+      // Paso 1: Obtener todas las bodegas activas
       const { data, error } = await supabase
-        .from("move")
+        .from("warehouse")
         .select("*")
-        .eq("id", moveId)
-        .single();
+        .eq("state", true); // Filtrar bodegas activas
 
       if (error) {
-        console.error("Error al obtener información del movimiento: ", error);
+        console.error("Error al obtener bodegas: ", error);
         return;
-      } else {
-        setMoveInfo(data);
       }
+
+      // Paso 2: Filtrar bodegas con capacidad disponible
+      const availableWarehouses = data.filter(
+        (warehouse) => warehouse.cant_actual < warehouse.cant_max_product
+      );
+
+      // Paso 3: Guardar la lista de bodegas filtrada
+      setWarehouseList(availableWarehouses || []);
     } catch (error) {
-      console.error("Error al obtener información del movimiento: ", error);
+      console.error("Error en getWarehousesWithCapacity: ", error);
     }
   };
 
+  // Función para obtener bodegas con stock de un producto específico
+  const getWarehousesWithProductStock = async () => {
+    try {
+      const { data: warehouseWithProductStock, error } = await supabase
+        .from("warehouse_product")
+        .select("id_warehouse")
+        .eq("id_product", MoveInfo.product_id)
+        .gt("stock", 0);
+
+      if (error) {
+        console.error("Error al obtener stock en bodegas: ", error);
+        return;
+      }
+
+      const warehouseIds = warehouseWithProductStock.map(
+        (wp) => wp.id_warehouse
+      );
+
+      if (warehouseIds.length > 0) {
+        const { data, error } = await supabase
+          .from("warehouse")
+          .select("*")
+          .eq("state", true)
+          .in("id", warehouseIds);
+
+        if (error) {
+          console.error("Error al obtener bodegas para Salida: ", error);
+        } else {
+          setWarehouseList(data || []);
+        }
+      } else {
+        setWarehouseList([]);
+      }
+    } catch (error) {
+      console.error("Error en getWarehousesWithProductStock: ", error);
+    }
+  };
+
+  // Ejecutar esta función al cargar el componente para obtener la lista de productos
   useEffect(() => {
-    handleGetMoveInfo();
-  }, [moveId]);
+    handleGetProducts();
+  }, []);
+
+  // Determinar la función a llamar dependiendo del tipo de movimiento
+  useEffect(() => {
+    if (MoveInfo.type === "Entrada") {
+      getWarehousesWithCapacity();
+    } else if (MoveInfo.type === "Salida" && MoveInfo.product_id) {
+      getWarehousesWithProductStock();
+    } else {
+      setWarehouseList([]); // Limpia la lista si no se cumplen las condiciones
+    }
+  }, [MoveInfo.type, MoveInfo.product_id]);
 
   const newMove = {
     quantity: MoveInfo.quantity,
@@ -103,8 +135,8 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
 
         <div className="space-y-6">
-          {/* Product, Quantity, and type in one row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Select para el producto */}
             <div className="flex flex-col">
               <label
                 htmlFor="product"
@@ -132,6 +164,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               </select>
             </div>
 
+            {/* Input para la cantidad */}
             <div className="flex flex-col">
               <label
                 htmlFor="quantity"
@@ -153,6 +186,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               />
             </div>
 
+            {/* Select para el tipo de movimiento */}
             <div className="flex flex-col">
               <label
                 htmlFor="content"
@@ -182,6 +216,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Select para la bodega */}
             <div className="flex flex-col">
               <label
                 htmlFor="supplier"
@@ -209,6 +244,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               </select>
             </div>
 
+            {/* Input para la fecha */}
             <div className="flex flex-col">
               <label
                 htmlFor="date"
@@ -231,6 +267,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
             </div>
           </div>
 
+          {/* Textarea para la descripción */}
           <div className="flex flex-col">
             <label
               htmlFor="description"
@@ -252,6 +289,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
           </div>
         </div>
 
+        {/* Botones de acción */}
         <div className="flex justify-end gap-4 mt-8">
           <button
             className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none"
@@ -267,11 +305,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               onUpdate={onUpdate}
             />
           ) : (
-            <ButtonCreate
-              newMove={newMove}
-              onClose={onClose}
-              onUpdate={onUpdate}
-            />
+            <ButtonCreate newMove={newMove} onClose={onClose} />
           )}
         </div>
       </div>

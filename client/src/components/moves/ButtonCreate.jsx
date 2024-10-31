@@ -16,15 +16,6 @@ export default function ButtonCreate({ newMove, onClose, onUpdate }) {
       return false;
     }
 
-    // validar que si es una entrada la bodega pueda recibir la cantidad del producto
-    // if (newMove.type === "Entrada") {
-    //   const getCapacity = supabase
-    //     .from("product")  
-    //     .select("*")
-    //     .eq("id", newMove.warehouse_id)
-        
-    // }
-
     // Validar que la cantidad sea mayor a 0
     if (newMove.quantity <= 0) {
       showNotification("La cantidad debe ser mayor a 0.", "error");
