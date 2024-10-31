@@ -1,4 +1,4 @@
-// proposito: Nos permite mostrar una tabla de productos y gestionar sus acciones
+// Propósito: Nos permite mostrar una tabla de productos y gestionar sus acciones
 
 import supabase from "../../utils/supabase";
 import { useState } from "react";
@@ -17,6 +17,7 @@ export default function ProductRow({
   brand,
   className,
   onUpdate,
+  isLowStock, // Añadir esta línea
 }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
@@ -66,12 +67,19 @@ export default function ProductRow({
 
   return (
     <>
-      <tr id={id} className={className}>
+      <tr
+        id={id}
+        className={className}
+        style={{
+          color: isLowStock ? 'red' : 'black', // Cambiar color de texto a rojo si está bajo en stock
+          fontWeight: isLowStock ? 'bold' : 'normal', // Negrita si está bajo en stock
+        }}
+      >
         <td className="p-3">{name}</td>
         <td className="p-3 text-center">{quantity}</td>
         <td className="p-3 text-center">{brand}</td>
         <td className="p-3 justify-end flex text-center">
-        <button
+          <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Información Producto", id, "info")}
           >
@@ -111,3 +119,5 @@ export default function ProductRow({
     </>
   );
 }
+
+
