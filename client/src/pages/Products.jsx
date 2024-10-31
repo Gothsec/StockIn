@@ -1,4 +1,4 @@
-// Proposito: Nos permite mostrar y gestionar los productos
+// Propósito: Nos permite mostrar y gestionar los productos
 
 import { useEffect, useState } from "react";
 import ProductRow from "../components/products/ProductRow";
@@ -146,7 +146,7 @@ export default function ProductsPage() {
                   name={product.name}
                   quantity={product.quantity}
                   brand={product.brand}
-                  isLowStock={product.isLowStock}
+                  isLowStock={product.isLowStock} // Asegúrate de pasar esto
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                   onUpdate={fetchProducts}
                 />
@@ -154,18 +154,20 @@ export default function ProductsPage() {
             </tbody>
           </table>
         </div>
-      </div>
 
-      {windowsModal && (
-        <ModalProduct
-          open={windowsModal}
-          onClose={() => setWindowsModal(false)}
-          title={modalProps.titleModal}
-          productId={modalProps.productId}
-          option={modalProps.option}
-          onUpdate={fetchProducts}
-        />
-      )}
+        {windowsModal && (
+          <ModalProduct
+            open={windowsModal}
+            onClose={() => setWindowsModal(false)}
+            title={modalProps.titleModal}
+            productId={modalProps.productId}
+            option={modalProps.option}
+            onUpdate={fetchProducts}
+          />
+        )}
+      </div>
     </div>
   );
 }
+
+
