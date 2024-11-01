@@ -305,7 +305,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               onUpdate={onUpdate}
             />
           ) : (
-            <ButtonCreate newMove={newMove} onClose={onClose} />
+            <ButtonCreate newMove={newMove} onClose={onClose} onUpdate={onUpdate}/>
           )}
         </div>
       </div>
