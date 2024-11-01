@@ -1,3 +1,8 @@
+// componente ButtonCreate se encarga de gestionar la creación de movimientos de productos
+// en un sistema de inventario, específicamente entradas y salidas de productos
+// cuenta con sus validacioes y actualizaciones de datos en la base de datos supabase
+// dependiendo del tipo de movimiento (entrada o salida)
+
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
