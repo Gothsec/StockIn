@@ -17,14 +17,14 @@ export default function MoveRow({ name, quantity, id, type, className, onUpdate 
   const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
-    orderId: "",
+    moveId: "",
     option: "",
   });
 
-  const abrirCerrarModal = (titleModal, orderId, option) => {
+  const abrirCerrarModal = (titleModal, moveId, option) => {
     setModalProps({
       titleModal,
-      orderId,
+      moveId: moveId,
       option,
     });
     setWindowsModal(!windowsModal);
@@ -33,7 +33,7 @@ export default function MoveRow({ name, quantity, id, type, className, onUpdate 
   const handleDelete = async () => {
     try {
       const { error } = await supabase
-        .from("order")
+        .from("move")
         .update({ state: false })
         .eq("id", id);
 
@@ -90,7 +90,7 @@ export default function MoveRow({ name, quantity, id, type, className, onUpdate 
           open={windowsModal}
           onClose={() => setWindowsModal(false)}
           title={modalProps.titleModal}
-          orderId={modalProps.orderId}
+          moveId={modalProps.moveId}
           option={modalProps.option}
           onUpdate={onUpdate}
         />
@@ -100,7 +100,7 @@ export default function MoveRow({ name, quantity, id, type, className, onUpdate 
         isOpen={confirmModalOpen}
         onClose={() => setConfirmModalOpen(false)}
         onConfirm={confirmDelete}
-        orderName={name}
+        moveName={name}
       />
     </>
   );
