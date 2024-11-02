@@ -17,7 +17,6 @@ export default function Home() {
           <Route path="/movimientos" element={<MovesPage />} />
           <Route path="/proveedores" element={<SuppliersPage />} />
           <Route path="/bodegas" element={<WarehousesPage />} />
-          <Route path="*" element={<Dashboard />} />
         </Routes>
       </div>
     </div>

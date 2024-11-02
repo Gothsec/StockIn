@@ -3,6 +3,7 @@ import { EmployeeIcon } from "../assets/EmployeeIcon.jsx";
 import { ReportIcon } from "../assets/ReportIcon.jsx";
 import { ProductIcon } from "../assets/ProductIcon.jsx";
 import { DashboardIcon } from "../assets/DashboardIcon.jsx";
+import { WarehouseIcon } from "../assets/WarehouseIcon.jsx";
 import { MovesIcon } from "../assets/MovesIcon.jsx";
 import { LogoutIcon } from "../assets/LogoutIcon.jsx";
 import SupplierIcon from "../assets/SupplierIcon";
@@ -13,6 +14,7 @@ const navAdminItems = [
   { text: "Vista general", icon: <DashboardIcon />, href: "/dashboard" },
   { text: "Productos", icon: <ProductIcon />, href: "/productos" },
   { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
+  { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Empleados", icon: <EmployeeIcon /> },
   { text: "Reportes", icon: <ReportIcon /> },
