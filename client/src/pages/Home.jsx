@@ -1,5 +1,5 @@
 import Nav from "../components/Nav";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import ProductsPage from "../pages/Products";
 import SuppliersPage from "../pages/Supplier";
 import Dashboard from "../pages/Dashboard";
@@ -12,6 +12,7 @@ export default function Home() {
       <Nav />
       <div className="flex-grow">
         <Routes>
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/productos" element={<ProductsPage />} />
           <Route path="/movimientos" element={<MovesPage />} />
