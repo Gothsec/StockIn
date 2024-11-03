@@ -45,7 +45,7 @@ export default function WarehousesPage() {
         id, 
         name,
         cant_actual,
-        cant_max_product,
+        percentage_used,
         responsible (
           name
         )

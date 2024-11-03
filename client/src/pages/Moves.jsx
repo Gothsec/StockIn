@@ -145,7 +145,7 @@ export default function MovesPage() {
           open={windowsModal}
           onClose={() => setWindowsModal(false)}
           title={modalProps.titleModal}
-          orderId={modalProps.MoveId}
+          moveId={modalProps.MoveId}
           option={modalProps.option}
           onUpdate={fetchMoves}
         />

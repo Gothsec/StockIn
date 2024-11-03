@@ -17,16 +17,24 @@ export default function ButtonUpdateWarehouse({
       !warehouseUpdated.name ||
       !warehouseUpdated.address ||
       !warehouseUpdated.responsible ||
-      warehouseUpdated.cant_max_product < 0
+      !warehouseUpdated.percentage_used
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
     // Validar que las cantidades sean números no negativos
-    if (warehouseUpdated.cant_max_product < 0) {
+    if (warehouseUpdated.percentage_used < 0) {
       showNotification(
-        "La cantidad máxima debe ser mayor o igual a cero.",
+        "El porcentaje de uso debe ser mayor o igual a 0.",
+        "error"
+      );
+      return false;
+    }
+
+    if (warehouseUpdated.percentage_used > 100) {
+      showNotification(
+        "El porcentaje de uso debe ser menor o igual a 100.",
         "error"
       );
       return false;
@@ -36,7 +44,8 @@ export default function ButtonUpdateWarehouse({
     const { data: existingWarehouses, error } = await supabase
       .from("warehouse")
       .select("name")
-      .neq("id", warehouseId); // Asegurarse de que no se compare con la bodega que se está actualizando
+      .neq("id", warehouseId) // Asegurarse de que no se compare con la bodega que se está actualizando
+      .eq("state", true);
 
     if (error) {
       console.error("Error al verificar nombres de bodega: ", error);
