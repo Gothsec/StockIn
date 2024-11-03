@@ -119,6 +119,30 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     }
   }, [MoveInfo.type, MoveInfo.product_id]);
 
+
+  const handleGetMoveInfo = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("move")
+        .select("*")
+        .eq("id", moveId)
+        .single();
+
+      if (error) {
+        console.error("Error al obtener información del movimiento: ", error);
+        return;
+      } else {
+        setMoveInfo(data);
+      }
+    } catch (error) {
+      console.error("Error al obtener información del movimiento: ", error);
+    }
+  };
+
+  useEffect(() => {
+    handleGetMoveInfo();
+  }, [moveId]);
+
   const newMove = {
     quantity: MoveInfo.quantity,
     type: MoveInfo.type,
@@ -126,7 +150,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     description: MoveInfo.description,
     product_id: MoveInfo.product_id,
     warehouse_id: MoveInfo.warehouse_id,
-    user_id: MoveInfo.user_id,
+    user_id: id_user,
   };
 
   return (
@@ -300,7 +324,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
           {option === "info" ? null : option === "update" ? (
             <ButtonUpdate
               moveUpdated={MoveInfo}
-              MoveId={moveId}
+              moveId={moveId}
               onClose={onClose}
               onUpdate={onUpdate}
             />
