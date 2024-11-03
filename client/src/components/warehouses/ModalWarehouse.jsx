@@ -41,9 +41,13 @@ export function ModalWarehouse({
     }
   };
 
+  // Modificar la función para obtener solo usuarios activos
   const handleGetUsers = async () => {
     try {
-      const { data, error } = await supabase.from("user").select("*");
+      const { data, error } = await supabase
+        .from("user")
+        .select("*")
+        .eq("state", true); 
 
       if (error) {
         console.error("Error al obtener usuarios: ", error);
@@ -59,7 +63,7 @@ export function ModalWarehouse({
     if (warehouseId) {
       handleGetWarehouseInfo();
     }
-    handleGetUsers();
+    handleGetUsers(); // Esto ahora obtiene solo usuarios activos
   }, [warehouseId]);
 
   const newWarehouse = {
@@ -77,8 +81,6 @@ export function ModalWarehouse({
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
 
         <div className="grid grid-cols-2 gap-6">
-          {" "}
-          {/* Cambiamos a diseño de grid */}
           <div className="flex flex-col">
             <label htmlFor="name" className="text-sm font-medium text-gray-700">
               Nombre de la Bodega
@@ -97,10 +99,7 @@ export function ModalWarehouse({
             />
           </div>
           <div className="flex flex-col">
-            <label
-              htmlFor="address"
-              className="text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="address" className="text-sm font-medium text-gray-700">
               Dirección
             </label>
             <input
@@ -117,10 +116,7 @@ export function ModalWarehouse({
             />
           </div>
           <div className="flex flex-col">
-            <label
-              htmlFor="responsible"
-              className="text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="responsible" className="text-sm font-medium text-gray-700">
               Responsable de la Bodega
             </label>
             <select
@@ -146,10 +142,7 @@ export function ModalWarehouse({
             </select>
           </div>
           <div className="flex flex-col">
-            <label
-              htmlFor="phone_number"
-              className="text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="phone_number" className="text-sm font-medium text-gray-700">
               Teléfono
             </label>
             <input
@@ -170,10 +163,7 @@ export function ModalWarehouse({
           </div>
           {(option === "info" || option === "update") && (
             <div className="flex flex-col">
-              <label
-                htmlFor="percentage_used"
-                className="text-sm font-medium text-gray-700"
-              >
+              <label htmlFor="percentage_used" className="text-sm font-medium text-gray-700">
                 Porcentaje de uso
               </label>
               <input
