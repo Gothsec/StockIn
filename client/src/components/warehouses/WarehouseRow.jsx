@@ -2,7 +2,7 @@
 
 import supabase from "../../utils/supabase";
 import { useState } from "react";
-import { ModalWarehouse } from "./ModalWarehouse"; // Cambiar a ModalWarehouse
+import { ModalWarehouse } from "./ModalWarehouse";
 import ConfirmationModal from "./ConfirmationModal";
 import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
@@ -40,7 +40,7 @@ export default function WarehouseRow({
   const handleDelete = async () => {
     try {
       const { error } = await supabase
-        .from("warehouse") // Cambiar de "order" a "warehouse"
+        .from("warehouse")
         .update({ state: false })
         .eq("id", id);
 
@@ -93,11 +93,11 @@ export default function WarehouseRow({
       </tr>
 
       {windowsModal && (
-        <ModalWarehouse // Cambiar a ModalWarehouse
+        <ModalWarehouse
           open={windowsModal}
           onClose={() => setWindowsModal(false)}
           title={modalProps.titleModal}
-          warehouseId={modalProps.warehouseId} // Cambiar a warehouseId
+          warehouseId={modalProps.warehouseId}
           option={modalProps.option}
           onUpdate={onUpdate}
         />
@@ -107,7 +107,7 @@ export default function WarehouseRow({
         isOpen={confirmModalOpen}
         onClose={() => setConfirmModalOpen(false)}
         onConfirm={confirmDelete}
-        orderName={name} // Cambiar a warehouseName si es necesario
+        warehouseName={name}
       />
     </>
   );

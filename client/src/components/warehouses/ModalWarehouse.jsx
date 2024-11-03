@@ -13,11 +13,12 @@ export function ModalWarehouse({
   const [warehouseInfo, setWarehouseInfo] = useState({
     name: "",
     address: "",
-    cant_max_product: "",
-    responsible: "", // Cambiado para almacenar el ID
+    percentage_used: 0,
+    cant_actual: 0,
+    responsible: "",
     phone_number: "",
   });
-  const [users, setUsers] = useState([]); // Estado para almacenar los usuarios
+  const [users, setUsers] = useState([]);
 
   const handleGetWarehouseInfo = async () => {
     try {
@@ -40,13 +41,13 @@ export function ModalWarehouse({
 
   const handleGetUsers = async () => {
     try {
-      const { data, error } = await supabase.from("user").select("*"); // Obtenemos todos los usuarios
+      const { data, error } = await supabase.from("user").select("*");
 
       if (error) {
         console.error("Error al obtener usuarios: ", error);
         return;
       }
-      setUsers(data); // Guardamos los usuarios en el estado
+      setUsers(data);
     } catch (error) {
       console.error("Error al obtener usuarios: ", error);
     }
@@ -56,14 +57,15 @@ export function ModalWarehouse({
     if (warehouseId) {
       handleGetWarehouseInfo();
     }
-    handleGetUsers(); // Cargar usuarios al abrir el modal
+    handleGetUsers();
   }, [warehouseId]);
 
   const newWarehouse = {
     name: warehouseInfo.name,
     address: warehouseInfo.address,
-    cant_max_product: warehouseInfo.cant_max_product,
-    responsible: warehouseInfo.responsible, // Ahora se espera que sea el ID del responsable
+    percentage_used: warehouseInfo.percentage_used,
+    cant_actual: warehouseInfo.cant_actual,
+    responsible: warehouseInfo.responsible,
     phone_number: warehouseInfo.phone_number,
   };
 
@@ -127,7 +129,7 @@ export function ModalWarehouse({
               onChange={(e) =>
                 setWarehouseInfo({
                   ...warehouseInfo,
-                  responsible: e.target.value, // Guardamos el ID seleccionado
+                  responsible: e.target.value,
                 })
               }
               required={option === "create" || option === "update"}
@@ -165,30 +167,31 @@ export function ModalWarehouse({
               required={option === "create" || option === "update"}
             />
           </div>
-
+          {(option === "info" || option === "update") && (
           <div className="flex flex-col">
             <label
-              htmlFor="cant_max_product"
+              htmlFor="percentage_used"
               className="text-sm font-medium text-gray-700"
             >
-              Cantidad Máxima de Productos
+              Porcentaje de uso
             </label>
             <input
-              name="cant_max_product"
-              id="cant_max_product"
+              name="percentage_used"
+              id="percentage_used"
               type="number"
               className="mt-1 p-2 border rounded-md"
               readOnly={option === "info"}
-              value={warehouseInfo.cant_max_product}
+              value={warehouseInfo.percentage_used}
               onChange={(e) =>
                 setWarehouseInfo({
                   ...warehouseInfo,
-                  cant_max_product: parseInt(e.target.value) || 0,
+                  percentage_used: parseInt(e.target.value) || 0,
                 })
               }
               required={option === "create" || option === "update"}
             />
           </div>
+          )}
         </div>
 
         <div className="flex justify-end gap-4 mt-8">
