@@ -2,7 +2,7 @@ import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate }) {
+export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, percentage_used}) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const validateMove = async () => {

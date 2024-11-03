@@ -7,7 +7,7 @@ import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonCreate({ newMove, onClose, onUpdate }) {
+export default function ButtonCreate({ newMove, onClose, onUpdate, percentage_used }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const validateMove = async () => {
@@ -16,43 +16,34 @@ export default function ButtonCreate({ newMove, onClose, onUpdate }) {
       !newMove.warehouse_id ||
       !newMove.date ||
       !newMove.type ||
-      !newMove.quantity
+      !newMove.quantity ||
+      !percentage_used
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       console.log(newMove);
       return false;
     }
 
-    if (Number(newMove.quantity) <= 0) {
-      showNotification("La cantidad debe ser mayor a 0.", "error");
+    // Validar que el porcentaje de uso sea número no negativo o mayor a 100
+    if (percentage_used < 0) {
+      showNotification(
+        "El porcentaje de uso debe ser mayor o igual a 0.",
+        "error"
+      );
       return false;
     }
 
-    if (newMove.type === "Entrada") {
-      const { data: warehouse, error: warehouseError } = await supabase
-        .from("warehouse")
-        .select("cant_max_product, cant_actual, name")
-        .eq("id", newMove.warehouse_id)
-        .maybeSingle();
+    if (percentage_used > 100) {
+      showNotification(
+        "El porcentaje de uso debe ser menor o igual a 100.",
+        "error"
+      );
+      return false;
+    }
 
-      if (warehouseError) {
-        showNotification(
-          "Error al verificar la capacidad de la bodega.",
-          "error"
-        );
-        console.error(warehouseError);
-        return false;
-      }
-
-      const newCantActual =
-        Number(warehouse.cant_actual) + Number(newMove.quantity);
-      if (newCantActual > Number(warehouse.cant_max_product)) {
-        showNotification(
-          `La bodega ${warehouse.name} no puede recibir esta cantidad, ya que sobrepasa su capacidad máxima.`,
-          "error"
-        );
-        return false;
-      }
+    if (Number(newMove.quantity) <= 0) {
+      showNotification("La cantidad debe ser mayor a 0.", "error");
+      return false;
     }
 
     if (newMove.type === "Salida") {
@@ -164,7 +155,7 @@ export default function ButtonCreate({ newMove, onClose, onUpdate }) {
 
     const { data: warehouse, error: warehouseError } = await supabase
       .from("warehouse")
-      .select("cant_actual")
+      .select("percentage_used, cant_actual")
       .eq("id", newMove.warehouse_id)
       .single();
 
@@ -173,7 +164,7 @@ export default function ButtonCreate({ newMove, onClose, onUpdate }) {
         Number(warehouse.cant_actual) + Number(newMove.quantity);
       await supabase
         .from("warehouse")
-        .update({ cant_actual: updatedCantActual })
+        .update({ percentage_used: percentage_used, cant_actual: updatedCantActual })
         .eq("id", newMove.warehouse_id);
     }
   };

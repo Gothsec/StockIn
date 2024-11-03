@@ -23,7 +23,7 @@ export default function ButtonUpdateWarehouse({
       return false;
     }
 
-    // Validar que las cantidades sean números no negativos
+    // Validar que el porcentaje de uso sea número no negativo o mayor a 100
     if (warehouseUpdated.percentage_used < 0) {
       showNotification(
         "El porcentaje de uso debe ser mayor o igual a 0.",

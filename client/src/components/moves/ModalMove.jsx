@@ -10,7 +10,8 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   const [productsList, setProductsList] = useState([]);
   const [warehouseList, setWarehouseList] = useState([]);
   const id_user = localStorage.getItem("id_user");
-  const tipos = ["Entrada", "Salida"];
+  const tipos = ["Entrada", "Salida", "Traslado"];
+  const [percentage_used, setPercentage_used] = useState(0);
   const [MoveInfo, setMoveInfo] = useState({
     quantity: "",
     type: "",
@@ -39,6 +40,25 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     }
   };
 
+  const handleGetPercentage_used = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("warehouse")
+        .select("percentage_used")
+        .eq("id", MoveInfo.warehouse_id)
+        .single();
+
+      if (error) {
+        console.error("Error al obtener el porcentaje de uso de la bodega: ", error);
+        return;
+      }
+
+      setPercentage_used(data.percentage_used);
+    } catch (error) {
+      console.error("Error al obtener el porcentaje de uso de la bodega: ", error);
+    }
+  };
+
   // Función para obtener bodegas con capacidad disponible
   const getWarehousesWithCapacity = async () => {
     try {
@@ -52,10 +72,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         console.error("Error al obtener bodegas: ", error);
         return;
       }
-
       // Paso 2: Filtrar bodegas con capacidad disponible
       const availableWarehouses = data.filter(
-        (warehouse) => warehouse.cant_actual < warehouse.cant_max_product
+        (warehouse) => warehouse.percentage_used < 100
       );
 
       // Paso 3: Guardar la lista de bodegas filtrada
@@ -142,6 +161,10 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   useEffect(() => {
     handleGetMoveInfo();
   }, [moveId]);
+
+  useEffect(() => {
+    handleGetPercentage_used();
+  }, [MoveInfo.warehouse_id]);
 
   const newMove = {
     quantity: MoveInfo.quantity,
@@ -243,7 +266,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
             {/* Select para la bodega */}
             <div className="flex flex-col">
               <label
-                htmlFor="supplier"
+                htmlFor="bodega"
                 className="text-sm font-medium text-gray-700"
               >
                 Bodega
@@ -267,7 +290,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
                 ))}
               </select>
             </div>
+          </div>
 
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Input para la fecha */}
             <div className="flex flex-col">
               <label
@@ -289,6 +314,29 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
                 required={option === "create" || option === "update"}
               />
             </div>
+
+            {/* Select para el porcentaje de uso de la bodega */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="percentage_used"
+                className="text-sm font-medium text-gray-700"
+              >
+                Porcentaje de uso
+              </label>
+              <input
+                name="percentage_used"
+                id="percentage_used"
+                type="number"
+                className="mt-1 p-2 border rounded-md"
+                readOnly={option === "info"}
+                value={percentage_used}
+                onChange={(e) =>
+                  setPercentage_used(e.target.value)
+                }
+                required={option === "create" || option === "update"}
+              />
+            </div>
+
           </div>
 
           {/* Textarea para la descripción */}
@@ -327,9 +375,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               moveId={moveId}
               onClose={onClose}
               onUpdate={onUpdate}
-            />
+              percentage_used={percentage_used}/>
           ) : (
-            <ButtonCreate newMove={newMove} onClose={onClose} onUpdate={onUpdate}/>
+            <ButtonCreate newMove={newMove} onClose={onClose} onUpdate={onUpdate} percentage_used={percentage_used}/>
           )}
         </div>
       </div>
