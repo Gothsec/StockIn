@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
+// ver la información de una bodega.
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateWarehouse";
 import ButtonUpdate from "./ButtonUpdateWarehouse";
@@ -74,7 +76,9 @@ export function ModalWarehouse({
       <div className="bg-white rounded-lg w-full max-w-4xl p-8 shadow-lg overflow-auto">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
 
-        <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-6">
+          {" "}
+          {/* Cambiamos a diseño de grid */}
           <div className="flex flex-col">
             <label htmlFor="name" className="text-sm font-medium text-gray-700">
               Nombre de la Bodega
@@ -92,7 +96,6 @@ export function ModalWarehouse({
               required={option === "create" || option === "update"}
             />
           </div>
-
           <div className="flex flex-col">
             <label
               htmlFor="address"
@@ -113,7 +116,6 @@ export function ModalWarehouse({
               required={option === "create" || option === "update"}
             />
           </div>
-
           <div className="flex flex-col">
             <label
               htmlFor="responsible"
@@ -143,7 +145,6 @@ export function ModalWarehouse({
               ))}
             </select>
           </div>
-
           <div className="flex flex-col">
             <label
               htmlFor="phone_number"
@@ -168,29 +169,29 @@ export function ModalWarehouse({
             />
           </div>
           {(option === "info" || option === "update") && (
-          <div className="flex flex-col">
-            <label
-              htmlFor="percentage_used"
-              className="text-sm font-medium text-gray-700"
-            >
-              Porcentaje de uso
-            </label>
-            <input
-              name="percentage_used"
-              id="percentage_used"
-              type="number"
-              className="mt-1 p-2 border rounded-md"
-              readOnly={option === "info"}
-              value={warehouseInfo.percentage_used}
-              onChange={(e) =>
-                setWarehouseInfo({
-                  ...warehouseInfo,
-                  percentage_used: parseInt(e.target.value) || 0,
-                })
-              }
-              required={option === "create" || option === "update"}
-            />
-          </div>
+            <div className="flex flex-col">
+              <label
+                htmlFor="percentage_used"
+                className="text-sm font-medium text-gray-700"
+              >
+                Porcentaje de uso
+              </label>
+              <input
+                name="percentage_used"
+                id="percentage_used"
+                type="number"
+                className="mt-1 p-2 border rounded-md"
+                readOnly={option === "info"}
+                value={warehouseInfo.percentage_used}
+                onChange={(e) =>
+                  setWarehouseInfo({
+                    ...warehouseInfo,
+                    percentage_used: parseInt(e.target.value) || 0,
+                  })
+                }
+                required={option === "create" || option === "update"}
+              />
+            </div>
           )}
         </div>
 
