@@ -1,6 +1,3 @@
-// proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
-// ver la información de un movimiento
-
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreate";
 import ButtonUpdate from "./ButtonUpdate";
@@ -53,9 +50,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         return;
       }
 
-      // Paso 2: Filtrar bodegas con capacidad disponible
+      // Paso 2: Filtrar bodegas que no han alcanzado el porcentaje máximo permitido
       const availableWarehouses = data.filter(
-        (warehouse) => warehouse.cant_actual < warehouse.cant_max_product
+        (warehouse) => warehouse.percentage_used < 100 // Porcentaje usado menor al 100%
       );
 
       // Paso 3: Guardar la lista de bodegas filtrada
@@ -119,7 +116,6 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     }
   }, [MoveInfo.type, MoveInfo.product_id]);
 
-
   const handleGetMoveInfo = async () => {
     try {
       const { data, error } = await supabase
@@ -140,7 +136,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   };
 
   useEffect(() => {
-    handleGetMoveInfo();
+    if (moveId) {
+      handleGetMoveInfo();
+    }
   }, [moveId]);
 
   const newMove = {
@@ -213,7 +211,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
             {/* Select para el tipo de movimiento */}
             <div className="flex flex-col">
               <label
-                htmlFor="content"
+                htmlFor="type"
                 className="text-sm font-medium text-gray-700"
               >
                 Tipo
@@ -243,14 +241,14 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
             {/* Select para la bodega */}
             <div className="flex flex-col">
               <label
-                htmlFor="supplier"
+                htmlFor="warehouse"
                 className="text-sm font-medium text-gray-700"
               >
                 Bodega
               </label>
               <select
-                name="bodega"
-                id="bodega"
+                name="warehouse_id"
+                id="warehouse"
                 className="mt-1 p-2 border rounded-md"
                 disabled={option === "info"}
                 value={MoveInfo.warehouse_id}
@@ -329,7 +327,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               onUpdate={onUpdate}
             />
           ) : (
-            <ButtonCreate newMove={newMove} onClose={onClose} onUpdate={onUpdate}/>
+            <ButtonCreate newMove={newMove} onClose={onClose} onUpdate={onUpdate} />
           )}
         </div>
       </div>
