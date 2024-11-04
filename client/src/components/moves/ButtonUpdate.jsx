@@ -6,16 +6,12 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const validateMove = async () => {
-    if (
-      !moveUpdated.product_id ||
-      !moveUpdated.warehouse_id ||
-      !moveUpdated.date ||
-      !moveUpdated.type ||
-      !moveUpdated.quantity
-    ) {
-      showNotification("Todos los campos son requeridos.", "error");
-      console.log(moveUpdated);
-      return false;
+    const requiredFields = ['product_id', 'warehouse_id', 'date', 'type', 'quantity'];
+    for (const field of requiredFields) {
+      if (!moveUpdated[field]) {
+        showNotification("Todos los campos son requeridos.", "error");
+        return false;
+      }
     }
 
     if (Number(moveUpdated.quantity) <= 0) {
@@ -23,52 +19,62 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       return false;
     }
 
+    const warehouse = await getWarehouse(moveUpdated.warehouse_id);
+    if (!warehouse) return false;
+
     if (moveUpdated.type === "Entrada") {
-      const { data: warehouse, error: warehouseError } = await supabase
-        .from("warehouse")
-        .select("cant_max_product, cant_actual, name")
-        .eq("id", moveUpdated.warehouse_id)
-        .maybeSingle();
-
-      if (warehouseError) {
-        showNotification("Error al verificar la capacidad de la bodega.", "error");
-        console.error(warehouseError);
-        return false;
-      }
-
-      const newCantActual =
-        Number(warehouse.cant_actual) + Number(moveUpdated.quantity);
-      if (newCantActual > Number(warehouse.cant_max_product)) {
-        showNotification(
-          `La bodega ${warehouse.name} no puede recibir esta cantidad, ya que sobrepasa su capacidad máxima.`,
-          "error"
-        );
-        return false;
-      }
+      return validateEntryMove(warehouse);
+    } else if (moveUpdated.type === "Salida") {
+      return validateExitMove(warehouse);
     }
 
-    if (moveUpdated.type === "Salida") {
-      const { data: warehouseProduct, error: warehouseProductError } =
-        await supabase
-          .from("warehouse_product")
-          .select("stock")
-          .eq("id_warehouse", moveUpdated.warehouse_id)
-          .eq("id_product", moveUpdated.product_id)
-          .maybeSingle();
+    return true;
+  };
 
-      if (warehouseProductError) {
-        showNotification("Error al verificar el stock del producto en la bodega.", "error");
-        console.error(warehouseProductError);
-        return false;
-      }
+  const getWarehouse = async (warehouseId) => {
+    const { data: warehouse, error } = await supabase
+      .from("warehouse")
+      .select("percentage_used, cant_actual, name")
+      .eq("id", warehouseId)
+      .maybeSingle();
 
-      if (Number(moveUpdated.quantity) > Number(warehouseProduct.stock)) {
-        showNotification(
-          "Se está intentando sacar una cantidad mayor a la que hay almacenada.",
-          "error"
-        );
-        return false;
-      }
+    if (error) {
+      showNotification("Error al verificar la bodega.", "error");
+      console.error(error);
+      return null;
+    }
+
+    return warehouse;
+  };
+
+  const validateEntryMove = (warehouse) => {
+    const newCantActual = Number(warehouse.cant_actual) + Number(moveUpdated.quantity);
+    const maxCapacity = warehouse.cant_max_product; // Ajusta según tu modelo de datos
+
+    if (newCantActual > maxCapacity) {
+      showNotification(`La bodega ${warehouse.name} no puede recibir esta cantidad, ya que sobrepasa su capacidad máxima.`, "error");
+      return false;
+    }
+    return true;
+  };
+
+  const validateExitMove = async (warehouse) => {
+    const { data: warehouseProduct, error } = await supabase
+      .from("warehouse_product")
+      .select("stock")
+      .eq("id_warehouse", moveUpdated.warehouse_id)
+      .eq("id_product", moveUpdated.product_id)
+      .maybeSingle();
+
+    if (error) {
+      showNotification("Error al verificar el stock del producto en la bodega.", "error");
+      console.error(error);
+      return false;
+    }
+
+    if (Number(moveUpdated.quantity) > Number(warehouseProduct?.stock || 0)) {
+      showNotification("Se está intentando sacar una cantidad mayor a la que hay almacenada.", "error");
+      return false;
     }
 
     return true;
@@ -85,17 +91,11 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
 
       if (error) {
         console.error("Error: ", error);
-        console.log(moveUpdated)
-        console.log(moveId)
         showNotification("Error al actualizar el movimiento", "error");
         return;
       }
 
-      if (moveUpdated.type === "Entrada") {
-        await handleEntry();
-      } else if (moveUpdated.type === "Salida") {
-        await handleExit();
-      }
+      moveUpdated.type === "Entrada" ? await handleEntry() : await handleExit();
 
       showNotification("Movimiento actualizado correctamente", "success");
       onClose();

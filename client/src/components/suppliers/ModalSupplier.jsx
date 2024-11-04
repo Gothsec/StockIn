@@ -96,7 +96,7 @@ export function ModalSupplier({
               <input
                 name="phone_number"
                 id="phone_number"
-                type="text"
+                type="tel"
                 className="mt-1 p-2 border rounded-md"
                 readOnly={option === "info"}
                 value={supplierInfo.phone_number}
