@@ -1,3 +1,5 @@
+// proposito: Nos permite mostrar una ventana modal que se puede utilizar para crear, actualizar o
+// ver la información de una bodega.
 import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateWarehouse";
 import ButtonUpdate from "./ButtonUpdateWarehouse";
@@ -39,9 +41,13 @@ export function ModalWarehouse({
     }
   };
 
+  // Modificar la función para obtener solo usuarios activos
   const handleGetUsers = async () => {
     try {
-      const { data, error } = await supabase.from("user").select("*");
+      const { data, error } = await supabase
+        .from("user")
+        .select("*")
+        .eq("state", true); 
 
       if (error) {
         console.error("Error al obtener usuarios: ", error);
@@ -57,7 +63,7 @@ export function ModalWarehouse({
     if (warehouseId) {
       handleGetWarehouseInfo();
     }
-    handleGetUsers();
+    handleGetUsers(); // Esto ahora obtiene solo usuarios activos
   }, [warehouseId]);
 
   const newWarehouse = {
@@ -74,7 +80,7 @@ export function ModalWarehouse({
       <div className="bg-white rounded-lg w-full max-w-4xl p-8 shadow-lg overflow-auto">
         <h2 className="text-xl font-semibold mb-6">{title}</h2>
 
-        <div className="space-y-6">
+        <div className="grid grid-cols-2 gap-6">
           <div className="flex flex-col">
             <label htmlFor="name" className="text-sm font-medium text-gray-700">
               Nombre de la Bodega
@@ -92,12 +98,8 @@ export function ModalWarehouse({
               required={option === "create" || option === "update"}
             />
           </div>
-
           <div className="flex flex-col">
-            <label
-              htmlFor="address"
-              className="text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="address" className="text-sm font-medium text-gray-700">
               Dirección
             </label>
             <input
@@ -113,12 +115,8 @@ export function ModalWarehouse({
               required={option === "create" || option === "update"}
             />
           </div>
-
           <div className="flex flex-col">
-            <label
-              htmlFor="responsible"
-              className="text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="responsible" className="text-sm font-medium text-gray-700">
               Responsable de la Bodega
             </label>
             <select
@@ -143,12 +141,8 @@ export function ModalWarehouse({
               ))}
             </select>
           </div>
-
           <div className="flex flex-col">
-            <label
-              htmlFor="phone_number"
-              className="text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="phone_number" className="text-sm font-medium text-gray-700">
               Teléfono
             </label>
             <input
@@ -168,29 +162,26 @@ export function ModalWarehouse({
             />
           </div>
           {(option === "info" || option === "update") && (
-          <div className="flex flex-col">
-            <label
-              htmlFor="percentage_used"
-              className="text-sm font-medium text-gray-700"
-            >
-              Porcentaje de uso
-            </label>
-            <input
-              name="percentage_used"
-              id="percentage_used"
-              type="number"
-              className="mt-1 p-2 border rounded-md"
-              readOnly={option === "info"}
-              value={warehouseInfo.percentage_used}
-              onChange={(e) =>
-                setWarehouseInfo({
-                  ...warehouseInfo,
-                  percentage_used: parseInt(e.target.value) || 0,
-                })
-              }
-              required={option === "create" || option === "update"}
-            />
-          </div>
+            <div className="flex flex-col">
+              <label htmlFor="percentage_used" className="text-sm font-medium text-gray-700">
+                Porcentaje de uso
+              </label>
+              <input
+                name="percentage_used"
+                id="percentage_used"
+                type="number"
+                className="mt-1 p-2 border rounded-md"
+                readOnly={option === "info"}
+                value={warehouseInfo.percentage_used}
+                onChange={(e) =>
+                  setWarehouseInfo({
+                    ...warehouseInfo,
+                    percentage_used: parseInt(e.target.value) || 0,
+                  })
+                }
+                required={option === "create" || option === "update"}
+              />
+            </div>
           )}
         </div>
 
