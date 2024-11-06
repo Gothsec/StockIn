@@ -86,7 +86,8 @@ export default function ButtonCreate({ newMove, onClose, onUpdate, percentage_us
         .maybeSingle();
 
       if (insertError) {
-        showNotification("Error al crear el pedido", "error");
+        showNotification("Error al crear el movimiento", "error");
+        console.log(newMove)
         console.error("Error al crear el movimiento: ", insertError);
         return;
       }

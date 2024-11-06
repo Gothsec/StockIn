@@ -20,7 +20,7 @@ export default function MovesPage() {
   });
   const [windowsModal, setWindowsModal] = useState(false);
   const [error, setError] = useState(null);
-  const tipos = ["Entrada", "Salida", "Traslado"];
+  const tipos = ["Entrada", "Salida"];
 
   const abrirCerrarModal = (
     titleModal,

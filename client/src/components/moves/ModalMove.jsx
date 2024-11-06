@@ -10,17 +10,21 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   const [productsList, setProductsList] = useState([]);
   const [warehouseList, setWarehouseList] = useState([]);
   const id_user = localStorage.getItem("id_user");
-  const tipos = ["Entrada", "Salida", "Traslado"];
-  const [percentage_used, setPercentage_used] = useState(0);
+  const tipos = ["Entrada", "Salida"];
+  const [percentage_used, setPercentage_used] = useState(null);
   const [MoveInfo, setMoveInfo] = useState({
-    quantity: "",
-    type: "",
-    date: "",
+    quantity: null,
+    type: null,
+    date: null,
     description: "",
-    product_id: "",
-    warehouse_id: "",
+    product_id: null,
+    warehouse_id: null,
     user_id: id_user,
   });
+
+  const [quantityProduct, setQuantityProduct] = useState(null);
+  const [quantityWarehouse, setQuantityWarehouse] = useState(null);
+  const [quantityMove, setQuantityMove] = useState(null);
 
   // Función para obtener la lista de productos
   const handleGetProducts = async () => {
@@ -34,6 +38,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         console.error("Error: ", error);
       } else {
         setProductsList(data || []);
+        setQuantityProduct(data.quantity);
       }
     } catch (error) {
       console.error("Error: ", error);
@@ -41,23 +46,27 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   };
 
   const handleGetPercentage_used = async () => {
+    if (!MoveInfo.warehouse_id) return;
+
     try {
       const { data, error } = await supabase
         .from("warehouse")
-        .select("percentage_used")
+        .select("percentage_used, cant_actual")
         .eq("id", MoveInfo.warehouse_id)
         .single();
-
+  
       if (error) {
         console.error("Error al obtener el porcentaje de uso de la bodega: ", error);
         return;
+      } else {
+        setPercentage_used(data.percentage_used);
+        setQuantityWarehouse(data.cant_actual);
       }
-
-      setPercentage_used(data.percentage_used);
     } catch (error) {
       console.error("Error al obtener el porcentaje de uso de la bodega: ", error);
     }
   };
+  
 
   // Función para obtener bodegas con capacidad disponible
   const getWarehousesWithCapacity = async () => {
@@ -152,6 +161,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         return;
       } else {
         setMoveInfo(data);
+        setQuantityMove(data.quantity);
       }
     } catch (error) {
       console.error("Error al obtener información del movimiento: ", error);
@@ -375,7 +385,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               moveId={moveId}
               onClose={onClose}
               onUpdate={onUpdate}
-              percentage_used={percentage_used}/>
+              percentage_used={percentage_used}
+              quantityMove={quantityMove}
+            />
           ) : (
             <ButtonCreate newMove={newMove} onClose={onClose} onUpdate={onUpdate} percentage_used={percentage_used}/>
           )}
