@@ -329,7 +329,7 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
         <div className="w-[400px] min-h-[100px] bg-white relative rounded-lg shadow-lg p-6 flex flex-col gap-4">
 
           <h2 className="text-xl font-bold text-gray-800 text-center mb-6">
-            Detalles del Proveedor
+            Detalles del Producto
           </h2>
           
           <div className="flex justify-between items-center">
