@@ -46,7 +46,7 @@ export function ModalWarehouse({
       const { data, error } = await supabase
         .from("user")
         .select("*")
-        .eq("state", true); 
+        .eq("state", true);
 
       if (error) {
         console.error("Error al obtener usuarios: ", error);
@@ -248,6 +248,11 @@ export function ModalWarehouse({
           <div className="flex justify-between items-center mb-4">
             <span className="font-semibold text-gray-700">Teléfono:</span>
             <span className="text-gray-600">{warehouseInfo.phone_number}</span>
+          </div>
+
+          <div className="flex justify-between items-center mb-4">
+            <span className="font-semibold text-gray-700">Porcentaje de uso:</span>
+            <span className="text-gray-600">{warehouseInfo.percentage_used}%</span>
           </div>
 
           <div className="flex justify-end">
