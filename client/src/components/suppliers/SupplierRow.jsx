@@ -73,13 +73,13 @@ export default function SupplierRow({
         <td className="p-3 flex gap-2 justify-end">
         <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Información Proveedor", id, "info")}
+            onClick={() => abrirCerrarModal("Información proveedor", id, "info")}
           >
             <InfoIcon />
           </button>
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Modificar Proveedor", id, "update")}
+            onClick={() => abrirCerrarModal("Modificar proveedor", id, "update")}
           >
             <EditIcon />
           </button>

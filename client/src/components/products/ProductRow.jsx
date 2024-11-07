@@ -81,13 +81,13 @@ export default function ProductRow({
         <td className="p-3 justify-end flex text-center">
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Información Producto", id, "info")}
+            onClick={() => abrirCerrarModal("Información producto", id, "info")}
           >
             <InfoIcon />
           </button>
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Modificar Producto", id, "update")}
+            onClick={() => abrirCerrarModal("Modificar producto", id, "update")}
           >
             <EditIcon />
           </button>

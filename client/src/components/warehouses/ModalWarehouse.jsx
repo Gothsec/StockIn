@@ -84,7 +84,7 @@ export function ModalWarehouse({
             {/* Nombre de la bodega */}
             <div className="flex flex-col">
               <label htmlFor="name" className="text-sm font-medium text-gray-700">
-                Nombre de la Bodega
+                Nombre de la bodega
               </label>
               <input
                 name="name"
@@ -222,7 +222,7 @@ export function ModalWarehouse({
         // Vista solo lectura
         <div className="w-[400px] min-h-[300px] bg-white relative rounded-lg shadow-lg p-6 flex flex-col gap-6">
           <h2 className="text-xl font-bold text-gray-800 text-center mb-6">
-            Detalles de la Bodega
+            Detalles de la bodega
           </h2>
           {/* Detalles de la bodega */}
           <div className="flex justify-between items-center mb-4">

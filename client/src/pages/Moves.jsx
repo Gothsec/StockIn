@@ -101,7 +101,7 @@ export default function MovesPage() {
             />
             <button
               className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-4 hover:bg-blue-700 transition-all duration-300 ease"
-              onClick={() => abrirCerrarModal("Nuevo Movimiento", "", "create")}
+              onClick={() => abrirCerrarModal("Nuevo movimiento", "", "create")}
             >
               <AddIcon />
             </button>
@@ -118,7 +118,7 @@ export default function MovesPage() {
           <table className="w-full border-collapse relative">
             <thead>
               <tr className="bg-slate-200 sticky top-0 left-0">
-                <th className="py-2 text-left px-4">Nombre Producto</th>
+                <th className="py-2 text-left px-4">Nombre producto</th>
                 <th className="py-2 text-left px-2">Cantidad</th>
                 <th className="py-2 text-center px-4">Tipo</th>
                 <th className="py-2 text-left px-4"></th>
