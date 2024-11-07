@@ -374,17 +374,17 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
 
           <div className="flex justify-between items-center">
             <span className="font-semibold">Precio costo:</span>
-            <span className="text-gray-700">{productInfo.cost_price}</span>
+            <span className="text-gray-700">{productInfo.cost_price} $</span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="font-semibold">Precio público:</span>
-            <span className="text-gray-700">{productInfo.public_price}</span>
+            <span className="text-gray-700">{productInfo.public_price} $</span>
           </div>
 
           <div className="flex justify-between items-center">
             <span className="font-semibold">Ganancia:</span>
-            <span className="text-gray-700">{productInfo.gain}</span>
+            <span className="text-gray-700">{productInfo.gain} $</span>
           </div>
 
           <div className="flex justify-end">

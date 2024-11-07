@@ -8,6 +8,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   const [warehouseList, setWarehouseList] = useState([]);
   const id_user = localStorage.getItem("id_user");
   const tipos = ["Entrada", "Salida"];
+  const [percentage_used, setPercentage_used] = useState(null);
+  const [managerMove, setManagerMove] = useState("");
+  const [userNameMove, setUserNameMove] = useState("");
   const [MoveInfo, setMoveInfo] = useState({
     quantity: "",
     type: "",
@@ -15,8 +18,13 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     description: "",
     product_id: "",
     warehouse_id: "",
-    user_id: id_user,
+    user_id: "",
   });
+
+  const [quantityMove, setQuantityMove] = useState(null);
+  const [typeMoveOld, setTypeMoveOld] = useState(null);
+  const [warehouseMoveOld, setWarehouseMoveOld] = useState(null);
+  const [productMoveOld, setProductMoveOld] = useState(null);
 
   // Función para obtener la lista de productos
   const handleGetProducts = async () => {
@@ -36,6 +44,28 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     }
   };
 
+  const handleGetPercentage_used = async () => {
+    if (!MoveInfo.warehouse_id) return;
+
+    try {
+      const { data, error } = await supabase
+        .from("warehouse")
+        .select("percentage_used, cant_actual")
+        .eq("id", MoveInfo.warehouse_id)
+        .single();
+  
+      if (error) {
+        console.error("Error al obtener el porcentaje de uso de la bodega: ", error);
+        return;
+      } else {
+        setPercentage_used(data.percentage_used);
+      }
+    } catch (error) {
+      console.error("Error al obtener el porcentaje de uso de la bodega: ", error);
+    }
+  };
+  
+
   // Función para obtener bodegas con capacidad disponible
   const getWarehousesWithCapacity = async () => {
     try {
@@ -49,10 +79,9 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         console.error("Error al obtener bodegas: ", error);
         return;
       }
-
-      // Paso 2: Filtrar bodegas que no han alcanzado el porcentaje máximo permitido
+      // Paso 2: Filtrar bodegas con capacidad disponible
       const availableWarehouses = data.filter(
-        (warehouse) => warehouse.percentage_used < 100 // Porcentaje usado menor al 100%
+        (warehouse) => warehouse.percentage_used < 100
       );
 
       // Paso 3: Guardar la lista de bodegas filtrada
@@ -69,7 +98,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         .from("warehouse_product")
         .select("id_warehouse")
         .eq("id_product", MoveInfo.product_id)
-        .gt("stock", 0);
+        // .gt("stock", 0);
 
       if (error) {
         console.error("Error al obtener stock en bodegas: ", error);
@@ -129,9 +158,40 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         return;
       } else {
         setMoveInfo(data);
+        setQuantityMove(data.quantity);
+        setManagerMove(data.user_id);
+        setTypeMoveOld(data.type);
+        setWarehouseMoveOld(data.warehouse_id);
+        setProductMoveOld(data.product_id);
       }
     } catch (error) {
       console.error("Error al obtener información del movimiento: ", error);
+    }
+  };
+
+  useEffect(() => {
+    if (managerMove) {
+      handleGetUserMove();
+    }
+  }, [managerMove]);
+
+  const handleGetUserMove = async () => {
+    if (!managerMove) return;
+    try {
+      const { data, error } = await supabase
+        .from("user")
+        .select("*")
+        .eq("id", managerMove)
+        .single();
+
+      if (error) {
+        console.error("Error al obtener el nombre del usuario: ", error);
+        return;
+      } else {
+        setUserNameMove(data.name);
+      }
+    } catch (error) {
+      console.error("Error al obtener el nombre del usuario: ", error);
     }
   };
 
@@ -140,6 +200,10 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
       handleGetMoveInfo();
     }
   }, [moveId]);
+
+  useEffect(() => {
+    handleGetPercentage_used();
+  }, [MoveInfo.warehouse_id]);
 
   const newMove = {
     quantity: MoveInfo.quantity,
@@ -238,57 +302,82 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Select para la bodega */}
-              <div className="flex flex-col">
-                <label
-                  htmlFor="warehouse"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Bodega
-                </label>
-                <select
-                  name="warehouse_id"
-                  id="warehouse"
-                  className="mt-1 p-2 border rounded-md"
-                  disabled={option === "info"}
-                  value={MoveInfo.warehouse_id}
-                  onChange={(e) =>
-                    setMoveInfo({ ...MoveInfo, warehouse_id: e.target.value })
-                  }
-                  required={option === "create" || option === "update"}
-                >
-                  <option value="">Selecciona una bodega</option>
-                  {warehouseList.map((warehouse) => (
-                    <option key={warehouse.id} value={warehouse.id}>
-                      {warehouse.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Input para la fecha */}
-              <div className="flex flex-col">
-                <label
-                  htmlFor="date"
-                  className="text-sm font-medium text-gray-700"
-                >
-                  Fecha
-                </label>
-                <input
-                  name="date"
-                  id="date"
-                  type="date"
-                  className="mt-1 p-2 border rounded-md"
-                  readOnly={option === "info"}
-                  value={MoveInfo.date}
-                  onChange={(e) =>
-                    setMoveInfo({ ...MoveInfo, date: e.target.value })
-                  }
-                  required={option === "create" || option === "update"}
-                />
-              </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Select para la bodega */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="bodega"
+                className="text-sm font-medium text-gray-700"
+              >
+                Bodega
+              </label>
+              <select
+                name="bodega"
+                id="bodega"
+                className="mt-1 p-2 border rounded-md"
+                disabled={option === "info"}
+                value={MoveInfo.warehouse_id}
+                onChange={(e) =>
+                  setMoveInfo({ ...MoveInfo, warehouse_id: e.target.value })
+                }
+                required={option === "create" || option === "update"}
+              >
+                <option value="">Selecciona una bodega</option>
+                {warehouseList.map((warehouse) => (
+                  <option key={warehouse.id} value={warehouse.id}>
+                    {warehouse.name}
+                  </option>
+                ))}
+              </select>
             </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {/* Input para la fecha */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="date"
+                className="text-sm font-medium text-gray-700"
+              >
+                Fecha
+              </label>
+              <input
+                name="date"
+                id="date"
+                type="date"
+                className="mt-1 p-2 border rounded-md"
+                readOnly={option === "info"}
+                value={MoveInfo.date}
+                onChange={(e) =>
+                  setMoveInfo({ ...MoveInfo, date: e.target.value })
+                }
+                required={option === "create" || option === "update"}
+              />
+            </div>
+
+            {/* Select para el porcentaje de uso de la bodega */}
+            <div className="flex flex-col">
+              <label
+                htmlFor="percentage_used"
+                className="text-sm font-medium text-gray-700"
+              >
+                Porcentaje de uso
+              </label>
+              <input
+                name="percentage_used"
+                id="percentage_used"
+                type="number"
+                className="mt-1 p-2 border rounded-md"
+                readOnly={option === "info"}
+                value={percentage_used}
+                onChange={(e) =>
+                  setPercentage_used(e.target.value)
+                }
+                required={option === "create" || option === "update"}
+              />
+            </div>
+
+          </div>
 
             {/* Textarea para la descripción */}
             <div className="flex flex-col">
@@ -312,42 +401,45 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
             </div>
           </div>
 
-          {/* Botones de acción */}
-          <div className="flex justify-end gap-4 mt-8">
-            <button
-              className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none"
-              onClick={onClose}
-            >
-              Volver
-            </button>
-            {option === "info" ? null : option === "update" ? (
-              <ButtonUpdate
-                moveUpdated={MoveInfo}
-                moveId={moveId}
-                onClose={onClose}
-                onUpdate={onUpdate}
-              />
-            ) : (
-              <ButtonCreate
-                newMove={newMove}
-                onClose={onClose}
-                onUpdate={onUpdate}
-              />
-            )}
-          </div>
+        {/* Botones de acción */}
+        <div className="flex justify-end gap-4 mt-8">
+          <button
+            className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none"
+            onClick={onClose}
+          >
+            Volver
+          </button>
+          {option === "info" ? null : option === "update" ? (
+            <ButtonUpdate
+              moveUpdated={MoveInfo}
+              moveId={moveId}
+              onClose={onClose}
+              onUpdate={onUpdate}
+              percentage_used={percentage_used}
+              quantityMove={quantityMove}
+              typeMoveOld={typeMoveOld}
+              warehouseMoveOld={warehouseMoveOld}
+              productMoveOld={productMoveOld}
+            />
+          ) : (
+            <ButtonCreate newMove={newMove} onClose={onClose} onUpdate={onUpdate} percentage_used={percentage_used}/>
+          )}
         </div>
+      </div>
       ) : (
-        <div className="w-[400px] min-h-[350px] bg-white relative rounded-lg shadow-lg p-6 flex flex-col gap-6">
+        // Vista solo lectura
+        <div className="w-[400px] min-h-[300px] bg-white relative rounded-lg shadow-lg p-6 flex flex-col gap-6">
           <h2 className="text-xl font-bold text-gray-800 text-center mb-6">
-            Detalles del Movimiento
+            Detalles del movimiento
           </h2>
-
+          {/* Detalles de la bodega */}
           <div className="flex justify-between items-center mb-4">
             <span className="font-semibold text-gray-700">Producto:</span>
             <span className="text-gray-600">
-              {productsList.find(
-                (product) => product.id === MoveInfo.product_id
-              )?.name || "Producto no encontrado"}
+              {
+                productsList.find((product) => product.id === MoveInfo.product_id)?.name ||
+                "Producto no encontrado"
+              }
             </span>
           </div>
 
@@ -361,31 +453,21 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
             <span className="text-gray-600">{MoveInfo.type}</span>
           </div>
 
-          {/* Información de la Bodega */}
-          <div className="flex justify-between items-center mb-4">
-            <span className="font-semibold text-gray-700">Bodega:</span>
-            <span className="text-gray-600">
-              {warehouseList.find(
-                (warehouse) => warehouse.id === MoveInfo.warehouse_id
-              )?.name || "Bodega no encontrada"}
-            </span>
-          </div>
-
-          {/* Fecha del Movimiento */}
           <div className="flex justify-between items-center mb-4">
             <span className="font-semibold text-gray-700">Fecha:</span>
             <span className="text-gray-600">{MoveInfo.date}</span>
           </div>
 
-          {/* Descripción del Movimiento */}
-          <div className="flex flex-col mb-4">
+          <div className="flex justify-between items-center mb-4">
             <span className="font-semibold text-gray-700">Descripción:</span>
-            <span className="text-gray-600">
-              {MoveInfo.description || "Sin descripción disponible"}
-            </span>
+            <span className="text-gray-600">{MoveInfo.description}</span>
           </div>
 
-          {/* Botón de Volver */}
+          <div className="flex justify-between items-center mb-4">
+            <span className="font-semibold text-gray-700">Responsable:</span>
+            <span className="text-gray-600">{userNameMove}</span>
+          </div>
+
           <div className="flex justify-end">
             <button
               className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 focus:outline-none"

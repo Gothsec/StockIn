@@ -2,16 +2,21 @@ import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate }) {
+export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, percentage_used, quantityMoveOld, typeMoveOld, warehouseMoveOld, productMoveOld}) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const validateMove = async () => {
-    const requiredFields = ['product_id', 'warehouse_id', 'date', 'type', 'quantity'];
-    for (const field of requiredFields) {
-      if (!moveUpdated[field]) {
-        showNotification("Todos los campos son requeridos.", "error");
-        return false;
-      }
+    if (
+      !moveUpdated.product_id ||
+      !moveUpdated.warehouse_id ||
+      !moveUpdated.date ||
+      !moveUpdated.type ||
+      !moveUpdated.quantity ||
+      !percentage_used
+    ) {
+      showNotification("Todos los campos son requeridos.", "error");
+      console.log(moveUpdated);
+      return false;
     }
 
     if (Number(moveUpdated.quantity) <= 0) {
@@ -19,66 +24,50 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       return false;
     }
 
-    const warehouse = await getWarehouse(moveUpdated.warehouse_id);
-    if (!warehouse) return false;
-
-    if (moveUpdated.type === "Entrada") {
-      return validateEntryMove(warehouse);
-    } else if (moveUpdated.type === "Salida") {
-      return validateExitMove(warehouse);
+    if (percentage_used < 0) {
+      showNotification(
+        "El porcentaje de uso debe ser mayor o igual a 0.",
+        "error"
+      );
+      return false;
     }
+
+    if (percentage_used > 100) {
+      showNotification(
+        "El porcentaje de uso debe ser menor o igual a 100.",
+        "error"
+      );
+      return false;
+    }
+
+    if (moveUpdated.type === "Salida") {
+      const { data: warehouseProduct, error } = await supabase
+        .from("warehouse_product")
+        .select("stock")
+        .eq("id_warehouse", moveUpdated.warehouse_id)
+        .eq("id_product", moveUpdated.product_id)
+        .maybeSingle();
+  
+      if (error) {
+        showNotification("Error al verificar el stock del producto en la bodega.", "error");
+        console.error(error);
+        return false;
+      }
+  
+        const oldStock = Number(warehouseProduct.stock) + Number(quantityMoveOld);
+  
+        if (Number(moveUpdated.quantity) > oldStock) {
+          showNotification(
+            "Se está intentando sacar una cantidad mayor a la que hay almacenada.",
+            "error"
+          );
+          return false;
+        }
+      }
 
     return true;
   };
 
-  const getWarehouse = async (warehouseId) => {
-    const { data: warehouse, error } = await supabase
-      .from("warehouse")
-      .select("percentage_used, cant_actual, name")
-      .eq("id", warehouseId)
-      .maybeSingle();
-
-    if (error) {
-      showNotification("Error al verificar la bodega.", "error");
-      console.error(error);
-      return null;
-    }
-
-    return warehouse;
-  };
-
-  const validateEntryMove = (warehouse) => {
-    const newCantActual = Number(warehouse.cant_actual) + Number(moveUpdated.quantity);
-    const maxCapacity = warehouse.cant_max_product; // Ajusta según tu modelo de datos
-
-    if (newCantActual > maxCapacity) {
-      showNotification(`La bodega ${warehouse.name} no puede recibir esta cantidad, ya que sobrepasa su capacidad máxima.`, "error");
-      return false;
-    }
-    return true;
-  };
-
-  const validateExitMove = async (warehouse) => {
-    const { data: warehouseProduct, error } = await supabase
-      .from("warehouse_product")
-      .select("stock")
-      .eq("id_warehouse", moveUpdated.warehouse_id)
-      .eq("id_product", moveUpdated.product_id)
-      .maybeSingle();
-
-    if (error) {
-      showNotification("Error al verificar el stock del producto en la bodega.", "error");
-      console.error(error);
-      return false;
-    }
-
-    if (Number(moveUpdated.quantity) > Number(warehouseProduct?.stock || 0)) {
-      showNotification("Se está intentando sacar una cantidad mayor a la que hay almacenada.", "error");
-      return false;
-    }
-
-    return true;
-  };
 
   const handleUpdateMove = async () => {
     if (!(await validateMove())) return;
@@ -121,8 +110,10 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       return;
     }
 
+    const oldStock = Number(warehouseProduct.stock) - Number(quantityMoveOld);
+
     const newStock = warehouseProduct
-      ? Number(warehouseProduct.stock) + Number(moveUpdated.quantity)
+      ? oldStock + Number(moveUpdated.quantity)
       : Number(moveUpdated.quantity);
 
     if (warehouseProduct) {
@@ -131,6 +122,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
         .update({ stock: newStock })
         .eq("id_warehouse", moveUpdated.warehouse_id)
         .eq("id_product", moveUpdated.product_id);
+        
     } else {
       await supabase.from("warehouse_product").insert({
         id_warehouse: moveUpdated.warehouse_id,
@@ -146,7 +138,8 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       .single();
 
     if (!productError && product) {
-      const updatedStock = Number(product.quantity) + Number(moveUpdated.quantity);
+      const oldStock = Number(product.quantity) - Number(quantityMoveOld);
+      const updatedStock = oldStock + Number(moveUpdated.quantity);
       await supabase
         .from("product")
         .update({ quantity: updatedStock })
@@ -160,8 +153,9 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       .single();
 
     if (!warehouseError && warehouse) {
+      const cant_actual_old = Number(warehouse.cant_actual) - Number(quantityMoveOld);
       const updatedCantActual =
-        Number(warehouse.cant_actual) + Number(moveUpdated.quantity);
+        cant_actual_old + Number(moveUpdated.quantity);
       await supabase
         .from("warehouse")
         .update({ cant_actual: updatedCantActual })
@@ -176,7 +170,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
         .select("stock")
         .eq("id_warehouse", moveUpdated.warehouse_id)
         .eq("id_product", moveUpdated.product_id)
-        .maybeSingle();
+        .single();
 
     if (warehouseProductError) {
       showNotification("Error al verificar el producto en la bodega.", "error");
@@ -184,7 +178,8 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       return;
     }
 
-    const newStock = Number(warehouseProduct.stock) - Number(moveUpdated.quantity);
+    const oldStock = Number(warehouseProduct.stock) + Number(quantityMoveOld);
+    const newStock = oldStock - Number(moveUpdated.quantity);
     await supabase
       .from("warehouse_product")
       .update({ stock: newStock })
@@ -198,11 +193,13 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       .single();
 
     if (!productError && product) {
-      const updatedStock = Number(product.quantity) - Number(moveUpdated.quantity);
+      const oldStock = Number(product.quantity) + Number(quantityMoveOld);
+      const updatedStock = oldStock - Number(moveUpdated.quantity);
       await supabase
         .from("product")
         .update({ quantity: updatedStock })
         .eq("id", moveUpdated.product_id);
+
     }
 
     const { data: warehouse, error: warehouseError } = await supabase
@@ -212,8 +209,9 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate })
       .single();
 
     if (!warehouseError && warehouse) {
+      const cant_actual_old = Number(warehouse.cant_actual) + Number(quantityMoveOld);
       const updatedCantActual =
-        Number(warehouse.cant_actual) - Number(moveUpdated.quantity);
+        cant_actual_old - Number(moveUpdated.quantity);
       await supabase
         .from("warehouse")
         .update({ cant_actual: updatedCantActual })
