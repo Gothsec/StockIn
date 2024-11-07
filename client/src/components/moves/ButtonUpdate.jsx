@@ -2,7 +2,7 @@ import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, percentage_used, quantityMove}) {
+export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, percentage_used, quantityMoveOld, typeMoveOld, warehouseMoveOld, productMoveOld}) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const validateMove = async () => {
@@ -41,33 +41,33 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
     }
 
     if (moveUpdated.type === "Salida") {
-      const { data: warehouseProduct, error: warehouseProductError } =
-        await supabase
-          .from("warehouse_product")
-          .select("stock")
-          .eq("id_warehouse", moveUpdated.warehouse_id)
-          .eq("id_product", moveUpdated.product_id)
-          .maybeSingle();
-
-      if (warehouseProductError) {
+      const { data: warehouseProduct, error } = await supabase
+        .from("warehouse_product")
+        .select("stock")
+        .eq("id_warehouse", moveUpdated.warehouse_id)
+        .eq("id_product", moveUpdated.product_id)
+        .maybeSingle();
+  
+      if (error) {
         showNotification("Error al verificar el stock del producto en la bodega.", "error");
-        console.error(warehouseProductError);
+        console.error(error);
         return false;
       }
-
-      const oldStock = Number(warehouseProduct) + Number(quantityMove);
-
-      if (Number(moveUpdated.quantity) > oldStock) {
-        showNotification(
-          "Se está intentando sacar una cantidad mayor a la que hay almacenada.",
-          "error"
-        );
-        return false;
+  
+        const oldStock = Number(warehouseProduct.stock) + Number(quantityMoveOld);
+  
+        if (Number(moveUpdated.quantity) > oldStock) {
+          showNotification(
+            "Se está intentando sacar una cantidad mayor a la que hay almacenada.",
+            "error"
+          );
+          return false;
+        }
       }
-    }
 
     return true;
   };
+
 
   const handleUpdateMove = async () => {
     if (!(await validateMove())) return;
@@ -84,11 +84,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
         return;
       }
 
-      if (moveUpdated.type === "Entrada") {
-        await handleEntry();
-      } else if (moveUpdated.type === "Salida") {
-        await handleExit();
-      }
+      moveUpdated.type === "Entrada" ? await handleEntry() : await handleExit();
 
       showNotification("Movimiento actualizado correctamente", "success");
       onClose();
@@ -114,7 +110,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
       return;
     }
 
-    const oldStock = Number(warehouseProduct.stock) - Number(quantityMove);
+    const oldStock = Number(warehouseProduct.stock) - Number(quantityMoveOld);
 
     const newStock = warehouseProduct
       ? oldStock + Number(moveUpdated.quantity)
@@ -142,7 +138,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
       .single();
 
     if (!productError && product) {
-      const oldStock = Number(product.quantity) - Number(quantityMove);
+      const oldStock = Number(product.quantity) - Number(quantityMoveOld);
       const updatedStock = oldStock + Number(moveUpdated.quantity);
       await supabase
         .from("product")
@@ -157,7 +153,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
       .single();
 
     if (!warehouseError && warehouse) {
-      const cant_actual_old = Number(warehouse.cant_actual) - Number(quantityMove);
+      const cant_actual_old = Number(warehouse.cant_actual) - Number(quantityMoveOld);
       const updatedCantActual =
         cant_actual_old + Number(moveUpdated.quantity);
       await supabase
@@ -182,7 +178,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
       return;
     }
 
-    const oldStock = Number(warehouseProduct.stock) + Number(quantityMove);
+    const oldStock = Number(warehouseProduct.stock) + Number(quantityMoveOld);
     const newStock = oldStock - Number(moveUpdated.quantity);
     await supabase
       .from("warehouse_product")
@@ -197,7 +193,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
       .single();
 
     if (!productError && product) {
-      const oldStock = Number(product.quantity) + Number(quantityMove);
+      const oldStock = Number(product.quantity) + Number(quantityMoveOld);
       const updatedStock = oldStock - Number(moveUpdated.quantity);
       await supabase
         .from("product")
@@ -213,7 +209,7 @@ export default function ButtonUpdate({ moveUpdated, moveId, onClose, onUpdate, p
       .single();
 
     if (!warehouseError && warehouse) {
-      const cant_actual_old = Number(warehouse.cant_actual) + Number(quantityMove);
+      const cant_actual_old = Number(warehouse.cant_actual) + Number(quantityMoveOld);
       const updatedCantActual =
         cant_actual_old - Number(moveUpdated.quantity);
       await supabase

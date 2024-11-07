@@ -1,9 +1,8 @@
-// Propósito: Nos permite actualizar una Bodega existente
-import supabase from "../../utils/supabase";
 import { useContext } from "react";
+import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonUpdateWarehouse({
+export default function ButtonUpdate({
   warehouseUpdated,
   warehouseId,
   onClose,
@@ -65,8 +64,8 @@ export default function ButtonUpdateWarehouse({
     return true;
   };
 
+  // Función de actualización de la bodega
   const handleUpdateWarehouse = async () => {
-    // Validamos los datos antes de enviarlos a la base de datos
     if (!(await validateWarehouseUpdate())) return;
 
     try {
@@ -78,13 +77,15 @@ export default function ButtonUpdateWarehouse({
       if (error) {
         console.error("Error: ", error);
         showNotification("Error al actualizar la bodega", "error");
-      } else {
-        showNotification("Bodega actualizada correctamente", "success");
-        onClose();
-        onUpdate();
+        return;
       }
+
+      showNotification("Bodega actualizada correctamente", "success");
+      onClose(); // Cerrar el modal
+      onUpdate(); // Actualizar la lista de bodegas
     } catch (error) {
       console.error("Error: ", error);
+      showNotification("Hubo un error al actualizar la bodega", "error");
     }
   };
 

@@ -1,8 +1,3 @@
-// componente ButtonCreate se encarga de gestionar la creación de movimientos de productos
-// en un sistema de inventario, específicamente entradas y salidas de productos
-// cuenta con sus validacioes y actualizaciones de datos en la base de datos supabase
-// dependiendo del tipo de movimiento (entrada o salida)
-
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
@@ -56,19 +51,13 @@ export default function ButtonCreate({ newMove, onClose, onUpdate, percentage_us
           .maybeSingle();
 
       if (warehouseProductError) {
-        showNotification(
-          "Error al verificar el stock del producto en la bodega.",
-          "error"
-        );
-        console.error(warehouseProductError);
+        showNotification("Error al verificar el stock del producto en la bodega.", "error");
+        console.error("Error en la consulta de stock:", warehouseProductError);
         return false;
       }
 
-      if (Number(newMove.quantity) > Number(warehouseProduct.stock)) {
-        showNotification(
-          "Se está intentando sacar una cantidad mayor a la que hay almacenada.",
-          "error"
-        );
+      if (Number(newMove.quantity) > Number(warehouseProduct?.stock || 0)) {
+        showNotification("Se está intentando sacar una cantidad mayor a la que hay almacenada.", "error");
         return false;
       }
     }
@@ -102,7 +91,7 @@ export default function ButtonCreate({ newMove, onClose, onUpdate, percentage_us
       onClose();
       onUpdate();
     } catch (error) {
-      console.error("Error al crear el movimiento: ", error);
+      console.error("Error al crear el movimiento:", error);
       showNotification("Hubo un error al crear el movimiento", "error");
     }
   };
@@ -118,7 +107,7 @@ export default function ButtonCreate({ newMove, onClose, onUpdate, percentage_us
 
     if (warehouseProductError) {
       showNotification("Error al verificar el producto en la bodega.", "error");
-      console.error(warehouseProductError);
+      console.error("Error en la consulta de producto:", warehouseProductError);
       return;
     }
 
@@ -181,7 +170,7 @@ export default function ButtonCreate({ newMove, onClose, onUpdate, percentage_us
 
     if (warehouseProductError) {
       showNotification("Error al verificar el producto en la bodega.", "error");
-      console.error(warehouseProductError);
+      console.error("Error en la consulta de producto:", warehouseProductError);
       return;
     }
 

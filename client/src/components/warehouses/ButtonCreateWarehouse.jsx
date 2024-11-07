@@ -22,6 +22,12 @@ export default function ButtonCreateWarehouse({
       return false;
     }
 
+    // Validar que el número de teléfono sea un valor válido
+    if (!/^\d{10}$/.test(newWarehouse.phone_number)) { // Ejemplo de validación para un número de 10 dígitos
+      showNotification("El número de teléfono debe tener 10 dígitos.", "error");
+      return false;
+    }
+
     // Validar que el nombre de la bodega sea único (sin considerar mayúsculas/minúsculas)
     const { data: existingWarehouses, error } = await supabase
       .from("warehouse")
