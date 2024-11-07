@@ -18,6 +18,275 @@ export function ModalSupplier({
     city: "",
   });
 
+  const departments = {
+    Amazonas: ["Leticia", "Puerto Nariño"],
+    Antioquia: [
+      "Medellín",
+      "Abejorral",
+      "Abrigo",
+      "Acacías",
+      "Apartadó",
+      "Armenia",
+      "Barbosa",
+      "Bello",
+      "Bello Horizonte",
+      "Betulia",
+      "Caucasia",
+      "Chigorodó",
+      "Copacabana",
+      "Envigado",
+      "Fredonia",
+      "Girardota",
+      "Itagüí",
+      "La Ceja",
+      "La Estrella",
+      "Rionegro",
+      "Sabaneta",
+      "Santa Fe de Antioquia",
+      "Sonsón",
+      "Turbo",
+      "Urabá",
+      "Yarumal",
+    ],
+    Arauca: [
+      "Arauca",
+      "Arauquita",
+      "Fortul",
+      "Puerto Rondón",
+      "Saravena",
+      "Tame",
+    ],
+    Atlántico: [
+      "Barranquilla",
+      "Soledad",
+      "Puerto Colombia",
+      "Malambo",
+      "Sabanalarga",
+      "Ponedera",
+      "Galapa",
+      "Juan de Acosta",
+      "Luruaco",
+      "Santo Tomás",
+      "Campo de la Cruz",
+    ],
+    Bolívar: [
+      "Cartagena",
+      "Magangué",
+      "Mompox",
+      "Turbana",
+      "Arjona",
+      "Clemencia",
+      "María la Baja",
+      "San Juan Nepomuceno",
+      "Santa Catalina",
+      "Villanueva",
+      "El Carmen de Bolívar",
+    ],
+    Boyacá: [
+      "Tunja",
+      "Duitama",
+      "Sogamoso",
+      "Chiquinquirá",
+      "Páez",
+      "Tuta",
+      "Oicatá",
+      "Ramiriquí",
+      "Paipa",
+      "Chiquinquirá",
+    ],
+    Caldas: [
+      "Manizales",
+      "Chinchiná",
+      "Villamaría",
+      "La Dorada",
+      "Marquetalia",
+      "Neira",
+      "Palestina",
+      "Supía",
+      "Victoria",
+    ],
+    Caquetá: [
+      "Florencia",
+      "Puerto Rico",
+      "San Vicente del Caguán",
+      "Solano",
+      "La Montañita",
+    ],
+    Casanare: [
+      "Yopal",
+      "Aguazul",
+      "Hato Corozal",
+      "Nunchía",
+      "Maní",
+      "Tauramena",
+      "Sabanalarga",
+      "Chámeza",
+      "Támara",
+    ],
+    Cauca: [
+      "Popayán",
+      "Pasto",
+      "Cajibío",
+      "Timbío",
+      "Piendamó",
+      "El Tambo",
+      "Patía",
+      "La Sierra",
+      "Almaguer",
+    ],
+    Cesar: [
+      "Valledupar",
+      "Agustín Codazzi",
+      "La Jagua de Ibirico",
+      "Chimichagua",
+      "San Diego",
+      "San Martín",
+      "Riohacha",
+    ],
+    Chocó: [
+      "Quibdó",
+      "Acandí",
+      "Bahía Solano",
+      "Bojayá",
+      "Cértegui",
+      "Istmina",
+      "Juradó",
+    ],
+    Córdoba: [
+      "Montería",
+      "Lorica",
+      "Cereté",
+      "Planeta Rica",
+      "Montelíbano",
+      "San Antero",
+      "Sahagún",
+      "Tierralta",
+    ],
+    Cundinamarca: [
+      "Bogotá",
+      "Soacha",
+      "Chía",
+      "Zipaquirá",
+      "Madrid",
+      "Facatativá",
+      "Fusagasugá",
+      "Girardot",
+      "Cota",
+      "La Calera",
+      "Ricaurte",
+    ],
+    Guainía: ["Inírida", "San José del Guaviare"],
+    Guaviare: ["San José del Guaviare", "Calamar", "El Retorno"],
+    Huila: [
+      "Neiva",
+      "Pitalito",
+      "La Plata",
+      "Campoalegre",
+      "Algeciras",
+      "Isnos",
+      "Timaná",
+      "San Agustín",
+      "Elías",
+    ],
+    "La Guajira": [
+      "Riohacha",
+      "Maicao",
+      "Fonseca",
+      "Villanueva",
+      "San Juan del Cesar",
+    ],
+    Magdalena: [
+      "Santa Marta",
+      "Ciénaga",
+      "El Retén",
+      "Fundación",
+      "Aracataca",
+      "Pivijay",
+      "Zona Bananera",
+    ],
+    Meta: [
+      "Villavicencio",
+      "Acacías",
+      "Restrepo",
+      "Cumaral",
+      "Puerto López",
+      "San Martín",
+      "La Macarena",
+      "Mesetas",
+    ],
+    Nariño: [
+      "Pasto",
+      "Tumaco",
+      "Ipiales",
+      "Chachagüí",
+      "La Unión",
+      "Cumbal",
+      "Pupiales",
+      "El Peñol",
+    ],
+    "Norte de Santander": [
+      "Cúcuta",
+      "Pamplona",
+      "Ocaña",
+      "Villa del Rosario",
+      "La Playa",
+      "Los Patios",
+      "Salazar de las Palmas",
+      "Sardinata",
+    ],
+    Putumayo: ["Mocoa", "Puerto Asís", "La Dorada", "Orito"],
+    Quindío: ["Armenia", "Montenegro", "Quimbaya", "Calarcá", "La Tebaida"],
+    Risaralda: [
+      "Pereira",
+      "Dosquebradas",
+      "Santa Rosa de Cabal",
+      "La Virginia",
+      "Apía",
+    ],
+    "San Andrés y Providencia": ["San Andrés", "Providencia"],
+    Santander: [
+      "Bucaramanga",
+      "Cúcuta",
+      "Girón",
+      "Barrancabermeja",
+      "Floridablanca",
+      "Piedecuesta",
+    ],
+    Sucre: [
+      "Sincelejo",
+      "Sampués",
+      "Corozal",
+      "Morroa",
+      "San Onofre",
+      "Magangué",
+    ],
+    Tolima: ["Ibagué", "Espinal", "Honda", "Líbano", "Melgar", "El Espinal"],
+    "Valle del Cauca": [
+      "Cali",
+      "Buenaventura",
+      "Palmira",
+      "Tuluá",
+      "Buga",
+      "Yumbo",
+      "Cartago",
+      "Roldanillo",
+    ],
+    Vaupés: ["Mitú", "Carurú", "Pacoa"],
+    Vichada: ["Puerto Carreño", "Cumaribo", "La Primavera"],
+  };
+
+  const [selectedDepartment, setSelectedDepartment] = useState("");
+
+  const handleDepartmentChange = (e) => {
+    const department = e.target.value;
+    setSelectedDepartment(department);
+    setSupplierInfo({ ...supplierInfo, city: "" }); // Limpiar ciudad al cambiar departamento
+  };
+
+  const handleCityChange = (e) => {
+    setSupplierInfo({ ...supplierInfo, city: e.target.value });
+  };
+
   // Función para obtener la información del proveedor
   const handleGetSupplierInfo = async () => {
     if (!supplierId) {
@@ -147,7 +416,10 @@ export function ModalSupplier({
                   readOnly={option === "info"}
                   value={supplierInfo.address}
                   onChange={(e) =>
-                    setSupplierInfo({ ...supplierInfo, address: e.target.value })
+                    setSupplierInfo({
+                      ...supplierInfo,
+                      address: e.target.value,
+                    })
                   }
                   required={option === "create" || option === "update"}
                 />
@@ -157,23 +429,51 @@ export function ModalSupplier({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col">
                 <label
-                  htmlFor="city"
+                  htmlFor="department"
                   className="text-sm font-medium text-gray-700"
+                >
+                  Departamento
+                </label>
+                <select
+                  id="department"
+                  name="department"
+                  className="mt-1 p-2 border rounded-md"
+                  value={selectedDepartment}
+                  onChange={handleDepartmentChange}
+                  disabled={option === "info"}
+                  required={option === "create" || option === "update"}
+                >
+                  <option value="">Seleccione un departamento</option>
+                  {Object.keys(departments).map((department) => (
+                    <option key={department} value={department}>
+                      {department}
+                    </option>
+                  ))}
+                </select>
+
+                <label
+                  htmlFor="city"
+                  className="mt-4 text-sm font-medium text-gray-700"
                 >
                   Ciudad
                 </label>
-                <input
-                  name="city"
+                <select
                   id="city"
-                  type="text"
+                  name="city"
                   className="mt-1 p-2 border rounded-md"
-                  readOnly={option === "info"}
                   value={supplierInfo.city}
-                  onChange={(e) =>
-                    setSupplierInfo({ ...supplierInfo, city: e.target.value })
-                  }
+                  onChange={handleCityChange}
+                  disabled={option === "info" || !selectedDepartment}
                   required={option === "create" || option === "update"}
-                />
+                >
+                  <option value="">Seleccione una ciudad</option>
+                  {selectedDepartment &&
+                    departments[selectedDepartment].map((city) => (
+                      <option key={city} value={city}>
+                        {city}
+                      </option>
+                    ))}
+                </select>
               </div>
             </div>
           </div>
@@ -206,7 +506,7 @@ export function ModalSupplier({
         // Vista de solo lectura (info)
         <div className="w-[400px] min-h-[350px] bg-white relative rounded-lg shadow-lg p-6 flex flex-col gap-6">
           <h2 className="text-xl font-bold text-gray-800 text-center mb-6">
-            Detalles del Proveedor
+            Detalles del proveedor
           </h2>
 
           <div className="flex justify-between items-center mb-4">
