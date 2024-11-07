@@ -133,7 +133,7 @@ export default function ProductsPage() {
             <thead>
               <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre</th>
-                <th className="py-2 text-center px-40">Stock Actual</th>
+                <th className="py-2 text-center px-40">Stock actual</th>
                 <th className="py-2 text-center px-2">Marca</th>
                 <th className="py-2 text-center px-10"></th>
               </tr>
