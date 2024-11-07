@@ -101,7 +101,7 @@ export default function MovesPage() {
             />
             <button
               className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-4 hover:bg-blue-700 transition-all duration-300 ease"
-              onClick={() => abrirCerrarModal("Nuevo Movimiento", "", "create")}
+              onClick={() => abrirCerrarModal("Nuevo movimiento", "", "create")}
             >
               <AddIcon />
             </button>
