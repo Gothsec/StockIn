@@ -72,7 +72,7 @@ export default function SuppliersPage() {
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="pb-8">
+        <header className="pb-4">
           <h1 className="font-bold text-4xl">Proveedores</h1>
           <div className="flex items-center mt-4">
             <select

@@ -107,7 +107,7 @@ export default function ProductsPage() {
               Bajos en stock
             </button>
           </div>
-
+  
           <input
             className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-9"
             type="search"
@@ -115,7 +115,7 @@ export default function ProductsPage() {
             onChange={(e) => setSearchProduct(e.target.value)}
           />
           <button
-            className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-9 hover:bg-blue-700 transition-all duration-300 ease"
+            className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-4 hover:bg-blue-700 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Nuevo producto", "", "create")}
           >
             <AddIcon />
