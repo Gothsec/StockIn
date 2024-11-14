@@ -85,11 +85,11 @@ export default function ProductsPage() {
         </div>
 
         <div className="flex justify-between items-center pb-4">
-          <div className="space-x-4">
+          <div className="">
             <button
-              className={`py-1 px-3 rounded-lg border transition-colors duration-300 ${
+              className={`py-1 px-3 rounded-tr-none rounded-br-none rounded-lg border transition-colors duration-300 border-blue-500 ${
                 showLowStock
-                  ? "bg-white text-blue-500 border-blue-500"
+                  ? "bg-white text-blue-500"
                   : "bg-blue-500 text-white"
               }`}
               onClick={() => setShowLowStock(false)}
@@ -97,10 +97,10 @@ export default function ProductsPage() {
               Stock completo
             </button>
             <button
-              className={`py-1 px-3 rounded-lg border transition-colors duration-300 ${
+              className={`py-1 px-3 rounded-tl-none rounded-bl-none rounded-lg border transition-colors duration-300  border-blue-500 ${
                 showLowStock
                   ? "bg-blue-500 text-white"
-                  : "bg-white text-blue-500 border-blue-500"
+                  : "bg-white text-blue-500"
               }`}
               onClick={() => setShowLowStock(true)}
             >
@@ -109,7 +109,7 @@ export default function ProductsPage() {
           </div>
   
           <input
-            className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-9"
+            className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-4"
             type="search"
             placeholder="Buscar producto"
             onChange={(e) => setSearchProduct(e.target.value)}

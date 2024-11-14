@@ -119,8 +119,8 @@ export default function MovesPage() {
             <thead>
               <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre producto</th>
-                <th className="py-2 text-left px-2">Cantidad</th>
-                <th className="py-2 text-center px-4">Tipo</th>
+                <th className="py-2 text-center px-8">Cantidad</th>
+                <th className="py-2 text-center px-8">Tipo</th>
                 <th className="py-2 text-left px-4"></th>
               </tr>
             </thead>

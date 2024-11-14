@@ -112,7 +112,7 @@ export default function WarehousesPage() {
               <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-2">Nombre de la bodega</th>
                 <th className="py-2 text-left px-2">Responsable</th>
-                <th className="py-2 text-left px-2">Cantidad actual</th>
+                <th className="py-2 text-center px-2">Cantidad actual</th>
                 <th className="py-2 text-left px-4"></th>
               </tr>
             </thead>
