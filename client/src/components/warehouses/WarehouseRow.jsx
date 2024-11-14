@@ -69,7 +69,7 @@ export default function WarehouseRow({
       <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
         <td className="p-3">{responsible}</td>
-        <td className="p-3">{cant_actual}</td>
+        <td className="p-3 text-center">{cant_actual}</td>
         <td className="p-3 flex gap-2 justify-end">
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"

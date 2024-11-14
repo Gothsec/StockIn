@@ -68,7 +68,7 @@ export default function MoveRow({
     <>
       <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3">{quantity}</td>
+        <td className="p-3 text-center">{quantity}</td>
         <td className="p-3 text-center">{type}</td>
         <td className="p-3 flex gap-2 justify-end">
           <button
