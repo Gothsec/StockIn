@@ -5,10 +5,10 @@ Login page
 ![Login](https://github.com/user-attachments/assets/34bdba52-4dbe-4a9b-ab4b-7d87eeb60c97)
 
 Dashboard page
-![image](https://github.com/user-attachments/assets/f0d5ac21-7658-4d1d-b92a-8c5380403f38)
+![Dashboard](https://github.com/user-attachments/assets/f0d5ac21-7658-4d1d-b92a-8c5380403f38)
 
 Products page
-![Products](https://github.com/user-attachments/assets/5f09cc73-dca4-46ee-a4d4-e78773f6ec64)
+![Products](https://github.com/user-attachments/assets/2139c785-97a1-4ed8-bb01-186f6e1dc5ff)
 
 Moves page
 ![Moves](https://github.com/user-attachments/assets/6dcaf72c-85c5-4def-a606-3960797d4e70)
