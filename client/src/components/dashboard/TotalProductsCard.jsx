@@ -16,21 +16,32 @@ export default function Dashboard() {
         return;
       }
 
-      const total = data?.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
+      const total =
+        data?.reduce((acc, product) => acc + product.quantity, 0) ?? 0;
       setTotalQuantity(total);
     };
 
     fetchTotalQuantity();
   }, []);
 
+  const isLoading = totalQuantity === null;
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div className="bg-slate-50 rounded-lg border-2 border-slate-200 p-6">
-        <h2 className="text-xl font-semibold text-gray-700">Total productos </h2>
-        <p className="text-4xl font-bold text-blue-500">
-          {totalQuantity !== null ? totalQuantity : "..."}
+    <div className="flex flex-col w-1/4 bg-white rounded-lg border-2 border-slate-200 p-4 gap-2">
+      <h3 className="text-xl font-medium text-gray-600 text-nowrap">
+        Total productos{" "}
+      </h3>
+      {isLoading ? (
+        <div className="flex justify-center items-center h-12">
+          <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-blue-500"></div>
+        </div>
+      ) : (
+        <p className="text-2xl sm:text-3xl font-bold text-blue-500">
+          {totalQuantity}
         </p>
-      </div>
+      )}
+
+      <span className="text-xs text-gray-500">Total de productos en stock</span>
     </div>
   );
 }
