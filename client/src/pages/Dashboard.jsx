@@ -1,4 +1,5 @@
 import TotalProductsCard from "../components/dashboard/TotalProductsCard";
+import FinancialOverviewGroup from "../components/dashboard/FinancialOverviewCard";
 
 export default function Dashboard() {
 
@@ -8,7 +9,10 @@ export default function Dashboard() {
         <div className="flex justify-between items-center pb-8">
           <h1 className="font-bold text-4xl">Vista general</h1>
         </div>
-        <TotalProductsCard />
+        <div className="flex gap-3">
+          <TotalProductsCard />
+          <FinancialOverviewGroup />
+        </div>
       </div>
     </div>
   );
