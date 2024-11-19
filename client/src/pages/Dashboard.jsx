@@ -1,5 +1,5 @@
-import TotalProductsCard from "../components/dashboard/TotalProductsCard";
-import FinancialOverviewGroup from "../components/dashboard/FinancialOverviewCard";
+import TotalUnitsCard from "../components/dashboard/TotalUnitsCard";
+import FinancialOverviewGroup from "../components/dashboard/FinancialOverviewGroup";
 
 export default function Dashboard() {
 
@@ -10,7 +10,7 @@ export default function Dashboard() {
           <h1 className="font-bold text-4xl">Vista general</h1>
         </div>
         <div className="flex gap-3">
-          <TotalProductsCard />
+          <TotalUnitsCard />
           <FinancialOverviewGroup />
         </div>
       </div>
