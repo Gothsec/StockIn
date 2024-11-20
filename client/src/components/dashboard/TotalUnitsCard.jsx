@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import supabase from "../../utils/supabase";
 
-export default function Dashboard() {
+export default function TotalUnitsCard() {
   const [totalQuantity, setTotalQuantity] = useState(null);
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col w-1/4 bg-white rounded-lg border-2 border-slate-200 p-4 gap-2">
       <h3 className="text-xl font-medium text-gray-600 text-nowrap">
-        Total productos{" "}
+        Total unidades{" "}
       </h3>
       {isLoading ? (
         <div className="flex justify-center items-center h-12">
@@ -41,7 +41,7 @@ export default function Dashboard() {
         </p>
       )}
 
-      <span className="text-xs text-gray-500">Total de productos en stock</span>
+      <span className="text-xs text-gray-500">Total de unidades en stock</span>
     </div>
   );
 }
