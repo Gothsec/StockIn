@@ -1,5 +1,6 @@
 import TotalUnitsCard from "../components/dashboard/TotalUnitsCard";
 import FinancialOverviewGroup from "../components/dashboard/FinancialOverviewGroup";
+import TopMovements from "../components/dashboard/TopProductMovements";
 
 export default function Dashboard() {
 
@@ -13,6 +14,7 @@ export default function Dashboard() {
           <TotalUnitsCard />
           <FinancialOverviewGroup />
         </div>
+        <TopMovements />
       </div>
     </div>
   );
