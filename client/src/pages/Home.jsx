@@ -10,8 +10,9 @@ import NotFound from "../pages/NotFound";
 export default function Home() {
   const location = useLocation();
 
-  const validPaths = ["/dashboard", "/productos", "/movimientos", "/proveedores", "/bodegas"];
+  const role = localStorage.getItem("role");
 
+  const validPaths = ["/dashboard", "/productos", "/movimientos", "/proveedores", "/bodegas"];
   const showNav = validPaths.includes(location.pathname);
 
   return (
@@ -19,12 +20,29 @@ export default function Home() {
       {showNav && <Nav />}
       <div className={`flex-grow ${!showNav ? "w-full" : ""}`}>
         <Routes>
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/"
+            element={
+              role === "employee" ? (
+                <Navigate to="/productos" replace />
+              ) : (
+                <Navigate to="/dashboard" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/dashboard"
+            element={
+              role === "admin" ? <Dashboard /> : <Navigate to="/productos" replace />
+            }
+          />
+
           <Route path="/productos" element={<ProductsPage />} />
           <Route path="/movimientos" element={<MovesPage />} />
           <Route path="/proveedores" element={<SuppliersPage />} />
           <Route path="/bodegas" element={<WarehousesPage />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
