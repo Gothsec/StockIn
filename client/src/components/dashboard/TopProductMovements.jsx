@@ -44,7 +44,7 @@ export default function TopMovements() {
   }, []);
 
   return (
-    <div className="w-2/5 p-4 bg-white border-2 border-slate-200 rounded-lg my-3">
+    <div className="w-2/6 p-4 bg-white border-2 border-slate-200 rounded-lg my-3">
       <h3 className="text-lg sm:text-xl font-medium text-gray-600 pb-3">
         Productos con más movimientos
       </h3>
