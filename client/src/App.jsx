@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./components/Login";
 import { ConfirmationProvider } from "./contexts/ConfirmationData";
@@ -11,10 +16,13 @@ export default function App() {
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       if (session) {
-        const role = localStorage.getItem("role") || session.user.user_metadata.role;
+        const role =
+          localStorage.getItem("role") || session.user.user_metadata.role;
         setUserRole(role);
       }
       setIsSessionLoaded(true);
@@ -22,19 +30,27 @@ export default function App() {
 
     checkSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        const role = localStorage.getItem("role") || session.user.user_metadata.role;
-        setUserRole(role);
-      } else {
-        setUserRole(null);
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (event, session) => {
+        if (session) {
+          const role =
+            localStorage.getItem("role") || session.user.user_metadata.role;
+          setUserRole(role);
+        } else {
+          setUserRole(null);
+        }
       }
-    });
+    );
 
     return () => authListener.subscription.unsubscribe();
   }, []);
 
-  if (!isSessionLoaded) return <div>Loading...</div>;
+  if (!isSessionLoaded)
+    return (
+      <div className="flex justify-center items-center h-12">
+        <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-blue-500"></div>
+      </div>
+    );
 
   return (
     <ConfirmationProvider>
@@ -46,7 +62,9 @@ export default function App() {
           />
           <Route
             path="/*"
-            element={userRole ? <Home role={userRole} /> : <Navigate to="/login" />}
+            element={
+              userRole ? <Home role={userRole} /> : <Navigate to="/login" />
+            }
           />
         </Routes>
       </Router>
