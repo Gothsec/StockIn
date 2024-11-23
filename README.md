@@ -5,7 +5,7 @@ Login page
 ![Login](https://github.com/user-attachments/assets/34bdba52-4dbe-4a9b-ab4b-7d87eeb60c97)
 
 Dashboard page
-![Dashboard](https://github.com/user-attachments/assets/f0d5ac21-7658-4d1d-b92a-8c5380403f38)
+![Dashboard](https://github.com/user-attachments/assets/b23beb3a-aa93-4467-bf51-7f66da2eb47c)
 
 Products page
 ![Products](https://github.com/user-attachments/assets/2139c785-97a1-4ed8-bb01-186f6e1dc5ff)
