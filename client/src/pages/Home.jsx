@@ -5,6 +5,7 @@ import SuppliersPage from "../pages/Supplier";
 import Dashboard from "../pages/Dashboard";
 import WarehousesPage from "../pages/Warehouse";
 import MovesPage from "../pages/Moves";
+import EmployeesPage from "../pages/Employees";
 import NotFound from "../pages/NotFound";
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
 
   const role = localStorage.getItem("role");
 
-  const validPaths = ["/dashboard", "/productos", "/movimientos", "/proveedores", "/bodegas"];
+  const validPaths = ["/dashboard", "/productos", "/movimientos", "/proveedores", "/bodegas", "/empleados"];
   const showNav = validPaths.includes(location.pathname);
 
   return (
@@ -42,6 +43,7 @@ export default function Home() {
           <Route path="/movimientos" element={<MovesPage />} />
           <Route path="/proveedores" element={<SuppliersPage />} />
           <Route path="/bodegas" element={<WarehousesPage />} />
+          <Route path="/empleados" element={<EmployeesPage />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
