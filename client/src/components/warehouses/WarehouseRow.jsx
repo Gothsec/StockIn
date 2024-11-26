@@ -1,16 +1,13 @@
-// Propósito: Nos permite mostrar una tabla de bodegas y gestionar sus acciones
-
+import { useState, useContext } from "react";
 import supabase from "../../utils/supabase";
-import { useState } from "react";
 import { ModalWarehouse } from "./ModalWarehouse";
 import ConfirmationModal from "./ConfirmationModal";
-import { useContext } from "react";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 import InfoIcon from "../../assets/InfoIcon";
 import EditIcon from "../../assets/EditIcon";
 import DeleteIcon from "../../assets/DeleteIcon";
 
-export default function WarehouseRow({
+export default function WarehouseRow ({
   name,
   responsible,
   cant_actual,
@@ -28,6 +25,10 @@ export default function WarehouseRow({
     option: "",
   });
 
+  const [validateElimination, setValidateElimination] = useState(false);
+  const [countAsociateProducts, setCountAsociateProducts] = useState(0);
+  const [validationCompleted, setValidationCompleted] = useState(false);
+
   const abrirCerrarModal = (titleModal, warehouseId, option) => {
     setModalProps({
       titleModal,
@@ -35,6 +36,38 @@ export default function WarehouseRow({
       option,
     });
     setWindowsModal(!windowsModal);
+  };
+
+  const validationDelete = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("warehouse_product")
+        .select("*")
+        .eq("id_warehouse", id)
+        .gt("stock", 0);
+
+      if (error) {
+        console.error("Error al validar la eliminación de la bodega: ", error);
+        return { isValid: false, count: 0 };
+      }
+
+      if (data.length > 0) {
+        return { isValid: false, count: data.length };
+      }
+      return { isValid: true, count: 0 };
+    } catch (err) {
+      console.error("Error en la validación:", err);
+      return { isValid: false, count: 0 };
+    }
+  };
+
+  const confirmDelete = async () => {
+    const result = await validationDelete();
+
+    setValidateElimination(result.isValid);
+    setCountAsociateProducts(result.count);
+    setValidationCompleted(true);
+    setConfirmModalOpen(true); // Solo abre el modal después de la validación
   };
 
   const handleDelete = async () => {
@@ -57,11 +90,7 @@ export default function WarehouseRow({
     } catch (error) {
       console.error("Error al eliminar la bodega:", error);
     }
-  };
-
-  const confirmDelete = () => {
-    handleDelete();
-    setConfirmModalOpen(false);
+    setConfirmModalOpen(false); // Cierra el modal al finalizar
   };
 
   return (
@@ -85,7 +114,7 @@ export default function WarehouseRow({
           </button>
           <button
             className="text-red-400 px-3 rounded-lg flex items-center hover:text-red-600 transition-all duration-300 ease"
-            onClick={() => setConfirmModalOpen(true)}
+            onClick={confirmDelete}
           >
             <DeleteIcon />
           </button>
@@ -104,11 +133,13 @@ export default function WarehouseRow({
       )}
 
       <ConfirmationModal
-        isOpen={confirmModalOpen}
+        isOpen={confirmModalOpen && validationCompleted}
         onClose={() => setConfirmModalOpen(false)}
-        onConfirm={confirmDelete}
+        onConfirm={handleDelete}
         warehouseName={name}
+        type={validateElimination}
+        countAsociateProducts={countAsociateProducts}
       />
     </>
   );
-}
+};
