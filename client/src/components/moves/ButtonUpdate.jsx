@@ -100,7 +100,7 @@ export default function ButtonUpdate({
             return false;
           }
           // restablecer el stock anterior
-          const stock = reset(data.stock, quantityMoveOld, changeType, moveUpdated.type);
+          const stock = reset(data.stock, quantityMoveOld);
           // verificar el stock actual
           let quantity = changeQuantity ? moveUpdated.quantity : quantityMoveOld;
           if (stock < quantity) {
@@ -138,7 +138,7 @@ export default function ButtonUpdate({
           }
 
           // restableciendo el stock anterior
-          const stock = reset(Number(data.stock), Number(quantityMoveOld));
+          const stock = reset(data.stock, quantityMoveOld);
           // verificando el stock actual
           if (stock < moveUpdated.quantity) {
             showNotification(
@@ -152,7 +152,7 @@ export default function ButtonUpdate({
       }
     }
 
-    if (changeProduct == true || changeWarehouse == true) {
+    if (changeProduct || changeWarehouse) {
       if (changeType) {
         if (moveUpdated.type == "Salida") {
           product = changeProduct ? moveUpdated.product_id : productMoveOld;
@@ -196,8 +196,8 @@ export default function ButtonUpdate({
           const {data, error} = await supabase
             .from("warehouse_product")
             .select("stock")
-            .eq("id_warehouse", warehouseMoveOld)
-            .eq("id_product", productMoveOld)
+            .eq("id_warehouse", warehouse)
+            .eq("id_product", product)
             .single();
 
             if (error) {
@@ -217,9 +217,6 @@ export default function ButtonUpdate({
                 "No hay suficiente stock en la bodega para realizar la operación.",
                 "error"
               );
-              console.log("product: ", product);
-              console.log("quantity: ", quantity);
-              console.log("warehouse: ", warehouse);
               return false;
             }
             return true;
@@ -227,6 +224,130 @@ export default function ButtonUpdate({
       }
     }
     return true;
+  }
+
+  const changeIndirect = async () => {
+    if (changeProduct || changeWarehouse || changeType  || changeQuantity ) { 
+
+      // tenemos que restablecer la cantidad de producto anterior?
+        const {data: dataProduct, error: errorProduct} = await supabase
+          .from("product")
+          .select("quantity")
+          .eq("id", productMoveOld)
+          .single();
+
+        if (errorProduct) {
+          console.log(
+            "Error al obtener la cantidad de producto anterior (changeIndirect - product) : ",
+            errorProduct
+          );
+          showNotification(
+            "Error al obtener la cantidad de producto anterior. ",
+            "error"
+          );
+          return false;
+        }
+        // restablecer la cantidad anterior
+        const stockOld = reset(dataProduct.quantity, quantityMoveOld);
+
+        const {errorUpdateProduct} = await supabase
+          .from("product")
+          .update({quantity: stockOld})
+          .eq("id", productMoveOld);
+
+        if (errorUpdateProduct) {
+          console.log(
+            "Error al actualizar la cantidad de producto anterior (changeIndirect - product) : ",
+            errorUpdateProduct
+          );
+          showNotification(
+            "Error al actualizar la cantidad de producto anterior. ",
+            "error"
+          );
+          return false;
+        }
+      
+      // Restableciendo bodega anterior?
+
+        const {data: dataWarehouse, error: errorWarehouse} = await supabase
+          .from("warehouse")
+          .select("cant_actual")
+          .eq("id", warehouseMoveOld)
+          .single();
+
+        if (errorWarehouse) {
+          console.log(
+            "Error al obtener el stock de la bodega anterior (changeIndirect - warehouse) : ",
+            errorWarehouse
+          );
+          showNotification(
+            "Error al obtener el stock de la bodega anterior. ",
+            "error"
+          );
+          return false;
+        }
+        // restablecer la canttidad actual
+        const cant_actual_old = reset(dataWarehouse.cant_actual, quantityMoveOld);
+
+        const {errorUpdateWarehouse} = await supabase
+          .from("warehouse")
+          .update({cant_actual: cant_actual_old})
+          .eq("id", warehouseMoveOld);
+
+        if (errorUpdateWarehouse) {
+          console.log(
+            "Error al actualizar el stock de la bodega anterior (changeIndirect - warehouse) : ",
+            errorUpdateWarehouse
+          );
+          showNotification(
+            "Error al actualizar el stock de la bodega anterior. ",
+            "error"
+          );
+          return false;
+        }
+       
+    
+      // Modificando Warehouse
+      const {data: dataWarehouseProduct, error: errorWarehouseProduct} = await supabase
+        .from("warehouse_product")
+        .select("stock")
+        .eq("id_warehouse", warehouseMoveOld)
+        .eq("id_product", productMoveOld)
+        .single();
+
+      if (errorWarehouseProduct) {
+        console.log(
+          "Error al obtener el stock en la verificación de stock suficiente (changeIndirect - warehouse_product) : ",
+          errorWarehouseProduct
+        );
+        showNotification(
+          "Error al obtener stock en la verificación de stock suficiente. ",
+          "error"
+        );
+        return false;
+      }
+      // restablecer el stock anterior
+      const stock = reset(dataWarehouseProduct.stock, quantityMoveOld);
+
+      const {errorUpdateWarehouseProduct} = await supabase
+        .from("warehouse_product")
+        .update({stock: stock})
+        .eq("id_warehouse", warehouseMoveOld)
+        .eq("id_product", productMoveOld);
+
+      if (errorUpdateWarehouseProduct) {
+        console.log(
+          "Error al actualizar el stock en la verificación de stock suficiente (changeIndirect - warehouse_product) : ",
+          errorUpdateWarehouseProduct
+        );
+        showNotification(
+          "Error al actualizar stock en la verificación de stock suficiente. ",
+          "error"
+        );
+        return false;
+      }
+      return true;
+    }
   }
 
   const reset = (stock, quantity) => {
@@ -245,8 +366,8 @@ export default function ButtonUpdate({
     }
   }
   
-  const update = (stock, quantity, typeUpdate) => {
-    if(typeUpdate == "Entrada") {
+  const update = (stock, quantity) => {
+    if(moveUpdated.type == "Entrada") {
       return stock + quantity;
     } else {
       return stock - quantity;
@@ -256,8 +377,9 @@ export default function ButtonUpdate({
   const handleUpdateMove = async () => {
     const enoughStockValid = await enoughStock();
     const validateMoveValid = await validateMove();
+    const changeIndirectValid = await changeIndirect();
     
-    if (enoughStockValid && validateMoveValid) {
+    if (enoughStockValid && validateMoveValid && changeIndirectValid) {
       showNotification("Pasaron las validaciones.", "success");
     }
   };
