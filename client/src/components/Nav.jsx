@@ -27,6 +27,7 @@ const navItems = [
   { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Empleados", icon: <EmployeeIcon />, href: "/empleados" },
+];
 
 const handleLogout = async () => {
   const { error } = await supabase.auth.signOut();
