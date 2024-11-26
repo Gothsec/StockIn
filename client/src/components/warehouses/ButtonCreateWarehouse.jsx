@@ -16,25 +16,23 @@ export default function ButtonCreateWarehouse({
       !newWarehouse.name ||
       !newWarehouse.address ||
       !newWarehouse.responsible ||
-      newWarehouse.cant_max_product < 0
+      !newWarehouse.phone_number
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
-    // Validar que las cantidades sean números no negativos
-    if (newWarehouse.cant_max_product < 0) {
-      showNotification(
-        "La cantidad máxima debe ser mayor o igual a cero.",
-        "error"
-      );
+    // Validar que el número de teléfono sea un valor válido
+    if (!/^\d{10}$/.test(newWarehouse.phone_number)) { // Ejemplo de validación para un número de 10 dígitos
+      showNotification("El número de teléfono debe tener 10 dígitos.", "error");
       return false;
     }
 
     // Validar que el nombre de la bodega sea único (sin considerar mayúsculas/minúsculas)
     const { data: existingWarehouses, error } = await supabase
       .from("warehouse")
-      .select("name");
+      .select("name")
+      .eq("state", true);
 
     if (error) {
       console.error("Error al verificar nombres de bodega: ", error);

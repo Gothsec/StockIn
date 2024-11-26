@@ -78,7 +78,7 @@ export default function MovesPage() {
   return (
     <div className="flex max-h-screen overflow-hidden">
       <div className="py-6 px-10 w-full flex flex-col">
-        <header className="pb-8">
+        <header className="pb-4">
           <h1 className="font-bold text-4xl">Movimientos</h1>
           <div className="flex items-center mt-4">
             <select
@@ -101,7 +101,7 @@ export default function MovesPage() {
             />
             <button
               className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-4 hover:bg-blue-700 transition-all duration-300 ease"
-              onClick={() => abrirCerrarModal("Nuevo Movimiento", "", "create")}
+              onClick={() => abrirCerrarModal("Nuevo movimiento", "", "create")}
             >
               <AddIcon />
             </button>
@@ -118,9 +118,9 @@ export default function MovesPage() {
           <table className="w-full border-collapse relative">
             <thead>
               <tr className="bg-slate-200 sticky top-0 left-0">
-                <th className="py-2 text-left px-4">Nombre Producto</th>
-                <th className="py-2 text-left px-2">Cantidad</th>
-                <th className="py-2 text-center px-4">Tipo</th>
+                <th className="py-2 text-left px-4">Nombre producto</th>
+                <th className="py-2 text-center px-8">Cantidad</th>
+                <th className="py-2 text-center px-8">Tipo</th>
                 <th className="py-2 text-left px-4"></th>
               </tr>
             </thead>
@@ -145,7 +145,7 @@ export default function MovesPage() {
           open={windowsModal}
           onClose={() => setWindowsModal(false)}
           title={modalProps.titleModal}
-          orderId={modalProps.MoveId}
+          moveId={modalProps.MoveId}
           option={modalProps.option}
           onUpdate={fetchMoves}
         />

@@ -1,9 +1,8 @@
-// Propósito: Nos permite actualizar una Bodega existente
-import supabase from "../../utils/supabase";
 import { useContext } from "react";
+import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
 
-export default function ButtonUpdateWarehouse({
+export default function ButtonUpdate({
   warehouseUpdated,
   warehouseId,
   onClose,
@@ -17,16 +16,24 @@ export default function ButtonUpdateWarehouse({
       !warehouseUpdated.name ||
       !warehouseUpdated.address ||
       !warehouseUpdated.responsible ||
-      warehouseUpdated.cant_max_product < 0
+      !warehouseUpdated.percentage_used
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
     }
 
-    // Validar que las cantidades sean números no negativos
-    if (warehouseUpdated.cant_max_product < 0) {
+    // Validar que el porcentaje de uso sea número no negativo o mayor a 100
+    if (warehouseUpdated.percentage_used < 0) {
       showNotification(
-        "La cantidad máxima debe ser mayor o igual a cero.",
+        "El porcentaje de uso debe ser mayor o igual a 0.",
+        "error"
+      );
+      return false;
+    }
+
+    if (warehouseUpdated.percentage_used > 100) {
+      showNotification(
+        "El porcentaje de uso debe ser menor o igual a 100.",
         "error"
       );
       return false;
@@ -36,7 +43,8 @@ export default function ButtonUpdateWarehouse({
     const { data: existingWarehouses, error } = await supabase
       .from("warehouse")
       .select("name")
-      .neq("id", warehouseId); // Asegurarse de que no se compare con la bodega que se está actualizando
+      .neq("id", warehouseId) // Asegurarse de que no se compare con la bodega que se está actualizando
+      .eq("state", true);
 
     if (error) {
       console.error("Error al verificar nombres de bodega: ", error);
@@ -56,8 +64,8 @@ export default function ButtonUpdateWarehouse({
     return true;
   };
 
+  // Función de actualización de la bodega
   const handleUpdateWarehouse = async () => {
-    // Validamos los datos antes de enviarlos a la base de datos
     if (!(await validateWarehouseUpdate())) return;
 
     try {
@@ -69,13 +77,15 @@ export default function ButtonUpdateWarehouse({
       if (error) {
         console.error("Error: ", error);
         showNotification("Error al actualizar la bodega", "error");
-      } else {
-        showNotification("Bodega actualizada correctamente", "success");
-        onClose();
-        onUpdate();
+        return;
       }
+
+      showNotification("Bodega actualizada correctamente", "success");
+      onClose(); // Cerrar el modal
+      onUpdate(); // Actualizar la lista de bodegas
     } catch (error) {
       console.error("Error: ", error);
+      showNotification("Hubo un error al actualizar la bodega", "error");
     }
   };
 

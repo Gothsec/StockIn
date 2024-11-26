@@ -85,11 +85,11 @@ export default function ProductsPage() {
         </div>
 
         <div className="flex justify-between items-center pb-4">
-          <div className="space-x-4">
+          <div className="">
             <button
-              className={`py-1 px-3 rounded-lg border transition-colors duration-300 ${
+              className={`py-1 px-3 rounded-tr-none rounded-br-none rounded-lg border transition-colors duration-300 border-blue-500 ${
                 showLowStock
-                  ? "bg-white text-blue-500 border-blue-500"
+                  ? "bg-white text-blue-500"
                   : "bg-blue-500 text-white"
               }`}
               onClick={() => setShowLowStock(false)}
@@ -97,26 +97,26 @@ export default function ProductsPage() {
               Stock completo
             </button>
             <button
-              className={`py-1 px-3 rounded-lg border transition-colors duration-300 ${
+              className={`py-1 px-3 rounded-tl-none rounded-bl-none rounded-lg border transition-colors duration-300  border-blue-500 ${
                 showLowStock
                   ? "bg-blue-500 text-white"
-                  : "bg-white text-blue-500 border-blue-500"
+                  : "bg-white text-blue-500"
               }`}
               onClick={() => setShowLowStock(true)}
             >
               Bajos en stock
             </button>
           </div>
-
+  
           <input
-            className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-9"
+            className="flex-auto border border-gray-400 h-9 rounded-lg pl-3 ml-4"
             type="search"
             placeholder="Buscar producto"
             onChange={(e) => setSearchProduct(e.target.value)}
           />
           <button
-            className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-9 hover:bg-blue-700 transition-all duration-300 ease"
-            onClick={() => abrirCerrarModal("Nuevo Producto", "", "create")}
+            className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-4 hover:bg-blue-700 transition-all duration-300 ease"
+            onClick={() => abrirCerrarModal("Nuevo producto", "", "create")}
           >
             <AddIcon />
           </button>
@@ -133,7 +133,7 @@ export default function ProductsPage() {
             <thead>
               <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre</th>
-                <th className="py-2 text-center px-40">Stock Actual</th>
+                <th className="py-2 text-center px-40">Stock actual</th>
                 <th className="py-2 text-center px-2">Marca</th>
                 <th className="py-2 text-center px-10"></th>
               </tr>
