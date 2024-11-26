@@ -73,7 +73,7 @@ export default function EmployeesPage() {
             onChange={(e) => setSearchName(e.target.value)}
           />
 
-          {/* Botón para añadir empleado */}
+          {/* Botón para añadir empleado. */}
           <button
             className="flex items-center justify-center bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-9 ml-4 hover:bg-blue-700 transition-all duration-300 ease"
             onClick={() => toggleModal("Nuevo empleado", "", "create")}
