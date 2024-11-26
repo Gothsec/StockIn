@@ -21,7 +21,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     user_id: "",
   });
 
-  const [quantityMove, setQuantityMove] = useState(null);
+  const [quantityMoveOld, setQuantityMoveOld] = useState(null);
   const [typeMoveOld, setTypeMoveOld] = useState(null);
   const [warehouseMoveOld, setWarehouseMoveOld] = useState(null);
   const [productMoveOld, setProductMoveOld] = useState(null);
@@ -158,7 +158,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
         return;
       } else {
         setMoveInfo(data);
-        setQuantityMove(data.quantity);
+        setQuantityMoveOld(data.quantity);
         setManagerMove(data.user_id);
         setTypeMoveOld(data.type);
         setWarehouseMoveOld(data.warehouse_id);
@@ -416,7 +416,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
               onClose={onClose}
               onUpdate={onUpdate}
               percentage_used={percentage_used}
-              quantityMove={quantityMove}
+              quantityMoveOld={quantityMoveOld}
               typeMoveOld={typeMoveOld}
               warehouseMoveOld={warehouseMoveOld}
               productMoveOld={productMoveOld}
