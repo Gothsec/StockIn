@@ -11,7 +11,6 @@ export default function Home() {
   const location = useLocation();
 
   const role = localStorage.getItem("role");
-
   const validPaths = ["/dashboard", "/productos", "/movimientos", "/proveedores", "/bodegas"];
   const showNav = validPaths.includes(location.pathname);
 
@@ -42,7 +41,6 @@ export default function Home() {
           <Route path="/movimientos" element={<MovesPage />} />
           <Route path="/proveedores" element={<SuppliersPage />} />
           <Route path="/bodegas" element={<WarehousesPage />} />
-
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
