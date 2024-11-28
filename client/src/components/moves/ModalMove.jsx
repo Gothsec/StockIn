@@ -6,6 +6,7 @@ import supabase from "../../utils/supabase";
 export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   const [productsList, setProductsList] = useState([]);
   const [warehouseList, setWarehouseList] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
   const id_user = localStorage.getItem("id_user");
   const tipos = ["Entrada", "Salida"];
   const [percentage_used, setPercentage_used] = useState(null);
@@ -90,6 +91,10 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
       console.error("Error en getWarehousesWithCapacity: ", error);
     }
   };
+
+  const filteredProducts = productsList.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   // Función para obtener bodegas con stock de un producto específico
   const getWarehousesWithProductStock = async () => {
@@ -223,13 +228,31 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
 
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Select para el producto */}
+              {/* Input para filtrar los productos en el select */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="search-product"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Filtrar Producto
+                </label>
+                <input
+                  id="search-product"
+                  type="text"
+                  placeholder="Escribe para buscar..."
+                  className="mt-1 p-2 border rounded-md"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+
+              {/* Select para producto */}
               <div className="flex flex-col">
                 <label
                   htmlFor="product"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Producto
+                  Producto filtrado
                 </label>
                 <select
                   name="product_id"
@@ -243,7 +266,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
                   required={option === "create" || option === "update"}
                 >
                   <option value="">Selecciona un producto</option>
-                  {productsList.map((product) => (
+                  {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.name}
                     </option>
