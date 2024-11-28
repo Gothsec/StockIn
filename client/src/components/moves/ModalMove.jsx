@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreate";
 import ButtonUpdate from "./ButtonUpdate";
 import supabase from "../../utils/supabase";
+import { capitalizeFirstLetter } from "../../utils/textUtils";
 
 export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   const [productsList, setProductsList] = useState([]);
@@ -417,7 +418,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
                 readOnly={option === "info"}
                 value={MoveInfo.description}
                 onChange={(e) =>
-                  setMoveInfo({ ...MoveInfo, description: e.target.value })
+                  setMoveInfo({ ...MoveInfo, description: capitalizeFirstLetter(e.target.value) })
                 }
                 required={option === "create" || option === "update"}
               ></textarea>
