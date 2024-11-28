@@ -11,6 +11,7 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
   const [percentage_used, setPercentage_used] = useState(null);
   const [managerMove, setManagerMove] = useState("");
   const [userNameMove, setUserNameMove] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [MoveInfo, setMoveInfo] = useState({
     quantity: "",
     type: "",
@@ -215,6 +216,10 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
     user_id: id_user,
   };
 
+   const filteredProducts = productsList.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
       {option !== "info" ? (
@@ -223,13 +228,32 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
 
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {/* Select para el producto */}
+              
+              {/* Input para filtrar los productos en el select */}
+              <div className="flex flex-col">
+                <label
+                  htmlFor="search-product"
+                  className="text-sm font-medium text-gray-700"
+                >
+                  Filtrar Producto
+                </label>
+                <input
+                  id="search-product"
+                  type="text"
+                  placeholder="Escribe para buscar..."
+                  className="mt-1 p-2 border rounded-md"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+
+              {/* Select para producto */}
               <div className="flex flex-col">
                 <label
                   htmlFor="product"
                   className="text-sm font-medium text-gray-700"
                 >
-                  Producto
+                  Producto filtrado
                 </label>
                 <select
                   name="product_id"
@@ -243,13 +267,14 @@ export function ModalMove({ title, option, onClose, moveId, onUpdate }) {
                   required={option === "create" || option === "update"}
                 >
                   <option value="">Selecciona un producto</option>
-                  {productsList.map((product) => (
+                  {filteredProducts.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.name}
                     </option>
                   ))}
                 </select>
               </div>
+            
 
               {/* Input para la cantidad */}
               <div className="flex flex-col">
