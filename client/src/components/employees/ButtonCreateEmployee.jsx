@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
+import { signUpWihtEmail, updateUser } from "../../services/auth";
 
 export default function ButtonCreateEmployee({
   newEmployee,
@@ -57,36 +58,29 @@ export default function ButtonCreateEmployee({
     // Validamos los datos antes de enviarlos a la base de datos
     if (!(await validateEmployee())) return;
 
-    // Preparamos los datos para la inserción sin incluir el campo "id"
-    const { name, email, phone_number, user_type, state } = newEmployee;
-    
-    const newEmployeeData = {
-      name,
-      email,
-      phone_number,
-      user_type,
-      state,
-    };
+    let email = 'empleado2@gmail.com';
+    let password = 'empleado2';
+    const result = await signUpWihtEmail({email, password})
+    console.log(result)
+    if  (result){
+      const { data: { user } } = await supabase.auth.getUser()
+      const name = newEmployee.name;
+      const phone_number = newEmployee.phone_number;
+      const user_type = 'employee';
+      const state = true;
+      const data = {
+        id: user.id,
+        name: name,
+        phone_number: phone_number,
+        email: email,
+        password: password,
+        user_type: user_type,
+        state: state,
+        user_id: user.id
+      };
+      await updateUser(data);
+    }  
 
-    try {
-      // Insertamos el nuevo empleado, sin enviar el campo "id" ya que es auto-generado
-      const { error } = await supabase
-        .from("user")
-        .insert([newEmployeeData])
-        .single();
-
-      if (error) {
-        console.error("Error al crear el usuario:", error.message);
-        showNotification(`Error al crear el usuario: ${error.message}`, "error");
-      } else {
-        showNotification("El usuario fue creado correctamente", "success");
-        onClose(); // Cerramos el modal
-        onUpdate(); // Actualizamos el listado o la vista donde se necesita
-      }
-    } catch (error) {
-      console.error("Error al crear el usuario:", error);
-      showNotification("Hubo un error al crear el usuario", "error");
-    }
   };
 
   return (

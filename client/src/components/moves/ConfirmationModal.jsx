@@ -7,7 +7,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, orderName }) => {
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <h2 className="text-lg font-semibold">
-          ¿Estás seguro de eliminar este movimiento "{orderName}"?
+          ¿Estás seguro de eliminar este movimiento?
         </h2>
         <div className="flex justify-end mt-4">
           <button

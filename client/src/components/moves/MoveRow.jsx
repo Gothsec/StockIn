@@ -37,25 +37,175 @@ export default function MoveRow({
     setWindowsModal(!windowsModal);
   };
 
-  const handleDelete = async () => {
-    try {
-      const { error } = await supabase
-        .from("move")
-        .update({ state: false })
-        .eq("id", id);
+  const reset = (type, stock, cantidad) => {
+    if (type === "Entrada") {
+      console.log("reseteo:", stock - cantidad);
+      return stock - cantidad;
+    } else {
+      console.log("reseteo:", stock + cantidad);
+      return stock + cantidad;
+    }
+  };
 
-      if (error) {
-        showNotification("Error al eliminar el pedido", "error");
-        console.error("Error eliminando el pedido:", error.message);
-      } else {
-        showNotification(
-          "El pedido ha sido eliminado correctamente",
-          "success"
+  const resetProduct = async (product, type, cantidad) => {
+    const { data: dataProduct, error: errorProduct } = await supabase
+      .from("product")
+      .select("quantity")
+      .eq("id", product)
+      .single();
+
+    if (errorProduct) {
+      console.error(
+        "Error al obtener la cantidad del producto: ",
+        errorProduct
+      );
+      return false;
+    } else {
+      // actualizamos la cantidad del producto
+      let stock = reset(type, Number(dataProduct.quantity), Number(cantidad));
+      const { errorUpdateProduct } = await supabase
+        .from("product")
+        .update({ quantity: stock })
+        .eq("id", product);
+
+      if (errorUpdateProduct) {
+        console.error(
+          "Error al actualizar la cantidad del producto: ",
+          errorUpdateProduct
         );
-        onUpdate();
+        return false;
       }
-    } catch (error) {
-      console.error("Error al eliminar el pedido:", error);
+    }
+    return true;
+  };
+  const resetWarehouse = async (warehouse, type, cantidad) => {
+    const { data: dataWarehouse, error: errorWarehouse } = await supabase
+      .from("warehouse")
+      .select("cant_actual")
+      .eq("id", warehouse)
+      .single();
+
+    if (errorWarehouse) {
+      console.error(
+        "Error al consultar la cantidad actual de la bodega: ",
+        errorWarehouse
+      );
+      return false;
+    } else {
+      let cant_actual_up = reset(
+        type,
+        Number(dataWarehouse.cant_actual),
+        Number(cantidad)
+      );
+      const { errorUpdateWarehouse } = await supabase
+        .from("warehouse")
+        .update({ cant_actual: cant_actual_up })
+        .eq("id", warehouse);
+      if (errorUpdateWarehouse) {
+        console.error(
+          "Error al actualizar la cantidad actual de la bodega: ",
+          errorUpdateWarehouse
+        );
+        return false;
+      }
+    }
+    return true;
+  };
+  const resetWarehouseProduct = async (warehouse, product, type, cantidad) => {
+    const { data: dataWarehouseProduct, error: errorWarehouseProduct } =
+      await supabase
+        .from("warehouse_product")
+        .select("stock")
+        .eq("id_warehouse", warehouse)
+        .eq("id_product", product)
+        .single();
+    if (errorWarehouseProduct) {
+      console.error(
+        "Error al consultar la cantidad en stock del producto en la bodega: ",
+        errorWarehouseProduct
+      );
+      return false;
+    } else {
+      let stock_up = reset(
+        type,
+        Number(dataWarehouseProduct.stock),
+        Number(cantidad),
+      );
+      const { errorUpdateWarehouseProduct } = await supabase
+        .from("warehouse_product")
+        .update({ stock: stock_up })
+        .eq("id_warehouse", warehouse)
+        .eq("id_product", product);
+      if (errorUpdateWarehouseProduct) {
+        console.error(
+          "Error al actualizar la cantidad en stock del producto en la bodega: ",
+          errorUpdateWarehouseProduct
+        );
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleDelete = async () => {
+
+    const { data, error } = await supabase
+      .from("move")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error(
+        "Error al consultar la información para eliminar el movimiento: ",
+        error
+      );
+      showNotification("Error al eliminar el movimiento", "error");
+    } else {
+      let product = data.product_id;
+      let warehouse = data.warehouse_id;
+      let type = data.type;
+      let quantity = data.quantity;
+
+      // actualizamos la cantidad del producto
+      const isProductReset = await resetProduct(
+        Number(product),
+        type,
+        Number(quantity)
+      );
+      // actualizamos la cantidad actual de la bodega
+      const isWarehouseReset = await resetWarehouse(
+        Number(warehouse),
+        type,
+        Number(quantity)
+      );
+      // actualizamos la cantidad en stock del producto en la bodega
+      const isWarehouseProductReset = await resetWarehouseProduct(
+        Number(warehouse),
+        Number(product),
+        type,
+        Number(quantity)
+      );
+      // eliminamos el movimiento
+      if (isProductReset && isWarehouseReset && isWarehouseProductReset) {
+        const { error } = await supabase
+          .from("move")
+          .update({ state: false })          .eq("id", id);
+        if (error) {
+          console.error("Error al eliminar el pedido:", error.message);
+          showNotification("Error al eliminar el pedido", "error");
+        } else {
+          console.log(isProductReset, isWarehouseReset, isWarehouseProductReset); 
+          showNotification(
+            "El movimiento ha sido eliminado correctamente",
+            "success"
+          );
+          onUpdate();
+        }
+      } else {
+          console.error("Error al eliminar el pedido - validaciones 3:", error.message);
+          showNotification("Error al eliminar el pedido", "error");
+      }
     }
   };
 
