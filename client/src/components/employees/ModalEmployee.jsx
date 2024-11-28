@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateEmployee";
 import ButtonUpdate from "./ButtonUpdateEmployee";
 import supabase from "../../utils/supabase";
+import { capitalizeFirstLetter } from "../../utils/textUtils";
 
 export function ModalEmployee({
   title,
@@ -72,7 +73,7 @@ export function ModalEmployee({
                 className="mt-1 p-2 border rounded-md"
                 value={employeeInfo.name}
                 onChange={(e) =>
-                  setEmployeeInfo({ ...employeeInfo, name: e.target.value })
+                  setEmployeeInfo({ ...employeeInfo, name: capitalizeFirstLetter(e.target.value) })
                 }
               />
             </div>
@@ -120,7 +121,7 @@ export function ModalEmployee({
                 className="mt-1 p-2 border rounded-md"
                 value={employeeInfo.user_type}
                 onChange={(e) =>
-                  setEmployeeInfo({ ...employeeInfo, user_type: e.target.value })
+                  setEmployeeInfo({ ...employeeInfo, user_type: capitalizeFirstLetter(e.target.value) })
                 }
               />
             </div>
