@@ -225,8 +225,10 @@ export default function ButtonUpdate({
   };
 
   return (
-    <button onClick={handleUpdateMove}>
-      Actualizar
+    <button 
+    className="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 focus:outline-none"
+    onClick={handleUpdateMove}>
+      Modificar
     </button>
   );
 }
