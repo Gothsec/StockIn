@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreate";
 import ButtonUpdate from "./ButtonUpdate";
 import supabase from "../../utils/supabase";
+import { capitalizeFirstLetter } from "../../utils/textUtils";
 
 export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
   const [productInfo, setProductInfo] = useState({
@@ -117,7 +118,7 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
                 className="w-full mt-1 p-2 border border-gray-300 rounded"
                 value={productInfo.name}
                 onChange={(e) =>
-                  setProductInfo({ ...productInfo, name: e.target.value })
+                  setProductInfo({ ...productInfo, name: capitalizeFirstLetter(e.target.value) })
                 }
                 readOnly={option === "info"}
                 required={option === "create" || option === "update"}
@@ -233,7 +234,7 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
                 className="w-full mt-1 p-2 border border-gray-300 rounded"
                 value={productInfo.brand}
                 onChange={(e) =>
-                  setProductInfo({ ...productInfo, brand: e.target.value })
+                  setProductInfo({ ...productInfo, brand: capitalizeFirstLetter(e.target.value) })
                 }
                 required={option === "create" || option === "update"}
                 readOnly={option === "info"}
@@ -251,7 +252,7 @@ export function ModalProduct({ title, option, onClose, productId, onUpdate }) {
                 className="w-full mt-1 p-2 border border-gray-300 rounded"
                 value={productInfo.content}
                 onChange={(e) =>
-                  setProductInfo({ ...productInfo, content: e.target.value })
+                  setProductInfo({ ...productInfo, content: capitalizeFirstLetter(e.target.value) })
                 }
                 required={option === "create" || option === "update"}
                 readOnly={option === "info"}

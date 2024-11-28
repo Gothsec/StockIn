@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateWarehouse";
 import ButtonUpdate from "./ButtonUpdateWarehouse";
 import supabase from "../../utils/supabase";
+import { capitalizeFirstLetter } from "../../utils/textUtils";
 
 export function ModalWarehouse({
   title,
@@ -94,7 +95,7 @@ export function ModalWarehouse({
                 readOnly={option === "info"}
                 value={warehouseInfo.name}
                 onChange={(e) =>
-                  setWarehouseInfo({ ...warehouseInfo, name: e.target.value })
+                  setWarehouseInfo({ ...warehouseInfo, name: capitalizeFirstLetter(e.target.value) })
                 }
                 required={option === "create" || option === "update"}
               />
@@ -113,7 +114,7 @@ export function ModalWarehouse({
                 readOnly={option === "info"}
                 value={warehouseInfo.address}
                 onChange={(e) =>
-                  setWarehouseInfo({ ...warehouseInfo, address: e.target.value })
+                  setWarehouseInfo({ ...warehouseInfo, address: capitalizeFirstLetter(e.target.value) })
                 }
                 required={option === "create" || option === "update"}
               />

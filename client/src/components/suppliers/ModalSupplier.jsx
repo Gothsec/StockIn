@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import ButtonCreate from "./ButtonCreateSupplier";
 import ButtonUpdate from "./ButtonUpdateSupplier";
 import supabase from "../../utils/supabase";
+import { capitalizeFirstLetter } from "../../utils/textUtils";
 
 export function ModalSupplier({
   title,
@@ -348,7 +349,7 @@ export function ModalSupplier({
                   readOnly={option === "info"}
                   value={supplierInfo.name}
                   onChange={(e) =>
-                    setSupplierInfo({ ...supplierInfo, name: e.target.value })
+                    setSupplierInfo({ ...supplierInfo, name: capitalizeFirstLetter(e.target.value) })
                   }
                   required={option === "create" || option === "update"}
                 />
@@ -418,7 +419,7 @@ export function ModalSupplier({
                   onChange={(e) =>
                     setSupplierInfo({
                       ...supplierInfo,
-                      address: e.target.value,
+                      address: capitalizeFirstLetter(e.target.value),
                     })
                   }
                   required={option === "create" || option === "update"}
