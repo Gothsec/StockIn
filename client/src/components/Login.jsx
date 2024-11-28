@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import supabase from "../utils/supabase";
-import Home from "../pages/Home";
 import PasswordRecoveryDialog from "../components/ForgotPassword";
 import Banner from "../../public/login-banner.png";
 
@@ -8,7 +7,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [loginSuccessful, setLoginSuccessful] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -62,7 +60,7 @@ export default function Login() {
           localStorage.setItem("id_user", id_user);
         }
 
-        setLoginSuccessful(true);
+        navigate("/")
         setErrorMessage("");
       }
     }
@@ -70,9 +68,7 @@ export default function Login() {
 
   return (
     <>
-      {loginSuccessful ? (
-        <Home />
-      ) : (
+      (
         <div className="flex px-4 items-center justify-center min-h-screen bg-gray-100">
           <div className="bg-white rounded-3xl shadow-lg w-full max-w-5xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
@@ -200,7 +196,7 @@ export default function Login() {
             </div>
           </div>
         </div>
-      )}
+      )
 
       {isDialogOpen && (
         <PasswordRecoveryDialog onClose={() => setIsDialogOpen(false)} />
