@@ -64,7 +64,10 @@ export function ModalEmployee({
           <h2 className="text-xl font-semibold text-gray-800 mb-6">{title}</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <div className="flex flex-col">
-              <label htmlFor="name" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="name"
+                className="text-sm font-medium text-gray-700"
+              >
                 Nombre
               </label>
               <input
@@ -73,12 +76,18 @@ export function ModalEmployee({
                 className="mt-1 p-2 border rounded-md"
                 value={employeeInfo.name}
                 onChange={(e) =>
-                  setEmployeeInfo({ ...employeeInfo, name: capitalizeFirstLetter(e.target.value) })
+                  setEmployeeInfo({
+                    ...employeeInfo,
+                    name: capitalizeFirstLetter(e.target.value),
+                  })
                 }
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="email" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-gray-700"
+              >
                 Correo Electrónico
               </label>
               <input
@@ -102,6 +111,7 @@ export function ModalEmployee({
                 id="phone_number"
                 type="tel"
                 className="mt-1 p-2 border rounded-md"
+                maxLength={10}
                 value={employeeInfo.phone_number}
                 onChange={(e) =>
                   setEmployeeInfo({
@@ -112,21 +122,33 @@ export function ModalEmployee({
               />
             </div>
             <div className="flex flex-col">
-              <label htmlFor="user_type" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="user_type"
+                className="text-sm font-medium text-gray-700"
+              >
                 Tipo de usuario
               </label>
-              <input
+              <select
                 id="user_type"
-                type="text"
                 className="mt-1 p-2 border rounded-md"
                 value={employeeInfo.user_type}
                 onChange={(e) =>
-                  setEmployeeInfo({ ...employeeInfo, user_type: capitalizeFirstLetter(e.target.value) })
+                  setEmployeeInfo({
+                    ...employeeInfo,
+                    user_type: e.target.value,
+                  })
                 }
-              />
+              >
+                <option value="">Selecciona un tipo de usuario</option>
+                <option value="Administrador">Administrador</option>
+                <option value="Empleado">Empleado</option>
+              </select>
             </div>
             <div className="flex flex-col">
-              <label htmlFor="state" className="text-sm font-medium text-gray-700">
+              <label
+                htmlFor="state"
+                className="text-sm font-medium text-gray-700"
+              >
                 Estado
               </label>
               <select
