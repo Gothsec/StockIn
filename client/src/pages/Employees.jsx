@@ -72,8 +72,8 @@ export default function EmployeesPage() {
           <input
             className="flex-auto border border-gray-400 h-9 rounded-lg pl-3"
             type="search"
-            placeholder="Buscar por empleado"
-            aria-label="Buscar por empleado"
+            placeholder="Buscar por nombre"
+            aria-label="Buscar por nombre"
             onChange={(e) => setSearchName(e.target.value)}
           />
 
@@ -83,7 +83,6 @@ export default function EmployeesPage() {
             onClick={() => toggleModal("Nuevo empleado", "", "create")}
           >
             <AddIcon />
-            <span className="ml-2">Añadir</span>
           </button>
         </header>
 
@@ -102,11 +101,10 @@ export default function EmployeesPage() {
           <table className="w-full border-collapse relative">
             <thead>
               <tr className="bg-slate-200 sticky top-0 left-0">
-                <th className="py-2 text-left px-2">Nombre</th>
-                <th className="py-2 text-left px-2">Email</th>
-                <th className="py-2 text-left px-2">Teléfono</th>
-                <th className="py-2 text-left px-2">Tipo de usuario</th>
-                <th className="py-2 text-left px-4"></th>
+                <th className="py-2 text-left px-4">Nombre</th>
+                <th className="py-2 text-center px-4">Email</th>
+                <th className="py-2 text-center px-4">Teléfono</th>
+                <th className="py-2 text-center px-4"></th>
               </tr>
             </thead>
             <tbody>

@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
-import { signUpWihtEmail, updateUser } from "../../services/auth";
+import { signUpWihtEmail, insertUser } from "../../services/auth";
 
 export default function ButtonCreateEmployee({
   newEmployee,
@@ -16,8 +16,8 @@ export default function ButtonCreateEmployee({
     if (
       !newEmployee.name ||
       !newEmployee.email ||
-      !newEmployee.phone_number ||
-      !newEmployee.user_type
+      !newEmployee.password ||
+      !newEmployee.phone_number
     ) {
       showNotification("Todos los campos son requeridos.", "error");
       return false;
@@ -58,11 +58,10 @@ export default function ButtonCreateEmployee({
     // Validamos los datos antes de enviarlos a la base de datos
     if (!(await validateEmployee())) return;
 
-    let email = 'empleado2@gmail.com';
-    let password = 'empleado2';
+    let email = newEmployee.email;
+    let password = newEmployee.password;
     const result = await signUpWihtEmail({email, password})
-    console.log(result)
-    if  (result){
+    if (result){
       const { data: { user } } = await supabase.auth.getUser()
       const name = newEmployee.name;
       const phone_number = newEmployee.phone_number;
@@ -78,8 +77,16 @@ export default function ButtonCreateEmployee({
         state: state,
         user_id: user.id
       };
-      await updateUser(data);
-    }  
+      const resultInsertUser =await insertUser(data);
+      if (resultInsertUser) {
+        showNotification("Empleado creado correctamente.", "success");
+        onUpdate();
+        onClose();
+      }
+    } else {
+      showNotification("Error al crear el empleado.", "error");
+    } 
+
 
   };
 

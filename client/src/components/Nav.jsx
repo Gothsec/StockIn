@@ -26,7 +26,6 @@ const navItems = [
   { text: "Movimientos", icon: <MovesIcon />, href: "/movimientos" },
   { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
-  { text: "Empleados", icon: <EmployeeIcon />, href: "/empleados" },
 ];
 
 const handleLogout = async () => {
