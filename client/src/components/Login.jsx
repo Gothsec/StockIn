@@ -136,7 +136,7 @@ export default function Login() {
                       className="mt-1 block w-full px-4 pl-10 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <Padlock />
-                    <div className="absolute inset-y-0 right-2 flex items-center cursor-pointer" 
+                    <div className="absolute inset-y-0 right-3 top-1 flex items-center cursor-pointer"
                       onClick={() => setShowPassword(!showPassword)}>
                       {showPassword ? <EyeUnvisable /> : <EyeVisable />}
                     </div>
