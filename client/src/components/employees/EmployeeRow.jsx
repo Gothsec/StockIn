@@ -11,7 +11,6 @@ export default function EmployeeRow({
   name,
   email,
   phone_number,
-  user_type,
   id,
   className,
   onUpdate,
@@ -66,10 +65,9 @@ export default function EmployeeRow({
     <>
       <tr className={`${className} text-left border-b`}>
         <td className="p-3">{name}</td>
-        <td className="p-3">{email}</td>
-        <td className="p-3">{phone_number}</td>
-        <td className="p-3">{user_type}</td>
-        <td className="p-3 flex gap-2 justify-end">
+        <td className="p-3 text-center">{email}</td>
+        <td className="p-3 text-center">{phone_number}</td>
+        <td className="p-3 justify-end flex text-center">
           {/* Botón de información */}
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"

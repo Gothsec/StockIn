@@ -3,6 +3,8 @@ import ButtonCreate from "./ButtonCreateEmployee";
 import ButtonUpdate from "./ButtonUpdateEmployee";
 import supabase from "../../utils/supabase";
 import { capitalizeFirstLetter } from "../../utils/textUtils";
+import EyeVisable from "../../assets/EyeVisable";
+import EyeUnvisable from "../../assets/EyeUnvisable";
 
 export function ModalEmployee({
   title,
@@ -13,11 +15,14 @@ export function ModalEmployee({
 }) {
   const [employeeInfo, setEmployeeInfo] = useState({
     name: "",
-    email: "",
     phone_number: "",
-    user_type: "",
+    email: "",
+    password: "",
+    user_type: "employee",
     state: true,
+    user_id: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
 
   // Obtener la información del empleado si el ID está definido (para actualizar)
   const handleGetEmployeeInfo = async () => {
@@ -48,10 +53,12 @@ export function ModalEmployee({
       // Resetear employeeInfo para crear un nuevo empleado
       setEmployeeInfo({
         name: "",
-        email: "",
         phone_number: "",
-        user_type: "",
+        email: "",
+        password: "",
+        user_type: "employee",
         state: true,
+        user_id: "",
       });
     }
   }, [employeeId, option]);
@@ -85,23 +92,6 @@ export function ModalEmployee({
             </div>
             <div className="flex flex-col">
               <label
-                htmlFor="email"
-                className="text-sm font-medium text-gray-700"
-              >
-                Correo Electrónico
-              </label>
-              <input
-                id="email"
-                type="email"
-                className="mt-1 p-2 border rounded-md"
-                value={employeeInfo.email}
-                onChange={(e) =>
-                  setEmployeeInfo({ ...employeeInfo, email: e.target.value })
-                }
-              />
-            </div>
-            <div className="flex flex-col">
-              <label
                 htmlFor="phone_number"
                 className="text-sm font-medium text-gray-700"
               >
@@ -123,48 +113,49 @@ export function ModalEmployee({
             </div>
             <div className="flex flex-col">
               <label
-                htmlFor="user_type"
+                htmlFor="email"
                 className="text-sm font-medium text-gray-700"
               >
-                Tipo de usuario
+                Correo Electrónico
               </label>
-              <select
-                id="user_type"
+              <input
+                id="email"
+                type="email"
                 className="mt-1 p-2 border rounded-md"
-                value={employeeInfo.user_type}
+                value={employeeInfo.email}
                 onChange={(e) =>
-                  setEmployeeInfo({
-                    ...employeeInfo,
-                    user_type: e.target.value,
-                  })
+                  setEmployeeInfo({ ...employeeInfo, email: e.target.value })
                 }
-              >
-                <option value="">Selecciona un tipo de usuario</option>
-                <option value="Administrador">Administrador</option>
-                <option value="Empleado">Empleado</option>
-              </select>
+              />
             </div>
+
             <div className="flex flex-col">
               <label
-                htmlFor="state"
+                htmlFor="password"
                 className="text-sm font-medium text-gray-700"
               >
-                Estado
+                Contraseña
               </label>
-              <select
-                id="state"
-                className="mt-1 p-2 border rounded-md"
-                value={employeeInfo.state}
-                onChange={(e) =>
-                  setEmployeeInfo({
-                    ...employeeInfo,
-                    state: e.target.value === "true",
-                  })
-                }
-              >
-                <option value={true}>Activo</option>
-                <option value={false}>Inactivo</option>
-              </select>
+              <div className="relative mt-1">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  className="p-2 pr-10 border rounded-md w-full"
+                  value={employeeInfo.password}
+                  onChange={(e) =>
+                    setEmployeeInfo({
+                      ...employeeInfo,
+                      password: e.target.value,
+                    })
+                  }
+                />
+                <div
+                  className="absolute inset-y-0 right-2 flex items-center cursor-pointer"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeUnvisable /> : <EyeVisable />}
+                </div>
+              </div>
             </div>
           </div>
           <div className="flex justify-end gap-4 mt-8">
@@ -192,23 +183,32 @@ export function ModalEmployee({
           </div>
         </div>
       ) : (
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">
+        <div className="w-[400px] min-h-[100px] bg-white relative rounded-lg shadow-lg p-6 flex flex-col gap-4">
+
+          <h2 className="text-xl font-bold text-gray-800 text-center mb-6">
             Detalles del Empleado
           </h2>
-          <div className="mb-2">
-            <strong>Nombre:</strong> {employeeInfo.name}
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold">Nombre:</span>
+            <span className="text-gray-700">{employeeInfo.name}</span>
+          </div>    
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold">Teléfono:</span>
+            <span className="text-gray-700"> {employeeInfo.phone_number}</span>
           </div>
-          <div className="mb-2">
-            <strong>Correo Electrónico:</strong> {employeeInfo.email}
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold">Correo Electrónico:</span>
+            <span className="text-gray-700"> {employeeInfo.email}</span>
           </div>
-          <div className="mb-2">
-            <strong>Teléfono:</strong> {employeeInfo.phone_number}
+
+          <div className="flex justify-between items-center">
+            <span className="font-semibold">Contraseña:</span>
+            <span className="text-gray-700"> {employeeInfo.password}</span>
           </div>
-          <div className="mb-2">
-            <strong>Estado:</strong>{" "}
-            {employeeInfo.state ? "Activo" : "Inactivo"}
-          </div>
+
           <button
             className="mt-4 px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600"
             onClick={onClose}

@@ -2,6 +2,7 @@
 import { useContext } from "react";
 import supabase from "../../utils/supabase";
 import { ConfirmationDataContext } from "../../contexts/ConfirmationData";
+import {updateUserAuth} from "../../services/auth";
 
 export default function ButtonUpdate({
   userUpdated,
@@ -58,24 +59,38 @@ export default function ButtonUpdate({
   const handleUpdateUser = async () => {
     if (!(await validateUserUpdate())) return;
 
-    try {
-      const { error } = await supabase
-        .from("user")
-        .update(userUpdated)
-        .eq("id", userId);
-
-      if (error) {
-        console.error("Error: ", error);
-        showNotification("Error al actualizar el usuario", "error");
-        return;
+    let email = userUpdated.email;
+    let password = userUpdated.password;
+    const result = await updateUserAuth( userId, email, password)
+    console.log(result)
+    if (result) {
+      const userUp = {
+        name: userUpdated.name,
+        phone_number: userUpdated.phone_number,
+        email: email,
+        password: password,
+        user_type: 'employee',
+        state: true,
       }
-
-      showNotification("Usuario actualizado correctamente", "success");
-      onClose(); // Cerrar el modal
-      onUpdate(); // Actualizar la lista de usuarios
-    } catch (error) {
-      console.error("Error: ", error);
-      showNotification("Hubo un error al actualizar el usuario", "error");
+      try {
+        const { error } = await supabase
+          .from("user")
+          .update(userUp)
+          .eq("id", userId);
+  
+        if (error) {
+          console.error("Error: ", error);
+          showNotification("Error al actualizar el usuario", "error");
+          return;
+        }
+  
+        showNotification("Usuario actualizado correctamente", "success");
+        onClose(); // Cerrar el modal
+        onUpdate(); // Actualizar la lista de usuarios
+      } catch (error) {
+        console.error("Error: ", error);
+        showNotification("Hubo un error al actualizar el usuario", "error");
+      }
     }
   };
 
