@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import supabase from "../utils/supabase";
 import PasswordRecoveryDialog from "../components/ForgotPassword";
 import Banner from "../../public/login-banner.png";
 import EyeVisable from "../assets/EyeVisable";
 import EyeUnvisable from "../assets/EyeUnvisable";
 import Padlock from "../assets/Padlock";
+import Email from "../assets/Email";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -13,6 +15,8 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedEmail = localStorage.getItem("email");
@@ -29,10 +33,11 @@ export default function Login() {
       email,
       password,
     });
+    console.log("data de supabase", data);
 
     if (error) {
       setErrorMessage("Email o contraseña incorrectos.");
-      setLoginSuccessful(false);
+      console.log("error con el auth de supabase", error);
     } else {
       const userId = data.user.id;
 
@@ -48,7 +53,6 @@ export default function Login() {
         setErrorMessage(
           "El usuario no existe o no tiene permiso para ingresar."
         );
-        setLoginSuccessful(false);
       } else {
         const userRole = userData.user_type;
         const userName = userData.name;
@@ -92,7 +96,7 @@ export default function Login() {
                 </h1>
                 <p className="text-gray-600">Ingresa con tu cuenta</p>
               </div>
-              <form method="post" className="space-y-6">
+              <form className="space-y-6" onSubmit={(e) => {e.preventDefault(); handleLogin(e);}}>
                 <div>
                   <label
                     htmlFor="email"
@@ -101,23 +105,11 @@ export default function Login() {
                     Correo
                   </label>
                   <div className="relative">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" />
-                      <path d="M3 7l9 6l9 -6" />
-                    </svg>
+                    <Email />
                     <input
                       id="email"
                       type="email"
+                      autocomplete="email"
                       placeholder="ejemplo@correo.com"
                       required
                       value={email}
@@ -137,6 +129,7 @@ export default function Login() {
                     <input
                       id="password"
                       type={showPassword ? "text" : "password"}
+                      autocomplete="current-password"
                       placeholder="••••••••"
                       required
                       onChange={(event) => setPassword(event.target.value)}
@@ -180,7 +173,6 @@ export default function Login() {
                   </div>
                 )}
                 <button
-                  onClick={handleLogin}
                   type="submit"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
