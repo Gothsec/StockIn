@@ -66,7 +66,7 @@ export default function Nav() {
           </span>
         </div>
         <hr className="mb-4 w-[90%] mx-auto border-blue-200" />
-        <span className="font-bold text-xs uppercase inline-block ml-4 mb-2 text-blue-200 md:block">
+        <span className="font-normal text-sm uppercase inline-block ml-4 mb-4 text-blue-200 md:block overflow-hidden truncate max-w-full">
           {name || "Usuario"}
         </span>
       </div>
