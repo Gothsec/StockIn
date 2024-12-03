@@ -94,7 +94,7 @@ export default function Login() {
                 <h1 className="text-3xl font-bold text-gray-800">
                   Bienvenido a StockIn
                 </h1>
-                <p className="text-gray-600">Ingresa con tu cuenta</p>
+                <p className="text-gray-600 text-lg">Ingresa con tu cuenta</p>
               </div>
               <form className="space-y-6" onSubmit={(e) => {e.preventDefault(); handleLogin(e);}}>
                 <div>
