@@ -92,7 +92,7 @@ export default function Login() {
                 <h1 className="text-3xl font-bold text-gray-800">
                   Bienvenido a StockIn
                 </h1>
-                <p className="text-gray-600">Ingresa con tu cuenta</p>
+                <p className="text-gray-600 text-lg">Ingresa con tu cuenta</p>
               </div>
               <form className="space-y-6" onSubmit={(e) => {e.preventDefault(); handleLogin(e);}}>
                 <div>
@@ -134,7 +134,7 @@ export default function Login() {
                       className="mt-1 block w-full px-4 pl-10 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <Padlock />
-                    <div className="absolute inset-y-0 right-2 flex items-center cursor-pointer" 
+                    <div className="absolute inset-y-0 right-3 top-1 flex items-center cursor-pointer"
                       onClick={() => setShowPassword(!showPassword)}>
                       {showPassword ? <EyeUnvisable /> : <EyeVisable />}
                     </div>
