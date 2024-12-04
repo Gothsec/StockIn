@@ -33,7 +33,8 @@ export default function EmployeesPage() {
         .from("user") // Asegúrate de que este sea el nombre correcto de la tabla
         .select("id, name, email, phone_number, user_type, state")
         .eq("user_type", "employee") // Filtrar solo usuarios de tipo empleado
-        .eq("state", true); // Filtrar solo empleados activos
+        .eq("state", true)
+        .order("id", {ascending: false});
 
       if (error) {
         throw error;

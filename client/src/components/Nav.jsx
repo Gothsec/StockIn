@@ -18,7 +18,7 @@ const navAdminItems = [
   { text: "Bodegas", icon: <WarehouseIcon />, href: "/bodegas" },
   { text: "Proveedores", icon: <SupplierIcon />, href: "/proveedores" },
   { text: "Empleados", icon: <EmployeeIcon />, href: "/empleados" },
-  { text: "Reportes", icon: <ReportIcon /> },
+  { text: "Reportes", icon: <ReportIcon />, href: "/reportes" },
 ];
 
 const navItems = [

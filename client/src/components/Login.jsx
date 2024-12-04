@@ -33,8 +33,6 @@ export default function Login() {
       email,
       password,
     });
-    console.log("data de supabase", data);
-
     if (error) {
       setErrorMessage("Email o contraseña incorrectos.");
       console.log("error con el auth de supabase", error);
@@ -109,7 +107,7 @@ export default function Login() {
                     <input
                       id="email"
                       type="email"
-                      autocomplete="email"
+                      autoComplete="email"
                       placeholder="ejemplo@correo.com"
                       required
                       value={email}
@@ -129,7 +127,7 @@ export default function Login() {
                     <input
                       id="password"
                       type={showPassword ? "text" : "password"}
-                      autocomplete="current-password"
+                      autoComplete="current-password"
                       placeholder="••••••••"
                       required
                       onChange={(event) => setPassword(event.target.value)}
@@ -155,7 +153,7 @@ export default function Login() {
                         htmlFor="remember-me"
                         className="ml-2 block text-sm text-gray-900 cursor-pointer"
                       >
-                        Recuerdame
+                        Recuérdame
                       </label>
                     </div>
                     <button

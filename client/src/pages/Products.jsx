@@ -42,7 +42,8 @@ export default function ProductsPage() {
     const { data, error } = await supabase
       .from("product")
       .select("id, name, quantity, minimum_quantity, brand, state")
-      .eq("state", true);
+      .eq("state", true)
+      .order("id", { ascending: false });
 
     if (error) {
       console.error("Error fetching products: ", error);

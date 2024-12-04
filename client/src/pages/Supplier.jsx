@@ -43,7 +43,8 @@ export default function SuppliersPage() {
     const { data, error } = await supabase
       .from("supplier")
       .select(`id, name, email, phone_number, city, address`)
-      .eq("state", true);
+      .eq("state", true)
+      .order("id", { ascending: false });
 
     if (error) {
       console.error("Error fetching suppliers: ", error);

@@ -104,7 +104,7 @@ export function ModalWarehouse({
             {/* Dirección */}
             <div className="flex flex-col">
               <label htmlFor="address" className="text-sm font-medium text-gray-700">
-                Dirección
+                Dirección de la bodega
               </label>
               <input
                 name="address"
@@ -151,7 +151,7 @@ export function ModalWarehouse({
             {/* Teléfono */}
             <div className="flex flex-col">
               <label htmlFor="phone_number" className="text-sm font-medium text-gray-700">
-                Teléfono
+                Teléfono de la bodega
               </label>
               <input
                 name="phone_number"
@@ -227,12 +227,12 @@ export function ModalWarehouse({
           </h2>
           {/* Detalles de la bodega */}
           <div className="flex justify-between items-center mb-4">
-            <span className="font-semibold text-gray-700">Nombre:</span>
+            <span className="font-semibold text-gray-700">Nombre de la bodega:</span>
             <span className="text-gray-600">{warehouseInfo.name}</span>
           </div>
 
           <div className="flex justify-between items-center mb-4">
-            <span className="font-semibold text-gray-700">Dirección:</span>
+            <span className="font-semibold text-gray-700">Dirección de la bodega:</span>
             <span className="text-gray-600">{warehouseInfo.address}</span>
           </div>
 
@@ -247,7 +247,7 @@ export function ModalWarehouse({
           </div>
 
           <div className="flex justify-between items-center mb-4">
-            <span className="font-semibold text-gray-700">Teléfono:</span>
+            <span className="font-semibold text-gray-700">Teléfono de la bodega:</span>
             <span className="text-gray-600">{warehouseInfo.phone_number}</span>
           </div>
 

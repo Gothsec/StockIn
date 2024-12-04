@@ -14,7 +14,7 @@ export default function MoveRow({
   name,
   quantity,
   id,
-  type,
+  date,
   className,
   onUpdate,
 }) {
@@ -39,10 +39,8 @@ export default function MoveRow({
 
   const reset = (type, stock, cantidad) => {
     if (type === "Entrada") {
-      console.log("reseteo:", stock - cantidad);
       return stock - cantidad;
     } else {
-      console.log("reseteo:", stock + cantidad);
       return stock + cantidad;
     }
   };
@@ -195,7 +193,6 @@ export default function MoveRow({
           console.error("Error al eliminar el pedido:", error.message);
           showNotification("Error al eliminar el pedido", "error");
         } else {
-          console.log(isProductReset, isWarehouseReset, isWarehouseProductReset); 
           showNotification(
             "El movimiento ha sido eliminado correctamente",
             "success"
@@ -216,10 +213,10 @@ export default function MoveRow({
 
   return (
     <>
-      <tr className={`${className} text-left border-b`}>
+      <tr className={`${className} "text-left border-b`}>
         <td className="p-3">{name}</td>
         <td className="p-3 text-center">{quantity}</td>
-        <td className="p-3 text-center">{type}</td>
+        <td className="p-3 text-center">{date}</td>
         <td className="p-3 flex gap-2 justify-end">
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
