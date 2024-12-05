@@ -1,7 +1,6 @@
 import { useState } from "react";
 import ReportMoves from "../components/reports/ReportMoves";
 import ReportProducts from "../components/reports/ReportProducts";
-import ReportWarehouse from "../components/reports/ReportWarehouse";
 
 export default function Reports() {
   const [reportActive, setReportActive] = useState(null);
@@ -10,7 +9,6 @@ export default function Reports() {
   const getReportTitle = () => {
     if (reportActive === "move") return "Reportes movimientos";
     if (reportActive === "product") return "Reportes productos";
-    if (reportActive === "warehouse") return "Reportes bodegas";
     return "Reportes";
   };
 
@@ -46,12 +44,6 @@ export default function Reports() {
             >
               Productos
             </button>
-            <button
-              className="bg-blue-600 text-white py-2 px-4 rounded-lg w-48 h-12 hover:bg-blue-700 transition-all duration-300"
-              onClick={() => setReportActive("warehouse")}
-            >
-              Bodegas
-            </button>
           </div>
         )}
 
@@ -60,7 +52,6 @@ export default function Reports() {
           <div className="absolute top-6 left-6">
             {reportActive === "move" && <ReportMoves />}
             {reportActive === "product" && <ReportProducts />}
-            {reportActive === "warehouse" && <ReportWarehouse />}
           </div>
         )}
       </div>
