@@ -10,9 +10,7 @@ export default function ButtonCreateEmployee({
 }) {
   const { showNotification } = useContext(ConfirmationDataContext);
 
-  // Función para validar los datos del empleado
   const validateEmployee = async () => {
-    // Verificar si los campos necesarios están llenos
     if (
       !newEmployee.name ||
       !newEmployee.email ||
@@ -23,17 +21,15 @@ export default function ButtonCreateEmployee({
       return false;
     }
 
-    // Validar que el número de teléfono sea un valor válido
     if (!/^\d{10}$/.test(newEmployee.phone_number)) {
       showNotification("El número de teléfono debe tener 10 dígitos.", "error");
       return false;
     }
 
-    // Validar que el correo electrónico no esté registrado ya
     const { data: existingUsers, error } = await supabase
       .from("user")
       .select("email")
-      .eq("state", true); // Filtrar solo usuarios activos
+      .eq("state", true);
 
     if (error) {
       console.error("Error al verificar correos de usuarios: ", error);
@@ -53,9 +49,7 @@ export default function ButtonCreateEmployee({
     return true;
   };
 
-  // Función para crear el empleado
   const handleCreateEmployee = async () => {
-    // Validamos los datos antes de enviarlos a la base de datos
     if (!(await validateEmployee())) return;
 
     let email = newEmployee.email;

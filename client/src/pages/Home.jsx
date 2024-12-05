@@ -43,8 +43,16 @@ export default function Home() {
           <Route path="/movimientos" element={<MovesPage />} />
           <Route path="/proveedores" element={<SuppliersPage />} />
           <Route path="/bodegas" element={<WarehousesPage />} />
-          <Route path="/empleados" element={<EmployeesPage />} />
-          <Route path="/reportes" element={<Reports />} />
+          <Route path="/empleados"
+            element={
+              role === "admin" ? <EmployeesPage /> : <Navigate to="/productos" replace />
+            } 
+          />
+          <Route path="/reportes" 
+            element={
+              role === "admin" ? <Reports /> : <Navigate to="/productos" replace />
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
