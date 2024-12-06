@@ -42,7 +42,8 @@ export default function ProductsPage() {
     const { data, error } = await supabase
       .from("product")
       .select("id, name, quantity, minimum_quantity, brand, state")
-      .eq("state", true);
+      .eq("state", true)
+      .order("id", { ascending: false });
 
     if (error) {
       console.error("Error fetching products: ", error);
@@ -146,7 +147,7 @@ export default function ProductsPage() {
                   name={product.name}
                   quantity={product.quantity}
                   brand={product.brand}
-                  isLowStock={product.isLowStock} // Asegúrate de pasar esto
+                  isLowStock={product.isLowStock}
                   className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                   onUpdate={fetchProducts}
                 />

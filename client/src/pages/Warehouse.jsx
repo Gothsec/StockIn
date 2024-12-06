@@ -50,7 +50,8 @@ export default function WarehousesPage() {
           name
         )
       `)
-      .eq("state", true); // Filtrar solo bodegas activas
+      .eq("state", true)
+      .order("id", {ascending: false});
 
     if (error) {
       console.error("Error fetching warehouses: ", error);

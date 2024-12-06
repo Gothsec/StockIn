@@ -47,10 +47,12 @@ export default function MovesPage() {
         id, 
         quantity,
         type,
+        date,
         product:product_id(name)  -- JOIN con la tabla product para obtener el nombre
       `
       )
-      .eq("state", true);
+      .eq("state", true)
+      .order("id", {ascending: false});
 
     if (error) {
       console.error("Error fetching moves: ", error);
@@ -120,7 +122,7 @@ export default function MovesPage() {
               <tr className="bg-slate-200 sticky top-0 left-0">
                 <th className="py-2 text-left px-4">Nombre producto</th>
                 <th className="py-2 text-center px-8">Cantidad</th>
-                <th className="py-2 text-center px-8">Tipo</th>
+                <th className="py-2 text-center px-8">Fecha</th>
                 <th className="py-2 text-left px-4"></th>
               </tr>
             </thead>
@@ -132,6 +134,7 @@ export default function MovesPage() {
                 name={move.product.name}
                 quantity={move.quantity}
                 type={move.type}
+                date={move.date}
                 className={index % 2 === 0 ? "bg-white" : "bg-blue-50"}
                 onUpdate={fetchMoves}
               />))}

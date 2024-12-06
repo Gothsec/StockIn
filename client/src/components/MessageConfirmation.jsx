@@ -14,7 +14,7 @@ function MessageConfirmation() {
         notification.type === "success" ? "bg-green-500" : "bg-red-500"
       }`}
       style={{
-        zIndex: 9999,  // Aseguramos que esté por encima del modal
+        zIndex: 9999,
         position: "absolute",
         transition: "all 0.3s ease-in-out",
       }}
