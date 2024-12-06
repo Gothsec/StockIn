@@ -18,7 +18,7 @@ export default function EmployeeRow({
   const { showNotification } = useContext(ConfirmationDataContext);
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [windowsModal, setWindowsModal] = useState(false); // Controla si el modal está abierto
+  const [windowsModal, setWindowsModal] = useState(false);
   const [modalProps, setModalProps] = useState({
     titleModal: "",
     userId: "",
@@ -31,10 +31,9 @@ export default function EmployeeRow({
       userId,
       option,
     });
-    setWindowsModal(true); // Cambiar directamente el estado para abrir el modal
+    setWindowsModal(true);
   };
 
-  // Eliminar empleado
   const handleDelete = async () => {
     try {
       const { error } = await supabase
@@ -55,7 +54,6 @@ export default function EmployeeRow({
     }
   };
 
-  // Confirmación de eliminación
   const confirmDelete = () => {
     handleDelete();
     setConfirmModalOpen(false);
@@ -68,7 +66,6 @@ export default function EmployeeRow({
         <td className="p-3 text-center">{email}</td>
         <td className="p-3 text-center">{phone_number}</td>
         <td className="p-3 justify-end flex text-center">
-          {/* Botón de información */}
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Información del usuario", id, "info")}
@@ -76,7 +73,6 @@ export default function EmployeeRow({
             <InfoIcon />
           </button>
 
-          {/* Botón de editar */}
           <button
             className="text-blue-400 px-3 flex items-center hover:text-blue-600 transition-all duration-300 ease"
             onClick={() => abrirCerrarModal("Modificar usuario", id, "update")}
@@ -84,7 +80,6 @@ export default function EmployeeRow({
             <EditIcon />
           </button>
 
-          {/* Botón de eliminar */}
           <button
             className="text-red-400 px-3 rounded-lg flex items-center hover:text-red-600 transition-all duration-300 ease"
             onClick={() => setConfirmModalOpen(true)}
@@ -94,18 +89,16 @@ export default function EmployeeRow({
         </td>
       </tr>
 
-      {/* Modal de información o edición */}
       {windowsModal && (
         <ModalEmployee
           title={modalProps.titleModal}
-          employeeId={modalProps.userId} // Cambiado de userId
+          employeeId={modalProps.userId}
           option={modalProps.option}
-          onClose={() => setWindowsModal(false)} // Cerrar el modal
+          onClose={() => setWindowsModal(false)}
           onUpdate={onUpdate}
         />
       )}
 
-      {/* Modal de confirmación de eliminación */}
       <ConfirmationModal
         isOpen={confirmModalOpen}
         onClose={() => setConfirmModalOpen(false)}

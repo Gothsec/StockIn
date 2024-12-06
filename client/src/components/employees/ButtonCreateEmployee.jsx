@@ -46,6 +46,11 @@ export default function ButtonCreateEmployee({
       return false;
     }
 
+    if (newEmployee.password.length < 8) {
+      showNotification("La contraseña debe tener al menos 8 caracteres.", "error");
+      return false;
+    }
+
     return true;
   };
 
@@ -55,6 +60,7 @@ export default function ButtonCreateEmployee({
     let email = newEmployee.email;
     let password = newEmployee.password;
     const result = await signUpWihtEmail({email, password})
+    console.log("resultado de la función signUpWihtEmail", result)
     if (result){
       const { data: { user } } = await supabase.auth.getUser()
       const name = newEmployee.name;

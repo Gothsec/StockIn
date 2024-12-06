@@ -11,17 +11,14 @@ export default function App() {
 
   useEffect(() => {
     const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
+      const { data: { session } } = await supabase.auth.getSession();
+    
       if (session) {
-        const role =
-          localStorage.getItem("role") || session.user.user_metadata.role;
+        const role = session.user.user_metadata.role || localStorage.getItem("role");
         setUserRole(role);
       }
       setIsSessionLoaded(true);
-    };
+    };    
 
     checkSession();
 

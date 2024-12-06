@@ -67,7 +67,7 @@ export default function Login() {
           sessionStorage.setItem("email", email);
           localStorage.setItem("id_user", id_user);
         }
-
+        await supabase.auth.refreshSession();
         navigate("/");
         setErrorMessage("");
       }
@@ -94,7 +94,7 @@ export default function Login() {
                 </h1>
                 <p className="text-gray-600 text-lg">Ingresa con tu cuenta</p>
               </div>
-              <form className="space-y-6" onSubmit={(e) => {e.preventDefault(); handleLogin(e);}}>
+              <form method="post" className="space-y-6">
                 <div>
                   <label
                     htmlFor="email"
@@ -134,8 +134,10 @@ export default function Login() {
                       className="mt-1 block w-full px-4 pl-10 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     />
                     <Padlock />
-                    <div className="absolute inset-y-0 right-3 top-1 flex items-center cursor-pointer"
-                      onClick={() => setShowPassword(!showPassword)}>
+                    <div
+                      className="absolute inset-y-0 right-3 top-1 flex items-center cursor-pointer"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
                       {showPassword ? <EyeUnvisable /> : <EyeVisable />}
                     </div>
                   </div>
@@ -171,7 +173,8 @@ export default function Login() {
                   </div>
                 )}
                 <button
-                  type="submit"
+                  onClick={handleLogin}
+                  type="button"
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                 >
                   Ingresar
