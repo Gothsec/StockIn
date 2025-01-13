@@ -64,6 +64,7 @@ export default function Login() {
 
         setLoginSuccessful(true);
         setErrorMessage("");
+        window.location.reload();
       }
     }
   };
