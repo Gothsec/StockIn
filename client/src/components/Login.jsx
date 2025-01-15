@@ -70,6 +70,7 @@ export default function Login() {
 
         navigate("/");
         setErrorMessage("");
+        window.location.reload();
       }
     }
   };
